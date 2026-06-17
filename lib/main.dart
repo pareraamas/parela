@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
+import 'app/bindings/app_binding.dart';
 import 'app/routes/app_pages.dart';
+import 'app/services/storage_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await StorageService.init();
   runApp(
     GetMaterialApp(
-      title: "Application",
+      title: 'Parela',
+      initialBinding: AppBinding(),
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
     ),

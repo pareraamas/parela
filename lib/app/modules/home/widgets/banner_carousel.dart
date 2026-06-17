@@ -1,81 +1,111 @@
 import 'package:flutter/material.dart';
+import 'package:parela/app/data/models/banner_model.dart';
 import 'package:parela/app/theme/app_colors.dart';
 
-class BannerCarousel extends StatelessWidget {
-  const BannerCarousel({super.key});
+class BannerCarousel extends StatefulWidget {
+  final List<BannerModel> banners;
+
+  const BannerCarousel({super.key, required this.banners});
+
+  @override
+  State<BannerCarousel> createState() => _BannerCarouselState();
+}
+
+class _BannerCarouselState extends State<BannerCarousel> {
+  int _current = 0;
+  final PageController _pageController = PageController();
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    const currentIndex = 0;
+    if (widget.banners.isEmpty) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: Stack(
           children: [
-            Container(
+            SizedBox(
               height: 180,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFFF8BDD0), Color(0xFFFCE4EC)],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: kPrimary),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: const Text(
-                              'BRAND',
-                              style: TextStyle(
-                                color: kPrimary,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 13,
-                                letterSpacing: 2,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'Feminine Care',
-                            style: TextStyle(
-                              color: kPrimary,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          const Text(
-                            'Lorem ipsum dolor sit amet\nconsectetur adipiscing elit.',
-                            style: TextStyle(color: kSubtext, fontSize: 11),
-                          ),
-                        ],
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: widget.banners.length,
+                onPageChanged: (i) => setState(() => _current = i),
+                itemBuilder: (context, index) {
+                  final b = widget.banners[index];
+                  return Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [b.colorStart, b.colorEnd],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
                       ),
                     ),
-                  ),
-                  Container(
-                    width: 140,
-                    color: const Color(0xFFF48FB1).withValues(alpha: 0.3),
-                    child: const Center(
-                      child: Icon(Icons.spa, size: 64, color: kPrimary),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: kPrimary),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    b.tag,
+                                    style: const TextStyle(
+                                      color: kPrimary,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 13,
+                                      letterSpacing: 2,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  b.title,
+                                  style: const TextStyle(
+                                    color: kPrimary,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  b.subtitle,
+                                  style: const TextStyle(
+                                    color: kSubtext,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 140,
+                          color: b.colorStart.withValues(alpha: 0.4),
+                          child: const Center(
+                            child: Icon(Icons.spa, size: 64, color: kPrimary),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
             Positioned(
@@ -84,14 +114,14 @@ class BannerCarousel extends StatelessWidget {
               right: 0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(3, (i) {
+                children: List.generate(widget.banners.length, (i) {
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     margin: const EdgeInsets.symmetric(horizontal: 3),
-                    width: i == currentIndex ? 16 : 6,
+                    width: i == _current ? 16 : 6,
                     height: 6,
                     decoration: BoxDecoration(
-                      color: i == currentIndex ? kPrimary : kPrimaryLight,
+                      color: i == _current ? kPrimary : kPrimaryLight,
                       borderRadius: BorderRadius.circular(3),
                     ),
                   );

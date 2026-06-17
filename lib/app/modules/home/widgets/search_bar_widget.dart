@@ -6,34 +6,31 @@ class SearchBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: const Row(
+        children: [
+          Icon(Icons.search, color: kSubtext, size: 20),
+          SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              'What are you looking for?',
+              style: TextStyle(color: kSubtext, fontSize: 14),
             ),
-          ],
-        ),
-        child: const Row(
-          children: [
-            Icon(Icons.search, color: kSubtext, size: 20),
-            SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                'What are you looking for?',
-                style: TextStyle(color: kSubtext, fontSize: 14),
-              ),
-            ),
-            Icon(Icons.mic_outlined, color: kSubtext, size: 20),
-          ],
-        ),
+          ),
+          Icon(Icons.mic_outlined, color: kSubtext, size: 20),
+        ],
       ),
     );
   }
