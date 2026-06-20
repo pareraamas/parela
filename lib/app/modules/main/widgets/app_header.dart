@@ -11,17 +11,19 @@ import 'package:parela/app/theme/app_colors.dart';
 class AppHeader extends StatelessWidget {
   final String? title;
   final String heroTag;
+  final Widget? leading;
 
-  const AppHeader({super.key, this.title, this.heroTag = 'search-bar'});
+  const AppHeader({super.key, this.title, this.heroTag = 'search-bar', this.leading});
 
   @override
   Widget build(BuildContext context) {
     final main = Get.find<MainController>();
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(20, 0, 8, 6),
+      padding: EdgeInsets.fromLTRB(leading != null ? 4 : 20, 0, 8, 6),
       child: Row(
         children: [
+          ?leading,
           title == null
               ? Expanded(
                   child: Hero(

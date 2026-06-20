@@ -24,116 +24,103 @@ class SearchResultView extends GetView<SearchResultController> {
     final main = Get.find<MainController>();
 
     return Scaffold(
-      backgroundColor: kBackground,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
             // ── Top bar ───────────────────────────────────────────────
             Container(
               color: Colors.white,
-              padding: const EdgeInsets.fromLTRB(4, 8, 16, 8),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: Get.back,
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      size: 20,
-                      color: kText,
-                    ),
-                  ),
-                  Expanded(
-                    child: Obx(
-                      () => Hero(
-                        tag: 'search-bar',
-                        child: Material(
-                          color: Colors.transparent,
-                          child: GestureDetector(
-                            onTap: () => Get.offNamed(
-                              Routes.SEARCH,
-                              arguments: controller.query.value,
-                            ),
-                            child: Container(
-                              height: 40,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                              ),
-                              decoration: BoxDecoration(
-                                color: kBackground,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: kPrimary.withValues(alpha: 0.5),
-                                  width: 1.5,
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.search_rounded,
-                                    color: kSubtext,
-                                    size: 18,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      controller.query.value,
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        color: kText,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+              padding: const EdgeInsets.fromLTRB(12, 0, 16, 8),
+              child: Obx(
+                () => Hero(
+                  tag: 'search-bar',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: GestureDetector(
+                      onTap: () => Get.toNamed(
+                        Routes.SEARCH,
+                        arguments: controller.query.value,
+                      ),
+                      child: Container(
+                        height: 38,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF9FB),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: kPrimary.withValues(alpha: 0.3),
                           ),
+                        ),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: Get.back,
+                              child: const Icon(
+                                Icons.keyboard_arrow_left_rounded,
+                                color: kSubtext,
+                                size: 24,
+                              ),
+                            ),
+
+                            Expanded(
+                              child: Text(
+                                controller.query.value,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  color: kText,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const Icon(
+                              Icons.edit_outlined,
+                              color: kSubtext,
+                              size: 14,
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
             ),
 
             // ── Sort chips ────────────────────────────────────────────
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+            Align(
+              alignment: Alignment.centerLeft,
               child: Obx(
                 () => SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: List.generate(controller.sortLabels.length, (i) {
                       final selected = controller.sortIndex.value == i;
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: GestureDetector(
-                          onTap: () => controller.setSort(i),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 7,
-                            ),
-                            decoration: BoxDecoration(
-                              color: selected ? kPrimary : Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: selected
-                                    ? kPrimary
-                                    : kSubtext.withValues(alpha: 0.4),
-                              ),
-                            ),
-                            child: Text(
-                              controller.sortLabels[i],
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: selected ? Colors.white : kText,
-                              ),
+                      return GestureDetector(
+                        onTap: () => controller.setSort(i),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 180),
+                          margin: const EdgeInsets.only(right: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: selected
+                                ? const Color.fromARGB(255, 246, 134, 181)
+                                : kBackground,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            controller.sortLabels[i],
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: selected ? Colors.white : kSubtext,
                             ),
                           ),
                         ),
@@ -143,8 +130,6 @@ class SearchResultView extends GetView<SearchResultController> {
                 ),
               ),
             ),
-
-            const SizedBox(height: 4),
 
             // ── Results ───────────────────────────────────────────────
             Expanded(
