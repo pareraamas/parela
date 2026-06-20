@@ -23,6 +23,9 @@ abstract class Routes {
   static const CART = _Paths.CART;
   static const MESSAGES = _Paths.MESSAGES;
   static const CHAT = _Paths.CHAT;
+  static const SEARCH_RESULT = _Paths.SEARCH_RESULT;
+  static const SEARCH = _Paths.SEARCH;
+  static const STORY = _Paths.STORY;
 }
 
 abstract class _Paths {
@@ -47,4 +50,7 @@ abstract class _Paths {
   static const CART = '/cart';
   static const MESSAGES = '/messages';
   static const CHAT = '/chat';
+  static const SEARCH_RESULT = '/search-result';
+  static const SEARCH = '/search';
+  static const STORY = '/story';
 }

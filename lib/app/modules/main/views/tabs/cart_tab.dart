@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/cart_item_model.dart';
 import 'package:parela/app/data/models/product_model.dart';
+import 'package:parela/app/modules/home/controllers/home_controller.dart';
 import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
@@ -12,6 +13,7 @@ class CartTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final main = Get.find<MainController>();
+    final homeTab = Get.find<HomeTabController>();
     return Obx(() {
       if (main.cartItems.isEmpty) {
         return const _EmptyCart();
@@ -52,9 +54,9 @@ class CartTab extends StatelessWidget {
               itemCount: main.cartItems.length,
               itemBuilder: (context, index) {
                 final item = main.cartItems[index];
-                final product = main.products.firstWhere(
+                final product = homeTab.products.firstWhere(
                   (p) => p.id == item.productId,
-                  orElse: () => main.products.first,
+                  orElse: () => homeTab.products.first,
                 );
                 return _CartItemRow(
                   product: product,

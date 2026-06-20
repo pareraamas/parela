@@ -5,7 +5,7 @@ import 'package:parela/app/data/models/payment_method_model.dart';
 import 'package:parela/app/data/models/product_model.dart';
 import 'package:parela/app/data/repositories/product_repository.dart';
 import 'package:parela/app/data/repositories/user_repository.dart';
-import 'package:parela/app/modules/main/controllers/main_controller.dart';
+import 'package:parela/app/modules/home/controllers/home_controller.dart';
 
 class OrderDetailController extends GetxController {
   final isLoading = true.obs;
@@ -19,7 +19,7 @@ class OrderDetailController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    order = Get.arguments as OrderModel? ?? Get.find<MainController>().products.first as dynamic;
+    order = Get.arguments as OrderModel? ?? Get.find<HomeTabController>().products.first as dynamic;
     _load();
   }
 

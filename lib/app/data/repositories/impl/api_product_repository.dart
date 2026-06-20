@@ -10,11 +10,16 @@ class ApiProductRepository implements ProductRepository {
   final _client = ApiClient.instance;
 
   @override
-  Future<List<ProductModel>> getAll() async {
-    final res = await _client.get('/products', auth: false);
-    return ((res['data'] as List?) ?? [])
+  Future<({List<ProductModel> data, bool hasMore})> getAll({int page = 1, int limit = 10}) async {
+    final res = await _client.get('/products', query: {'page': page, 'limit': limit}, auth: false);
+    final data = ((res['data'] as List?) ?? [])
         .map((j) => ProductModel.fromJson(j as Map<String, dynamic>))
         .toList();
+    final meta = res['meta'] as Map<String, dynamic>?;
+    final hasMore = meta != null
+        ? (meta['current_page'] as int? ?? page) < (meta['last_page'] as int? ?? 1)
+        : data.length >= limit;
+    return (data: data, hasMore: hasMore);
   }
 
   @override

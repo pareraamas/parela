@@ -18,7 +18,8 @@ class AllProductsController extends GetxController {
   Future<void> _load() async {
     try {
       isLoading.value = true;
-      products.assignAll(await Get.find<ProductRepository>().getAll());
+      final paged = await Get.find<ProductRepository>().getAll(limit: 100);
+      products.assignAll(paged.data);
     } catch (_) {
     } finally {
       isLoading.value = false;

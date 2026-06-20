@@ -1,4 +1,5 @@
 // ignore_for_file: constant_identifier_names
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../modules/main/bindings/main_binding.dart';
@@ -37,8 +38,33 @@ import '../modules/cart/views/cart_view.dart';
 import '../modules/messages/bindings/messages_binding.dart';
 import '../modules/messages/views/messages_view.dart';
 import '../modules/messages/views/chat_view.dart';
+import '../modules/search/bindings/search_binding.dart';
+import '../modules/search/views/search_page.dart';
+import '../modules/search/views/search_result_view.dart';
+import '../modules/story/bindings/story_binding.dart';
+import '../modules/story/views/story_view.dart';
 
 part 'app_routes.dart';
+
+class _SearchFadeTransition extends CustomTransition {
+  @override
+  Widget buildTransition(
+    BuildContext context,
+    Curve? curve,
+    Alignment? alignment,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return FadeTransition(
+      opacity: CurvedAnimation(
+        parent: animation,
+        curve: curve ?? Curves.easeOut,
+      ),
+      child: child,
+    );
+  }
+}
 
 class AppPages {
   AppPages._();
@@ -126,18 +152,28 @@ class AppPages {
       page: () => const SellerStoreView(),
       binding: SellerStoreBinding(),
     ),
-    GetPage(
-      name: _Paths.CART,
-      page: () => const CartView(),
-    ),
+    GetPage(name: _Paths.CART, page: () => const CartView()),
     GetPage(
       name: _Paths.MESSAGES,
       page: () => const MessagesView(),
       binding: MessagesBinding(),
     ),
+    GetPage(name: _Paths.CHAT, page: () => const ChatView()),
     GetPage(
-      name: _Paths.CHAT,
-      page: () => const ChatView(),
+      name: _Paths.SEARCH_RESULT,
+      page: () => const SearchResultView(),
+      binding: SearchResultBinding(),
+    ),
+    GetPage(
+      name: _Paths.SEARCH,
+      page: () => const SearchPage(),
+      customTransition: _SearchFadeTransition(),
+      transitionDuration: const Duration(milliseconds: 180),
+    ),
+    GetPage(
+      name: _Paths.STORY,
+      page: () => const StoryView(),
+      binding: StoryBinding(),
     ),
   ];
 }

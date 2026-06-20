@@ -3,6 +3,7 @@ import 'package:parela/app/data/models/address_model.dart';
 import 'package:parela/app/data/models/banner_model.dart';
 import 'package:parela/app/data/models/cart_item_model.dart';
 import 'package:parela/app/data/models/category_model.dart';
+import 'package:parela/app/data/models/flash_sale_model.dart';
 import 'package:parela/app/data/models/notification_model.dart';
 import 'package:parela/app/data/models/order_item_model.dart';
 import 'package:parela/app/data/models/order_model.dart';
@@ -26,295 +27,621 @@ class MockContent {
     verified: true,
   );
 
-  // ── Products ──────────────────────────────────────────────────────────────
+  // ── Sellers ───────────────────────────────────────────────────────────────
+  // s001–s002: mall | s003: official | s004–s005: regular
 
-  static final List<ProductModel> mockProducts = [
-    const ProductModel(
-      id: 'p001',
-      brand: 'BOURJOIS',
-      name: 'Bourjois Twist Up The Volume',
-      price: 189000,
-      originalPrice: 250000,
-      rating: 4.8,
-      reviewCount: 1240,
-      isBestSeller: true,
-      sellerId: 's001',
-      categoryId: 'c001',
-      colorHex: '#F8D7E5',
-      description:
-          'A volumizing mascara with a twist-up brush. Perfect for dramatic lashes that last all day without smudging.',
-      colors: [0xFF000000, 0xFF4A1010, 0xFF1A237E],
-      sizes: ['5ml', '10ml'],
-    ),
-    const ProductModel(
-      id: 'p002',
-      brand: 'MAYBELLINE',
-      name: 'Maybelline Grippy Serum +2%',
-      price: 220000,
-      originalPrice: 280000,
-      rating: 4.6,
-      reviewCount: 876,
-      isBestSeller: true,
-      sellerId: 's002',
-      categoryId: 'c004',
-      colorHex: '#E8F5E9',
-      description:
-          'A lightweight serum that grips pigment for long-lasting color. Infused with 2% niacinamide for radiant skin.',
-      colors: [0xFFE91E63, 0xFF9C27B0, 0xFFFF5722],
-      sizes: ['30ml', '50ml'],
-    ),
-    const ProductModel(
-      id: 'p003',
-      brand: 'LOREAL',
-      name: "L'Oréal Paris Infallible Foundation",
-      price: 165000,
-      originalPrice: 200000,
-      rating: 4.5,
-      reviewCount: 2341,
-      isBestSeller: false,
-      sellerId: 's001',
-      categoryId: 'c001',
-      colorHex: '#FFF9C4',
-      description:
-          'Full-coverage foundation with up to 24-hour wear. Lightweight formula that blends seamlessly.',
-      colors: [0xFFD7A87B, 0xFFC4956A, 0xFFB07B50],
-      sizes: ['N10', 'N20', 'N30', 'N40'],
-    ),
-    const ProductModel(
-      id: 'p004',
-      brand: 'NYX',
-      name: 'NYX Professional Lip Liner',
-      price: 95000,
-      originalPrice: 120000,
-      rating: 4.7,
-      reviewCount: 654,
-      isBestSeller: true,
-      sellerId: 's003',
-      categoryId: 'c001',
-      colorHex: '#FCE4EC',
-      description:
-          'Define and line your lips with this long-lasting pencil. Creamy formula glides on effortlessly.',
-      colors: [0xFFE91E63, 0xFFAD1457, 0xFFBF360C],
-      sizes: ['One Size'],
-    ),
-    const ProductModel(
-      id: 'p005',
-      brand: 'CETAPHIL',
-      name: 'Cetaphil Moisturizing Cream',
-      price: 145000,
-      originalPrice: 175000,
-      rating: 4.9,
-      reviewCount: 3456,
-      isBestSeller: true,
-      sellerId: 's004',
-      categoryId: 'c004',
-      colorHex: '#E3F2FD',
-      description:
-          'Rich, non-greasy moisturizer for dry to very dry skin. Clinically proven to restore skin barrier.',
-      colors: [0xFFFFFFFF],
-      sizes: ['250g', '500g'],
-    ),
-    const ProductModel(
-      id: 'p006',
-      brand: 'INNISFREE',
-      name: 'Innisfree Green Tea Serum',
-      price: 310000,
-      originalPrice: 390000,
-      rating: 4.7,
-      reviewCount: 987,
-      isBestSeller: false,
-      sellerId: 's005',
-      categoryId: 'c004',
-      colorHex: '#E8F5E9',
-      description:
-          'Intensive hydrating serum with fresh Jeju green tea. Provides 72-hour moisturization.',
-      colors: [0xFF4CAF50],
-      sizes: ['50ml', '80ml'],
-    ),
-    const ProductModel(
-      id: 'p007',
-      brand: 'MAC',
-      name: 'MAC Studio Fix Powder',
-      price: 425000,
-      originalPrice: 520000,
-      rating: 4.8,
-      reviewCount: 1890,
-      isBestSeller: true,
-      sellerId: 's002',
-      categoryId: 'c001',
-      colorHex: '#FFF8E1',
-      description:
-          'Matte finish powder with SPF 15. Provides buildable, natural-looking coverage.',
-      colors: [0xFFD7A87B, 0xFFC4956A, 0xFFEDD9BD],
-      sizes: ['NW15', 'NW25', 'NW35', 'NW45'],
-    ),
-    const ProductModel(
-      id: 'p008',
-      brand: 'SKINTIFIC',
-      name: 'Skintific 5X Ceramide Barrier Serum',
-      price: 199000,
-      originalPrice: 250000,
-      rating: 4.6,
-      reviewCount: 2100,
-      isBestSeller: false,
-      sellerId: 's005',
-      categoryId: 'c004',
-      colorHex: '#F3E5F5',
-      description:
-          'Strengthens skin barrier with 5 types of ceramide. Reduces redness and sensitivity.',
-      colors: [0xFFCE93D8],
-      sizes: ['20ml', '40ml'],
-    ),
-    const ProductModel(
-      id: 'p009',
-      brand: 'REVLON',
-      name: 'Revlon ColorStay Eyeliner',
-      price: 85000,
-      originalPrice: 115000,
-      rating: 4.4,
-      reviewCount: 543,
-      isBestSeller: false,
-      sellerId: 's003',
-      categoryId: 'c002',
-      colorHex: '#EEEEEE',
-      description:
-          'Smudge-proof eyeliner with built-in sharpener. Lasts up to 24 hours.',
-      colors: [0xFF000000, 0xFF212121, 0xFF1A237E],
-      sizes: ['One Size'],
-    ),
-    const ProductModel(
-      id: 'p010',
-      brand: 'THE BODY SHOP',
-      name: 'The Body Shop Himalayan Charcoal',
-      price: 275000,
-      originalPrice: 340000,
-      rating: 4.5,
-      reviewCount: 765,
-      isBestSeller: false,
-      sellerId: 's004',
-      categoryId: 'c004',
-      colorHex: '#ECEFF1',
-      description:
-          'Purifying glow mask with Himalayan charcoal and bamboo. Draws out pore-clogging impurities.',
-      colors: [0xFF607D8B],
-      sizes: ['75ml'],
-    ),
+  static final List<SellerModel> mockSellers = [
+    SellerModel.fromMap({
+      'id': 's001',
+      'name': 'ESQA Mall',
+      'rating': 4.9,
+      'productCount': 312,
+      'verified': true,
+      'isOfficial': true,
+      'location': 'Jakarta Selatan',
+      'avatarUrl': 'assets/public/sellers/esqa-mall/avatar.webp',
+      'description': 'ESQA adalah brand kosmetik lokal premium yang menghadirkan produk makeup berkualitas tinggi dengan formula vegan dan cruelty-free.',
+      'followerCount': 128400,
+      'soldCount': 245600,
+      'responseRate': '99%',
+      'responseTime': '< 1 jam',
+      'badges': ['mall', 'top_seller', 'fast_shipping'],
+    }),
+    SellerModel.fromMap({
+      'id': 's002',
+      'name': 'IOK Mall',
+      'rating': 4.8,
+      'productCount': 187,
+      'verified': true,
+      'isOfficial': true,
+      'location': 'Bandung',
+      'avatarUrl': 'assets/public/sellers/iok-mall/avatar.webp',
+      'description': 'IOK adalah brand fashion dan pakaian olahraga lokal dengan teknologi kain inovatif — anti-UV, penyerap keringat, dan nyaman sepanjang hari.',
+      'followerCount': 94200,
+      'soldCount': 178300,
+      'responseRate': '98%',
+      'responseTime': '< 2 jam',
+      'badges': ['mall', 'top_seller', 'fast_shipping'],
+    }),
+    SellerModel.fromMap({
+      'id': 's003',
+      'name': 'FOC Official',
+      'rating': 4.9,
+      'productCount': 54,
+      'verified': true,
+      'isOfficial': true,
+      'location': 'Jakarta Pusat',
+      'avatarUrl': 'assets/public/sellers/foc-offisial/avatar.webp',
+      'description': 'FOC (Fragrance of Choice) adalah toko resmi parfume premium pilihan. Semua produk dijamin 100% original langsung dari brand.',
+      'followerCount': 42800,
+      'soldCount': 61900,
+      'responseRate': '97%',
+      'responseTime': '< 3 jam',
+      'badges': ['official', 'top_seller'],
+    }),
+    SellerModel.fromMap({
+      'id': 's004',
+      'name': 'Toko Serba Ada',
+      'rating': 4.5,
+      'productCount': 403,
+      'verified': true,
+      'location': 'Surabaya',
+      'description': 'Toko serba ada dengan berbagai kebutuhan sehari-hari. Produk lengkap, harga bersahabat, pengiriman cepat.',
+      'followerCount': 18700,
+      'soldCount': 92400,
+      'responseRate': '95%',
+      'responseTime': '< 4 jam',
+      'badges': ['fast_shipping'],
+    }),
+    SellerModel.fromMap({
+      'id': 's005',
+      'name': 'Warung Digital',
+      'rating': 4.4,
+      'productCount': 238,
+      'verified': false,
+      'location': 'Yogyakarta',
+      'description': 'Warung Digital hadir menyediakan berbagai kebutuhan produk lifestyle, gadget, dan fashion dengan harga kompetitif.',
+      'followerCount': 9300,
+      'soldCount': 47200,
+      'responseRate': '92%',
+      'responseTime': '< 6 jam',
+      'badges': [],
+    }),
   ];
 
   // ── Categories ────────────────────────────────────────────────────────────
 
   static final List<CategoryModel> mockCategories = [
-    const CategoryModel(id: 'c001', label: 'Makeup', icon: Icons.brush),
-    const CategoryModel(id: 'c002', label: 'EyeLash', icon: Icons.remove_red_eye),
-    const CategoryModel(id: 'c003', label: 'Parfume', icon: Icons.local_florist),
-    const CategoryModel(id: 'c004', label: 'Beauty', icon: Icons.face),
-    const CategoryModel(id: 'c005', label: 'Skincare', icon: Icons.spa),
-    const CategoryModel(id: 'c006', label: 'Hair Care', icon: Icons.content_cut),
-    const CategoryModel(id: 'c007', label: 'Lipstick', icon: Icons.color_lens),
-    const CategoryModel(id: 'c008', label: 'Tools', icon: Icons.handyman),
+    const CategoryModel(id: 'c001', label: 'Makeup',    icon: Icons.brush,         color: Color(0xFFFCE4EC)),
+    const CategoryModel(id: 'c002', label: 'Skincare',  icon: Icons.spa,            color: Color(0xFFE3F2FD)),
+    const CategoryModel(id: 'c003', label: 'Parfume',   icon: Icons.local_florist,  color: Color(0xFFEDE7F6)),
+    const CategoryModel(id: 'c004', label: 'Lipstick',  icon: Icons.color_lens,     color: Color(0xFFFFEBEE)),
+    const CategoryModel(id: 'c005', label: 'Hair Care', icon: Icons.content_cut,    color: Color(0xFFFFF8E1)),
+    const CategoryModel(id: 'c006', label: 'Fashion',   icon: Icons.checkroom,      color: Color(0xFFE8EAF6)),
+    const CategoryModel(id: 'c007', label: 'Sport',     icon: Icons.sports,         color: Color(0xFFE8F5E9)),
+    const CategoryModel(id: 'c008', label: 'Aksesoris', icon: Icons.handyman,       color: Color(0xFFFFF3E0)),
+  ];
+
+  // ── Products ──────────────────────────────────────────────────────────────
+  // ESQA Mall (s001): p001–p003
+  // FOC Official (s003): p004
+  // IOK Mall (s002): p005–p008
+  // Regular (s004–s005): p009–p016
+
+  static final List<ProductModel> mockProducts = [
+    // ── ESQA Mall ─────────────────────────────────────────────────────────
+    const ProductModel(
+      id: 'p001',
+      brand: 'ESQA',
+      name: 'ESQA Glazed HD Powder',
+      price: 189000,
+      originalPrice: 239000,
+      rating: 4.9,
+      reviewCount: 3841,
+      isBestSeller: true,
+      sellerId: 's001',
+      categoryId: 'c001',
+      colorHex: '#FCE4EC',
+      description:
+          'Bedak tabur ultra-fine dengan teknologi HD yang memberikan tampilan kulit halus dan cerah. Formula vegan & cruelty-free, cocok untuk semua jenis kulit.',
+      colors: [0xFFEDD9BD, 0xFFD7A87B, 0xFFC4956A],
+      sizes: ['Light', 'Natural', 'Tan'],
+      soldCount: 38410,
+      imageUrls: [
+        'assets/public/products/esqa-bedak/1.webp',
+        'assets/public/products/esqa-bedak/2.webp',
+        'assets/public/products/esqa-bedak/3.webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'p002',
+      brand: 'ESQA',
+      name: 'ESQA x Tasya Farasya Eyeshadow Palette',
+      price: 279000,
+      originalPrice: 349000,
+      rating: 4.8,
+      reviewCount: 2156,
+      isBestSeller: true,
+      sellerId: 's001',
+      categoryId: 'c001',
+      colorHex: '#F8D7E5',
+      description:
+          'Palette kolaborasi eksklusif ESQA x Tasya Farasya. 12 warna eyeshadow dengan pigmentasi tinggi, dari nude hingga bold. Formula vegan, tahan lama seharian.',
+      colors: [0xFFB71C1C, 0xFF6D4C41, 0xFF4A148C, 0xFF880E4F],
+      sizes: ['One Size'],
+      soldCount: 21560,
+      imageUrls: [
+        'assets/public/products/esqa-eyeshadow/1.webp',
+        'assets/public/products/esqa-eyeshadow/2.webp',
+        'assets/public/products/esqa-eyeshadow/3.webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'p003',
+      brand: 'ESQA',
+      name: 'ESQA Lip Matte Cream',
+      price: 129000,
+      originalPrice: 169000,
+      rating: 4.8,
+      reviewCount: 4722,
+      isBestSeller: true,
+      sellerId: 's001',
+      categoryId: 'c004',
+      colorHex: '#FFCDD2',
+      description:
+          'Lip matte cream dengan formula ringan dan nyaman di bibir. Warna intens, transfer-proof, dan tahan hingga 8 jam. Tidak membuat bibir kering.',
+      colors: [0xFFE91E63, 0xFFAD1457, 0xFFBF360C, 0xFF880E4F, 0xFFB71C1C],
+      sizes: ['Chili Red', 'Rose Nude', 'Berry', 'Sienna', 'Coral'],
+      soldCount: 47220,
+      imageUrls: [
+        'assets/public/products/esqa-lipstik/1.webp',
+        'assets/public/products/esqa-lipstik/2.webp',
+        'assets/public/products/esqa-lipstik/3.webp',
+      ],
+    ),
+
+    // ── FOC Official ──────────────────────────────────────────────────────
+    const ProductModel(
+      id: 'p004',
+      brand: 'FOC',
+      name: 'FOC Meteore Eau de Parfum',
+      price: 349000,
+      originalPrice: 429000,
+      rating: 4.9,
+      reviewCount: 1834,
+      isBestSeller: true,
+      sellerId: 's003',
+      categoryId: 'c003',
+      colorHex: '#E8EAF6',
+      description:
+          'Parfume premium dengan aroma woody-aromatic yang elegan. Top note: bergamot & lemon. Heart: vetiver & iris. Base: cedarwood & musk. Tahan 8–12 jam.',
+      colors: [0xFF5C6BC0, 0xFF7986CB],
+      sizes: ['30ml', '50ml', '100ml'],
+      soldCount: 18340,
+      imageUrls: [
+        'assets/public/products/foc-parfume-meteore/1.webp',
+        'assets/public/products/foc-parfume-meteore/2.webp',
+        'assets/public/products/foc-parfume-meteore/3.webp',
+      ],
+    ),
+
+    // ── IOK Mall ──────────────────────────────────────────────────────────
+    const ProductModel(
+      id: 'p005',
+      brand: 'IOK',
+      name: 'IOK Celana Olahraga Slim Fit',
+      price: 159000,
+      originalPrice: 219000,
+      rating: 4.7,
+      reviewCount: 2891,
+      isBestSeller: true,
+      sellerId: 's002',
+      categoryId: 'c007',
+      colorHex: '#E8F5E9',
+      description:
+          'Celana olahraga slim fit dengan teknologi kain 4-way stretch dan moisture-wicking. Nyaman untuk gym, jogging, atau aktivitas outdoor. Anti-bau dan quick dry.',
+      colors: [0xFF212121, 0xFF1A237E, 0xFF1B5E20, 0xFF880E4F],
+      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+      soldCount: 28910,
+      imageUrls: [
+        'assets/public/products/iok-celana-olahraga/1.webp',
+        'assets/public/products/iok-celana-olahraga/2.webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'p006',
+      brand: 'IOK',
+      name: 'IOK Jaket Anti UV UPF50+',
+      price: 249000,
+      originalPrice: 329000,
+      rating: 4.8,
+      reviewCount: 1647,
+      isBestSeller: true,
+      sellerId: 's002',
+      categoryId: 'c006',
+      colorHex: '#E3F2FD',
+      description:
+          'Jaket anti-UV dengan proteksi UPF50+ yang menghalangi 98% sinar UV. Bahan ultra-ringan, breathable, dan bisa dilipat masuk saku. Ideal untuk aktivitas outdoor.',
+      colors: [0xFF0D47A1, 0xFF1B5E20, 0xFF212121, 0xFFB71C1C],
+      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+      soldCount: 16470,
+      imageUrls: [
+        'assets/public/products/iok-jaket-antiuv/1.webp',
+        'assets/public/products/iok-jaket-antiuv/2.webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'p007',
+      brand: 'IOK',
+      name: 'IOK Shino Pants Casual',
+      price: 199000,
+      originalPrice: 269000,
+      rating: 4.7,
+      reviewCount: 1123,
+      isBestSeller: false,
+      sellerId: 's002',
+      categoryId: 'c006',
+      colorHex: '#FFF8E1',
+      description:
+          'Celana shino casual dengan bahan premium lembut dan adem. Potongan slim tappered yang modern, cocok untuk aktivitas sehari-hari maupun semi-formal.',
+      colors: [0xFF5D4037, 0xFF37474F, 0xFF1A237E, 0xFFBF360C],
+      sizes: ['28', '30', '32', '34', '36'],
+      soldCount: 11230,
+      imageUrls: [
+        'assets/public/products/iok-shino-pants/1.webp',
+        'assets/public/products/iok-shino-pants/2.webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'p008',
+      brand: 'IOK',
+      name: 'IOK Shino Shorts',
+      price: 149000,
+      originalPrice: 199000,
+      rating: 4.6,
+      reviewCount: 876,
+      isBestSeller: false,
+      sellerId: 's002',
+      categoryId: 'c006',
+      colorHex: '#ECEFF1',
+      description:
+          'Celana pendek shino dengan bahan ringan dan adem. Desain clean minimalis dengan dua saku samping dan satu saku belakang. Cocok untuk casual everyday.',
+      colors: [0xFF37474F, 0xFF4E342E, 0xFF212121, 0xFF1A237E],
+      sizes: ['28', '30', '32', '34', '36'],
+      soldCount: 8760,
+      imageUrls: [
+        'assets/public/products/iok-shino-pendek/1.webp',
+        'assets/public/products/iok-shino-pendek/2.webp',
+      ],
+    ),
+
+    // ── Regular Sellers (random products) ────────────────────────────────
+    const ProductModel(
+      id: 'p009',
+      brand: 'SmartFit',
+      name: 'Smartwatch Pro Series X1',
+      price: 399000,
+      originalPrice: 549000,
+      rating: 4.3,
+      reviewCount: 1204,
+      isBestSeller: false,
+      sellerId: 's004',
+      categoryId: 'c008',
+      colorHex: '#CFD8DC',
+      description:
+          'Smartwatch dengan layar AMOLED 1.8 inci, monitor detak jantung, SpO2, 100+ mode olahraga, notifikasi pintar, dan baterai tahan 7 hari. Water-resistant IP68.',
+      colors: [0xFF212121, 0xFFB0BEC5, 0xFFB71C1C],
+      sizes: ['One Size'],
+      soldCount: 12040,
+      imageUrls: [
+        'assets/public/products/random/smartwatch.webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'p010',
+      brand: 'Gatsby',
+      name: 'Gatsby Water Gloss Pomade',
+      price: 42000,
+      originalPrice: 55000,
+      rating: 4.5,
+      reviewCount: 3287,
+      isBestSeller: true,
+      sellerId: 's004',
+      categoryId: 'c005',
+      colorHex: '#E8EAF6',
+      description:
+          'Pomade water-based dengan hold kuat dan shine tinggi. Mudah diaplikasikan, mudah dibersihkan dengan air. Cocok untuk gaya rambut sleek back dan pompadour.',
+      colors: [0xFF1A237E],
+      sizes: ['75g', '150g'],
+      soldCount: 32870,
+      imageUrls: [
+        'assets/public/products/random/pomade.webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'p011',
+      brand: 'Wardah',
+      name: 'Wardah Hydrating Facial Wash',
+      price: 32000,
+      originalPrice: 42000,
+      rating: 4.6,
+      reviewCount: 5412,
+      isBestSeller: true,
+      sellerId: 's005',
+      categoryId: 'c002',
+      colorHex: '#E8F5E9',
+      description:
+          'Sabun muka dengan formula hydrating yang membersihkan kotoran dan minyak tanpa membuat kulit terasa kering. Mengandung aloe vera dan vitamin E. Untuk kulit normal dan kombinasi.',
+      colors: [0xFF43A047],
+      sizes: ['60ml', '100ml'],
+      soldCount: 54120,
+      imageUrls: [
+        'assets/public/products/random/fasial-wash.webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'p012',
+      brand: 'Dettol',
+      name: 'Dettol Sabun Antibakteri Original',
+      price: 18500,
+      originalPrice: 24000,
+      rating: 4.7,
+      reviewCount: 8934,
+      isBestSeller: true,
+      sellerId: 's005',
+      categoryId: 'c002',
+      colorHex: '#E8F5E9',
+      description:
+          'Sabun antibakteri Dettol melindungi dari 100 jenis kuman dan bakteri. Formula lembut dengan moisturizer yang menjaga kelembapan kulit. Cocok untuk seluruh keluarga.',
+      colors: [0xFF2E7D32],
+      sizes: ['90g', '110g'],
+      soldCount: 89340,
+      imageUrls: [
+        'assets/public/products/random/sabun-detol.webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'p013',
+      brand: 'Kazbrella',
+      name: 'Payung Lipat Anti UV UPF60+',
+      price: 89000,
+      originalPrice: 129000,
+      rating: 4.5,
+      reviewCount: 2156,
+      isBestSeller: false,
+      sellerId: 's004',
+      categoryId: 'c008',
+      colorHex: '#FFF9C4',
+      description:
+          'Payung lipat dengan proteksi UPF60+ yang efektif menghalau sinar UV dan panas matahari. Bahan anti-air, ringan hanya 280g, dan bisa terkembang otomatis.',
+      colors: [0xFF0D47A1, 0xFFB71C1C, 0xFF1B5E20, 0xFF212121, 0xFF880E4F],
+      sizes: ['One Size'],
+      soldCount: 21560,
+      imageUrls: [
+        'assets/public/products/random/payung-anti-uv.webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'p014',
+      brand: 'Overco',
+      name: 'Kaos Oversize Premium Cotton',
+      price: 75000,
+      originalPrice: 115000,
+      rating: 4.4,
+      reviewCount: 1893,
+      isBestSeller: false,
+      sellerId: 's005',
+      categoryId: 'c006',
+      colorHex: '#ECEFF1',
+      description:
+          'Kaos oversize dengan bahan cotton combed 30s premium yang lembut dan adem. Potongan boxy yang stylish, tersedia dalam berbagai warna. Tidak mudah melar setelah dicuci.',
+      colors: [0xFFFFFFFF, 0xFF212121, 0xFFB0BEC5, 0xFF795548, 0xFFBF360C],
+      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+      soldCount: 18930,
+      imageUrls: [
+        'assets/public/products/random/kaos-oversize.webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'p015',
+      brand: 'HydroFit',
+      name: 'Botol Minum Tritan 750ml',
+      price: 65000,
+      originalPrice: 89000,
+      rating: 4.6,
+      reviewCount: 3102,
+      isBestSeller: false,
+      sellerId: 's004',
+      categoryId: 'c008',
+      colorHex: '#E3F2FD',
+      description:
+          'Botol minum anti-bocor dari bahan Tritan BPA-free yang aman dan tahan lama. Kapasitas 750ml dengan skala ukuran, cocok untuk olahraga maupun aktivitas harian.',
+      colors: [0xFF0D47A1, 0xFF1B5E20, 0xFFB71C1C, 0xFF880E4F, 0xFFFF6F00],
+      sizes: ['750ml'],
+      soldCount: 31020,
+      imageUrls: [
+        'assets/public/products/random/botol-minum.webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'p016',
+      brand: 'MirrorMe',
+      name: 'Cermin Lipat Dompet LED',
+      price: 35000,
+      originalPrice: 55000,
+      rating: 4.3,
+      reviewCount: 1247,
+      isBestSeller: false,
+      sellerId: 's005',
+      categoryId: 'c008',
+      colorHex: '#FCE4EC',
+      description:
+          'Cermin lipat kompak ukuran kartu dengan lampu LED terang. Bisa masuk dompet atau tas, ideal untuk touch up makeup di mana saja. Material aluminium ringan dan tahan karat.',
+      colors: [0xFFB0BEC5, 0xFFFFD54F, 0xFFE91E63],
+      sizes: ['One Size'],
+      soldCount: 12470,
+      imageUrls: [
+        'assets/public/products/random/cermin-lipat.webp',
+      ],
+    ),
   ];
 
   // ── Banners ───────────────────────────────────────────────────────────────
 
   static final List<BannerModel> mockBanners = [
     const BannerModel(
-      tag: 'BRAND',
-      title: 'Feminine Care',
-      subtitle: 'Lorem ipsum dolor sit amet\nconsectetur adipiscing elit.',
+      tag: 'ESQA MALL',
+      title: 'Beauty Vegan Series',
+      subtitle: 'Diskon hingga 30% produk\nESQA pilihan minggu ini.',
       colorStart: Color(0xFFF8BDD0),
       colorEnd: Color(0xFFFCE4EC),
+      imageUrl: 'assets/public/banners/Gemini_Generated_Image_1.webp',
     ),
     const BannerModel(
-      tag: 'PROMO',
-      title: 'Summer Sale 50%',
-      subtitle: 'Up to 50% off on all skincare\nproducts this weekend.',
+      tag: 'FLASH SALE',
+      title: 'IOK Sport Day',
+      subtitle: 'Koleksi olahraga & fashion\nIOK diskon up to 40%.',
       colorStart: Color(0xFFBBDEFB),
       colorEnd: Color(0xFFE3F2FD),
+      imageUrl: 'assets/public/banners/Gemini_Generated_Image_2.webp',
     ),
     const BannerModel(
-      tag: 'NEW',
-      title: 'Glow Collection',
-      subtitle: 'Discover the new season\nbeauty collection.',
-      colorStart: Color(0xFFE1BEE7),
-      colorEnd: Color(0xFFF3E5F5),
+      tag: 'EXCLUSIVE',
+      title: 'FOC Parfume Fest',
+      subtitle: 'Meteore EDP gratis\npouch eksklusif senilai 75rb.',
+      colorStart: Color(0xFFD1C4E9),
+      colorEnd: Color(0xFFEDE7F6),
+      imageUrl: 'assets/public/banners/Gemini_Generated_Image_3.webp',
     ),
   ];
 
   // ── Stories ───────────────────────────────────────────────────────────────
 
   static const List<Map<String, dynamic>> mockStories = [
-    {'label': 'Lipstick', 'color': Color(0xFFFFCDD2)},
-    {'label': 'Foundation', 'color': Color(0xFFF8BBD0)},
-    {'label': 'Serum', 'color': Color(0xFFE1BEE7)},
-    {'label': 'Eye Care', 'color': Color(0xFFBBDEFB)},
-    {'label': 'Moisturizer', 'color': Color(0xFFB2EBF2)},
+    {
+      'label': 'ESQA Lip',
+      'color': Color(0xFFFFCDD2),
+      'sellerId': 's001',
+      'avatarUrl': 'assets/public/sellers/esqa-mall/avatar.webp',
+      'videoUrl': 'assets/public/videos/esqa-lipstik-story/video.mp4',
+    },
+    {
+      'label': 'ESQA Eyes',
+      'color': Color(0xFFF8BBD0),
+      'sellerId': 's001',
+      'avatarUrl': 'assets/public/sellers/esqa-mall/avatar.webp',
+      'videoUrl': 'assets/public/videos/esqa-eyeshadow-story/video.mp4',
+    },
+    {
+      'label': 'FOC Meteore',
+      'color': Color(0xFFD1C4E9),
+      'sellerId': 's003',
+      'avatarUrl': 'assets/public/sellers/foc-offisial/avatar.webp',
+      'videoUrl': 'assets/public/videos/foc-parfume-story/video.mp4',
+    },
+    {
+      'label': 'IOK Jaket',
+      'color': Color(0xFFBBDEFB),
+      'sellerId': 's002',
+      'avatarUrl': 'assets/public/sellers/iok-mall/avatar.webp',
+      'videoUrl': 'assets/public/videos/iok-jaket-story/video.mp4',
+    },
+    {
+      'label': 'IOK Sport',
+      'color': Color(0xFFB2EBF2),
+      'sellerId': 's002',
+      'avatarUrl': 'assets/public/sellers/iok-mall/avatar.webp',
+      'videoUrl': 'assets/public/videos/iok-celana-story/video.mp4',
+    },
+    {
+      'label': 'IOK Shino',
+      'color': Color(0xFFDCEDC8),
+      'sellerId': 's002',
+      'avatarUrl': 'assets/public/sellers/iok-mall/avatar.webp',
+      'videoUrl': 'assets/public/videos/iok-shino-pendek-story/video.mp4',
+    },
   ];
 
   // ── Cart ──────────────────────────────────────────────────────────────────
 
   static final List<CartItemModel> mockCartItems = [
-    CartItemModel(productId: 'p001', quantity: 2, color: 0xFF000000, size: '10ml', price: 189000),
-    CartItemModel(productId: 'p004', quantity: 1, color: 0xFFE91E63, size: 'One Size', price: 95000),
-    CartItemModel(productId: 'p007', quantity: 1, color: 0xFFD7A87B, size: 'NW25', price: 425000),
+    CartItemModel(productId: 'p001', quantity: 1, color: 0xFFEDD9BD, size: 'Natural', price: 189000),
+    CartItemModel(productId: 'p003', quantity: 2, color: 0xFFE91E63, size: 'Chili Red', price: 129000),
+    CartItemModel(productId: 'p005', quantity: 1, color: 0xFF212121, size: 'L', price: 159000),
   ];
 
   // ── Orders ────────────────────────────────────────────────────────────────
 
   static final List<OrderModel> mockOrders = [
     OrderModel(
+      id: 'ORD-20240618',
+      date: '18 Jun 2024',
+      status: 'shipped',
+      statusIndex: 2,
+      total: 537000,
+      tracking: 'JNE-998877665',
+      items: [
+        const OrderItemModel(productId: 'p004', productName: 'FOC Meteore EDP', variant: '50ml', quantity: 1, price: 349000),
+        const OrderItemModel(productId: 'p003', productName: 'ESQA Lip Matte Cream', variant: 'Chili Red', quantity: 1, price: 129000),
+      ],
+    ),
+    OrderModel(
+      id: 'ORD-20240610',
+      date: '10 Jun 2024',
+      status: 'delivered',
+      statusIndex: 3,
+      total: 408000,
+      tracking: 'SICEPAT-112233444',
+      items: [
+        const OrderItemModel(productId: 'p006', productName: 'IOK Jaket Anti UV UPF50+', variant: 'Navy / L', quantity: 1, price: 249000),
+        const OrderItemModel(productId: 'p010', productName: 'Gatsby Water Gloss Pomade', variant: '75g', quantity: 2, price: 42000),
+      ],
+    ),
+    OrderModel(
       id: 'ORD-20240601',
       date: '1 Jun 2024',
       status: 'delivered',
       statusIndex: 3,
-      total: 898000,
+      total: 468000,
       tracking: 'JNE-123456789',
       items: [
-        const OrderItemModel(productId: 'p001', productName: 'Bourjois Twist Up The Volume', variant: 'Black / 10ml', quantity: 2, price: 189000),
-        const OrderItemModel(productId: 'p004', productName: 'NYX Professional Lip Liner', variant: 'Pink / One Size', quantity: 1, price: 95000),
+        const OrderItemModel(productId: 'p002', productName: 'ESQA x Tasya Eyeshadow Palette', variant: 'One Size', quantity: 1, price: 279000),
+        const OrderItemModel(productId: 'p011', productName: 'Wardah Hydrating Facial Wash', variant: '100ml', quantity: 2, price: 32000),
       ],
     ),
     OrderModel(
-      id: 'ORD-20240525',
-      date: '25 May 2024',
-      status: 'shipped',
-      statusIndex: 2,
-      total: 475000,
-      tracking: 'SICEPAT-987654321',
+      id: 'ORD-20240520',
+      date: '20 Mei 2024',
+      status: 'delivered',
+      statusIndex: 3,
+      total: 318000,
+      tracking: 'ANTERAJA-567891234',
       items: [
-        const OrderItemModel(productId: 'p007', productName: 'MAC Studio Fix Powder', variant: 'NW25', quantity: 1, price: 425000),
+        const OrderItemModel(productId: 'p005', productName: 'IOK Celana Olahraga Slim Fit', variant: 'Hitam / M', quantity: 1, price: 159000),
+        const OrderItemModel(productId: 'p013', productName: 'Payung Lipat Anti UV UPF60+', variant: 'Navy', quantity: 1, price: 89000),
       ],
     ),
     OrderModel(
       id: 'ORD-20240510',
-      date: '10 May 2024',
+      date: '10 Mei 2024',
       status: 'processing',
       statusIndex: 1,
-      total: 310000,
+      total: 189000,
       tracking: '-',
       items: [
-        const OrderItemModel(productId: 'p006', productName: 'Innisfree Green Tea Serum', variant: '50ml', quantity: 1, price: 310000),
+        const OrderItemModel(productId: 'p001', productName: 'ESQA Glazed HD Powder', variant: 'Natural', quantity: 1, price: 189000),
       ],
     ),
     OrderModel(
-      id: 'ORD-20240501',
-      date: '1 May 2024',
+      id: 'ORD-20240425',
+      date: '25 Apr 2024',
       status: 'delivered',
       statusIndex: 3,
-      total: 220000,
-      tracking: 'ANTERAJA-567891234',
+      total: 100500,
+      tracking: 'JNE-445566778',
       items: [
-        const OrderItemModel(productId: 'p002', productName: 'Maybelline Grippy Serum +2%', variant: 'Pink / 30ml', quantity: 1, price: 220000),
-      ],
-    ),
-    OrderModel(
-      id: 'ORD-20240420',
-      date: '20 Apr 2024',
-      status: 'delivered',
-      statusIndex: 3,
-      total: 145000,
-      tracking: 'JNE-112233445',
-      items: [
-        const OrderItemModel(productId: 'p005', productName: 'Cetaphil Moisturizing Cream', variant: '250g', quantity: 1, price: 145000),
+        const OrderItemModel(productId: 'p012', productName: 'Dettol Sabun Antibakteri', variant: '110g', quantity: 3, price: 18500),
+        const OrderItemModel(productId: 'p016', productName: 'Cermin Lipat Dompet LED', variant: 'Silver', quantity: 1, price: 35000),
       ],
     ),
   ];
@@ -322,31 +649,23 @@ class MockContent {
   // ── Notifications ─────────────────────────────────────────────────────────
 
   static List<NotificationModel> get mockNotifications => [
-        NotificationModel(id: 'n001', title: 'Order Shipped!', body: 'Your order ORD-20240525 has been picked up by SiCepat.', isRead: false, time: '2m ago', type: 'order'),
-        NotificationModel(id: 'n002', title: 'Flash Sale Today!', body: 'Up to 70% off on makeup products. Limited time only!', isRead: false, time: '1h ago', type: 'promo'),
-        NotificationModel(id: 'n003', title: 'Order Delivered', body: 'Your order ORD-20240601 has been delivered successfully.', isRead: true, time: '2d ago', type: 'order'),
-        NotificationModel(id: 'n004', title: 'New Arrivals', body: 'Check out the latest beauty products from your favourite brands.', isRead: true, time: '3d ago', type: 'promo'),
-        NotificationModel(id: 'n005', title: 'Review Your Purchase', body: 'How was Bourjois Twist Up The Volume? Leave a review!', isRead: true, time: '5d ago', type: 'system'),
-        NotificationModel(id: 'n006', title: 'Points Earned', body: 'You earned 89 points from your last purchase.', isRead: true, time: '5d ago', type: 'system'),
-        NotificationModel(id: 'n007', title: 'Weekend Deals', body: 'Special weekend promo — buy 2 get 1 free on selected items.', isRead: true, time: '1w ago', type: 'promo'),
-        NotificationModel(id: 'n008', title: 'Profile Updated', body: 'Your profile information has been updated successfully.', isRead: true, time: '2w ago', type: 'system'),
+        NotificationModel(id: 'n001', title: 'Pesanan Dikirim!', body: 'Pesanan ORD-20240618 sudah dijemput oleh JNE. Lacak pengirimanmu sekarang.', isRead: false, time: '5m ago', type: 'order'),
+        NotificationModel(id: 'n002', title: 'Flash Sale Siang Ini!', body: 'ESQA Lip Matte Cream diskon 40% hanya 2 jam lagi. Jangan sampai kehabisan!', isRead: false, time: '30m ago', type: 'promo'),
+        NotificationModel(id: 'n003', title: 'IOK Mall — Koleksi Baru', body: 'Shino Shorts varian warna Navy kini tersedia. Dapatkan sebelum kehabisan.', isRead: false, time: '2h ago', type: 'promo'),
+        NotificationModel(id: 'n004', title: 'Pesanan Tiba!', body: 'Pesanan ORD-20240610 sudah diterima. Yuk tinggalkan ulasanmu!', isRead: true, time: '1d ago', type: 'order'),
+        NotificationModel(id: 'n005', title: 'Beri Ulasan Produk', body: 'Bagaimana IOK Jaket Anti UV? Ulasanmu sangat berarti bagi pembeli lain.', isRead: true, time: '2d ago', type: 'system'),
+        NotificationModel(id: 'n006', title: 'FOC Parfume Fest', body: 'Beli FOC Meteore 50ml sekarang dan dapatkan pouch eksklusif gratis senilai 75rb.', isRead: true, time: '3d ago', type: 'promo'),
+        NotificationModel(id: 'n007', title: 'Poin Kamu Bertambah!', body: 'Selamat! Kamu mendapatkan 189 poin dari pesanan ORD-20240601.', isRead: true, time: '5d ago', type: 'system'),
+        NotificationModel(id: 'n008', title: 'ESQA x Tasya Diulas', body: 'Review ESQA x Tasya Farasya Eyeshadow milikmu mendapat 42 tanda "Helpful".', isRead: true, time: '6d ago', type: 'system'),
+        NotificationModel(id: 'n009', title: 'Weekend Sale', body: 'Diskon ekstra 10% untuk semua produk IOK Mall akhir pekan ini. Kode: IOK10.', isRead: true, time: '1w ago', type: 'promo'),
+        NotificationModel(id: 'n010', title: 'Profil Diperbarui', body: 'Informasi profil kamu telah berhasil diperbarui.', isRead: true, time: '2w ago', type: 'system'),
       ];
-
-  // ── Sellers ───────────────────────────────────────────────────────────────
-
-  static final List<SellerModel> mockSellers = [
-    SellerModel.fromMap({'id': 's001', 'name': 'Beauty Official Store', 'rating': 4.9, 'productCount': 124, 'verified': true, 'location': 'Jakarta'}),
-    SellerModel.fromMap({'id': 's002', 'name': 'Glamour Beauty', 'rating': 4.7, 'productCount': 89, 'verified': true, 'location': 'Bandung'}),
-    SellerModel.fromMap({'id': 's003', 'name': 'Pro Cosmetics', 'rating': 4.6, 'productCount': 56, 'verified': false, 'location': 'Surabaya'}),
-    SellerModel.fromMap({'id': 's004', 'name': 'Skincare Clinic', 'rating': 4.8, 'productCount': 73, 'verified': true, 'location': 'Bali'}),
-    SellerModel.fromMap({'id': 's005', 'name': 'K-Beauty Corner', 'rating': 4.7, 'productCount': 210, 'verified': true, 'location': 'Jakarta'}),
-  ];
 
   // ── Addresses ─────────────────────────────────────────────────────────────
 
   static final List<AddressModel> mockAddresses = [
-    AddressModel.fromMap({'id': 'a001', 'label': 'Home', 'recipient': 'Muhammad Farhan', 'phone': '+62 812-3456-7890', 'street': 'Jl. Sudirman No. 12, RT 01/RW 03', 'city': 'Jakarta Selatan, DKI Jakarta 12190', 'isDefault': true}),
-    AddressModel.fromMap({'id': 'a002', 'label': 'Office', 'recipient': 'Muhammad Farhan', 'phone': '+62 812-3456-7890', 'street': 'Jl. HR Rasuna Said Kav. 62', 'city': 'Jakarta Selatan, DKI Jakarta 12940', 'isDefault': false}),
+    AddressModel.fromMap({'id': 'a001', 'label': 'Rumah', 'recipient': 'Muhammad Farhan', 'phone': '+62 812-3456-7890', 'street': 'Jl. Sudirman No. 12, RT 01/RW 03', 'city': 'Jakarta Selatan, DKI Jakarta 12190', 'isDefault': true}),
+    AddressModel.fromMap({'id': 'a002', 'label': 'Kantor', 'recipient': 'Muhammad Farhan', 'phone': '+62 812-3456-7890', 'street': 'Jl. HR Rasuna Said Kav. 62', 'city': 'Jakarta Selatan, DKI Jakarta 12940', 'isDefault': false}),
   ];
 
   // ── Payment Methods ───────────────────────────────────────────────────────
@@ -360,11 +679,112 @@ class MockContent {
   // ── Reviews ───────────────────────────────────────────────────────────────
 
   static final List<ReviewModel> mockReviews = [
-    ReviewModel.fromMap({'id': 'r001', 'user': 'Sarah K.', 'rating': 5.0, 'comment': 'Amazing product! The formula is so smooth and the color payoff is incredible.', 'date': '15 May 2024', 'productId': 'p001'}),
-    ReviewModel.fromMap({'id': 'r002', 'user': 'Dewi R.', 'rating': 4.5, 'comment': 'Good quality. The packaging is elegant and it lasts all day on my skin.', 'date': '10 May 2024', 'productId': 'p001'}),
-    ReviewModel.fromMap({'id': 'r003', 'user': 'Anita S.', 'rating': 4.0, 'comment': 'Pretty good but slightly expensive. The texture is lightweight which I love.', 'date': '2 May 2024', 'productId': 'p002'}),
-    ReviewModel.fromMap({'id': 'r004', 'user': 'Putri M.', 'rating': 5.0, 'comment': 'This is my holy grail serum! My skin feels so hydrated and glowy.', 'date': '28 Apr 2024', 'productId': 'p002'}),
+    // ESQA Glazed HD Powder (p001)
+    ReviewModel.fromMap({'id': 'r001', 'user': 'Sarah K.', 'rating': 5.0, 'comment': 'Bedaknya halus banget, coverage bagus dan nggak bikin kulit kelihatan cakey. Cocok banget untuk kulit kombinasiku!', 'date': '15 Jun 2024', 'productId': 'p001'}),
+    ReviewModel.fromMap({'id': 'r002', 'user': 'Dewi R.', 'rating': 5.0, 'comment': 'Sudah pakai ESQA powder ini selama 3 bulan dan jadi favorit. Tahan lama dan finish-nya natural banget.', 'date': '10 Jun 2024', 'productId': 'p001'}),
+    ReviewModel.fromMap({'id': 'r003', 'user': 'Rizka A.', 'rating': 4.0, 'comment': 'Produknya oke, tapi shade Light agak kurang cocok di kulitku yang kuning langsat. Selebihnya oke banget!', 'date': '3 Jun 2024', 'productId': 'p001'}),
+
+    // ESQA Eyeshadow Palette (p002)
+    ReviewModel.fromMap({'id': 'r004', 'user': 'Anita S.', 'rating': 5.0, 'comment': 'Palette ini luar biasa! Pigmentasinya sangat bagus, warnanya blend dengan mulus. Worth every penny!', 'date': '12 Jun 2024', 'productId': 'p002'}),
+    ReviewModel.fromMap({'id': 'r005', 'user': 'Putri M.', 'rating': 4.5, 'comment': 'Warnanya cantik-cantik dan tahan lama tanpa primer. Kemasannya juga mewah banget. Recommended!', 'date': '8 Jun 2024', 'productId': 'p002'}),
+
+    // ESQA Lip Matte (p003)
+    ReviewModel.fromMap({'id': 'r006', 'user': 'Linda W.', 'rating': 5.0, 'comment': 'Formula-nya ringan di bibir dan warnanya intens! Chili Red cocok banget untuk kulit sawo matang.', 'date': '17 Jun 2024', 'productId': 'p003'}),
+    ReviewModel.fromMap({'id': 'r007', 'user': 'Maya P.', 'rating': 4.5, 'comment': 'Tahan lama dan nggak bikin bibir kering. Sudah coba 3 shade dan semuanya bagus!', 'date': '14 Jun 2024', 'productId': 'p003'}),
+
+    // FOC Meteore (p004)
+    ReviewModel.fromMap({'id': 'r008', 'user': 'Budi S.', 'rating': 5.0, 'comment': 'Wanginya elegan banget, maskulin tapi tidak terlalu berat. Tahan sampai 10 jam di kulitku. Highly recommended!', 'date': '11 Jun 2024', 'productId': 'p004'}),
+    ReviewModel.fromMap({'id': 'r009', 'user': 'Arif D.', 'rating': 4.5, 'comment': 'Parfum lokal yang kualitasnya tidak kalah dengan brand internasional. Sillage-nya bagus dan ketahanannya lama.', 'date': '9 Jun 2024', 'productId': 'p004'}),
+
+    // IOK Celana Olahraga (p005)
+    ReviewModel.fromMap({'id': 'r010', 'user': 'Reza F.', 'rating': 5.0, 'comment': 'Bahan celana ini top banget! Nyaman dipakai lari pagi, keringat cepat kering dan nggak gerah. Sudah beli 3 warna.', 'date': '13 Jun 2024', 'productId': 'p005'}),
+    ReviewModel.fromMap({'id': 'r011', 'user': 'Hendra K.', 'rating': 4.5, 'comment': 'Kualitas bagus untuk harganya. Setelah 5x cuci masih tidak melar dan warnanya tidak pudar.', 'date': '7 Jun 2024', 'productId': 'p005'}),
+
+    // IOK Jaket Anti UV (p006)
+    ReviewModel.fromMap({'id': 'r012', 'user': 'Sinta L.', 'rating': 5.0, 'comment': 'Jaketnya ringan banget, hampir nggak berasa dipake. Proteksi UV-nya nyata, kulit tidak gosong setelah seharian outdoor.', 'date': '16 Jun 2024', 'productId': 'p006'}),
+    ReviewModel.fromMap({'id': 'r013', 'user': 'Dian M.', 'rating': 4.0, 'comment': 'Keren dan fungsional. Bisa dilipat kecil masuk tas. Sedikit minus: ritsleting agak keras diawal pemakaian.', 'date': '5 Jun 2024', 'productId': 'p006'}),
+
+    // Smartwatch (p009)
+    ReviewModel.fromMap({'id': 'r014', 'user': 'Tono W.', 'rating': 4.0, 'comment': 'Monitor detak jantung cukup akurat dibanding band lain. Layarnya terang dan baterai memang tahan 7 hari.', 'date': '4 Jun 2024', 'productId': 'p009'}),
+
+    // Pomade (p010)
+    ReviewModel.fromMap({'id': 'r015', 'user': 'Fajar A.', 'rating': 4.5, 'comment': 'Water-based jadi enak dibersihkan. Hold-nya kuat tapi nggak bikin rambut kaku. Classic!', 'date': '6 Jun 2024', 'productId': 'p010'}),
+
+    // Facial Wash (p011)
+    ReviewModel.fromMap({'id': 'r016', 'user': 'Citra N.', 'rating': 5.0, 'comment': 'Kulit bersih tanpa rasa ketarik setelah cuci muka. Sudah pakai berulang kali dan jadi staple skincare harianku.', 'date': '18 Jun 2024', 'productId': 'p011'}),
   ];
+
+  // ── Flash Sale ────────────────────────────────────────────────────────────
+
+  static FlashSaleModel get mockFlashSale => FlashSaleModel(
+        currentSession: FlashSaleSessionModel(
+          id: 'fs_session_001',
+          title: 'Flash Sale Siang',
+          endsAt: DateTime.now().add(const Duration(hours: 2, minutes: 47)),
+          items: const [
+            FlashSaleItemModel(
+              productId: 'fs001',
+              productName: 'G-MAX Kopi Ginseng 1 Box 10 Sachet',
+              brand: 'G-MAX',
+              sellerId: 's004',
+              sellerName: 'G-MAX Official',
+              imageUrl: 'assets/public/flashsale/G-MAX Kopi Kekuatan Alami dari Ginseng Asli ( 1 BOX Isi 10 Sachet ).webp',
+              originalPrice: 185000,
+              flashSalePrice: 99000,
+              discountPercent: 46,
+              flashSaleStock: 100,
+              soldCount: 82,
+              soldPercent: 82,
+              color: Color(0xFFFFF8E1),
+            ),
+            FlashSaleItemModel(
+              productId: 'fs002',
+              productName: 'METOO MW-3 Whitening Toothpaste 3x100g',
+              brand: 'METOO',
+              sellerId: 's005',
+              sellerName: 'METOO Store',
+              imageUrl: 'assets/public/flashsale/METOO MW-3 Advanced whitening Toothpaste 3*100g - Gigi Putih.webp',
+              originalPrice: 120000,
+              flashSalePrice: 65000,
+              discountPercent: 46,
+              flashSaleStock: 80,
+              soldCount: 61,
+              soldPercent: 76,
+              color: Color(0xFFE3F2FD),
+            ),
+            FlashSaleItemModel(
+              productId: 'fs003',
+              productName: 'Morris White Edition EDP 100ml',
+              brand: 'MORRIS',
+              sellerId: 's006',
+              sellerName: 'Morris Official',
+              imageUrl: 'assets/public/flashsale/Morris Eau De Parfum White Edition 100ml - Parfum Pria.webp',
+              originalPrice: 349000,
+              flashSalePrice: 219000,
+              discountPercent: 37,
+              flashSaleStock: 30,
+              soldCount: 17,
+              soldPercent: 57,
+              color: Color(0xFFEDE7F6),
+            ),
+            FlashSaleItemModel(
+              productId: 'fs004',
+              productName: 'WSKEN Tempered Glass Auto Align iPhone',
+              brand: 'WSKEN',
+              sellerId: 's007',
+              sellerName: 'WSKEN Store',
+              imageUrl: 'assets/public/flashsale/WSKEN Tempered Glass Clear Privacy Glossy Auto Align Tech Anti Gores Screen Protector Full for iPhone.webp',
+              originalPrice: 79000,
+              flashSalePrice: 35000,
+              discountPercent: 56,
+              flashSaleStock: 200,
+              soldCount: 148,
+              soldPercent: 74,
+              color: Color(0xFFE8F5E9),
+            ),
+          ],
+        ),
+      );
 
   // ── Onboarding ────────────────────────────────────────────────────────────
 

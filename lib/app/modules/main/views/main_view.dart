@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/theme/app_colors.dart';
 import 'package:parela/app/modules/explore_tab/views/explore_tab_view.dart';
@@ -15,27 +16,37 @@ class MainView extends GetView<MainController> {
   Widget build(BuildContext context) {
     return Obx(() {
       final isVideoTab = controller.tabIndex.value == 2;
-      return Scaffold(
-        backgroundColor: isVideoTab ? Colors.black : kBackground,
-        extendBody: isVideoTab,
-        body: SafeArea(
-          bottom: false,
-          child: IndexedStack(
-            index: controller.tabIndex.value,
-            children: const [
-              HomeTab(),
-              ExploreTab(),
-              VideoTab(),
-              TransactionTab(),
-              ProfileTab(),
-            ],
+      final statusBarStyle = isVideoTab
+          ? SystemUiOverlayStyle.light
+          : const SystemUiOverlayStyle(
+              statusBarColor: Colors.white,
+              statusBarIconBrightness: Brightness.dark,
+              statusBarBrightness: Brightness.light,
+            );
+      return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: statusBarStyle,
+        child: Scaffold(
+          backgroundColor: isVideoTab ? Colors.black : Colors.white,
+          extendBody: false,
+          body: SafeArea(
+            bottom: false,
+            child: IndexedStack(
+              index: controller.tabIndex.value,
+              children: const [
+                HomeTab(),
+                ExploreTab(),
+                VideoTab(),
+                TransactionTab(),
+                ProfileTab(),
+              ],
+            ),
           ),
-        ),
-        bottomNavigationBar: _BottomNav(
-          currentIndex: controller.tabIndex.value,
-          onTap: controller.changeTab,
-          cartCount: controller.cartCount.value,
-          isVideoTab: isVideoTab,
+          bottomNavigationBar: _BottomNav(
+            currentIndex: controller.tabIndex.value,
+            onTap: controller.changeTab,
+            cartCount: controller.cartCount.value,
+            isVideoTab: isVideoTab,
+          ),
         ),
       );
     });
@@ -92,10 +103,7 @@ class _BottomNav extends StatelessWidget {
                 activeColor: activeColor,
                 onTap: () => onTap(1),
               ),
-              _VideoNavItem(
-                isActive: currentIndex == 2,
-                onTap: () => onTap(2),
-              ),
+              _VideoNavItem(isActive: currentIndex == 2, onTap: () => onTap(2)),
               _NavItem(
                 icon: Icons.receipt_long_outlined,
                 activeIcon: Icons.receipt_long_rounded,

@@ -4,7 +4,7 @@ import 'package:parela/app/data/models/product_model.dart';
 import 'package:parela/app/data/models/review_model.dart';
 
 abstract class ProductRepository {
-  Future<List<ProductModel>> getAll();
+  Future<({List<ProductModel> data, bool hasMore})> getAll({int page = 1, int limit = 10});
   Future<List<ProductModel>> getByCategory(String categoryId);
   Future<List<ProductModel>> getBySeller(String sellerId);
   Future<ProductModel?> getById(String id);

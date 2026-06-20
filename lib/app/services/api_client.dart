@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:developer' as dev;
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 import 'package:parela/app/services/storage_service.dart';
@@ -54,34 +56,40 @@ class ApiClient {
   }
 
   Future<Map<String, dynamic>> get(String path, {Map<String, dynamic>? query, bool auth = true}) async {
+    _logRequest('GET', path, query: query);
     final res = await _client.get(_uri(path, query), headers: _headers(auth: auth));
-    return _handle(res, path: path, auth: auth, retry: () => get(path, query: query, auth: auth));
+    return _handle(res, method: 'GET', path: path, auth: auth, retry: () => get(path, query: query, auth: auth));
   }
 
   Future<Map<String, dynamic>> post(String path, {Object? body, bool auth = true}) async {
+    _logRequest('POST', path, body: body);
     final res = await _client.post(_uri(path), headers: _headers(auth: auth),
         body: body != null ? json.encode(body) : null);
-    return _handle(res, path: path, auth: auth, retry: () => post(path, body: body, auth: auth));
+    return _handle(res, method: 'POST', path: path, auth: auth, retry: () => post(path, body: body, auth: auth));
   }
 
   Future<Map<String, dynamic>> put(String path, {Object? body, bool auth = true}) async {
+    _logRequest('PUT', path, body: body);
     final res = await _client.put(_uri(path), headers: _headers(auth: auth),
         body: body != null ? json.encode(body) : null);
-    return _handle(res, path: path, auth: auth, retry: () => put(path, body: body, auth: auth));
+    return _handle(res, method: 'PUT', path: path, auth: auth, retry: () => put(path, body: body, auth: auth));
   }
 
   Future<Map<String, dynamic>> delete(String path, {bool auth = true}) async {
+    _logRequest('DELETE', path);
     final res = await _client.delete(_uri(path), headers: _headers(auth: auth));
-    return _handle(res, path: path, auth: auth, retry: () => delete(path, auth: auth));
+    return _handle(res, method: 'DELETE', path: path, auth: auth, retry: () => delete(path, auth: auth));
   }
 
   Future<Map<String, dynamic>> _handle(
     http.Response res, {
+    required String method,
     required String path,
     required bool auth,
     required Future<Map<String, dynamic>> Function() retry,
   }) async {
     final body = json.decode(res.body) as Map<String, dynamic>;
+    _logResponse(method, path, res.statusCode, body);
 
     if (res.statusCode == 401 && auth) {
       final refreshed = await _refresh();
@@ -95,6 +103,20 @@ class ApiClient {
       message: body['message'] as String? ?? 'Unknown error',
       errors: body['errors'] as Map<String, dynamic>?,
     );
+  }
+
+  static void _logRequest(String method, String path, {Object? body, Map<String, dynamic>? query}) {
+    if (!kDebugMode) return;
+    final q = query != null && query.isNotEmpty ? '?$query' : '';
+    dev.log('→ $method $path$q${body != null ? '\n  body: ${json.encode(body)}' : ''}',
+        name: 'ApiClient');
+  }
+
+  static void _logResponse(String method, String path, int status, Map<String, dynamic> body) {
+    if (!kDebugMode) return;
+    final ok = status >= 200 && status < 300;
+    final prefix = ok ? '← $status' : '✗ $status';
+    dev.log('$prefix $method $path\n  ${json.encode(body)}', name: 'ApiClient');
   }
 
   Future<bool> _refresh() async {

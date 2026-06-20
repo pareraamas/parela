@@ -4,6 +4,7 @@ class CategoryModel {
   final String id;
   final String label;
   final IconData icon;
+  final Color color;
   final String? imageUrl;
   final int productCount;
 
@@ -11,6 +12,7 @@ class CategoryModel {
     required this.id,
     required this.label,
     required this.icon,
+    this.color = const Color(0xFFF8D7E5),
     this.imageUrl,
     this.productCount = 0,
   });
@@ -19,6 +21,9 @@ class CategoryModel {
         id: j['id'] as String,
         label: j['label'] as String,
         icon: _iconFromName((j['icon'] as String?) ?? ''),
+        color: j['color'] != null
+            ? Color(int.parse((j['color'] as String).replaceFirst('#', '0xFF')))
+            : const Color(0xFFF8D7E5),
         imageUrl: j['image_url'] as String?,
         productCount: (j['product_count'] as int?) ?? 0,
       );

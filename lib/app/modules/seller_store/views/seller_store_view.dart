@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/cart_item_model.dart';
-import 'package:parela/app/modules/home/widgets/product_card.dart';
+import 'package:parela/app/widgets/product_card.dart';
 import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
@@ -21,7 +21,11 @@ class SellerStoreView extends GetView<SellerStoreController> {
           appBar: AppBar(
             backgroundColor: kPrimary,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 18),
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+                size: 18,
+              ),
               onPressed: Get.back,
             ),
           ),
@@ -44,7 +48,11 @@ class SellerStoreView extends GetView<SellerStoreController> {
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.arrow_back_ios, color: kText, size: 18),
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    color: kText,
+                    size: 18,
+                  ),
                 ),
               ),
               flexibleSpace: FlexibleSpaceBar(
@@ -102,7 +110,11 @@ class SellerStoreView extends GetView<SellerStoreController> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.star, color: Colors.amber, size: 14),
+                            const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                              size: 14,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               '${seller.rating}  •  ${seller.productCount} products',
@@ -121,9 +133,9 @@ class SellerStoreView extends GetView<SellerStoreController> {
             ),
             SliverPadding(
               padding: const EdgeInsets.all(16),
-              sliver: Obx(() => SliverGrid(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              sliver: Obx(
+                () => SliverGrid(
+                  delegate: SliverChildBuilderDelegate((context, index) {
                     final p = controller.products[index];
                     return Obx(
                       () => ProductCard(
@@ -132,25 +144,26 @@ class SellerStoreView extends GetView<SellerStoreController> {
                         onFavorite: () => main.toggleWishlist(p.id),
                         onTap: () =>
                             Get.toNamed(Routes.PRODUCT_DETAIL, arguments: p),
-                        onAddToCart: () => main.addToCart(CartItemModel(
-                          productId: p.id,
-                          quantity: 1,
-                          color: p.colors.first,
-                          size: p.sizes.first,
-                          price: p.price,
-                        )),
+                        onAddToCart: () => main.addToCart(
+                          CartItemModel(
+                            productId: p.id,
+                            quantity: 1,
+                            color: p.colors.first,
+                            size: p.sizes.first,
+                            price: p.price,
+                          ),
+                        ),
                       ),
                     );
-                  },
-                  childCount: controller.products.length,
+                  }, childCount: controller.products.length),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.72,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                  ),
                 ),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.72,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                ),
-              )),
+              ),
             ),
           ],
         ),

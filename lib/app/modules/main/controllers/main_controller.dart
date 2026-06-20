@@ -1,60 +1,38 @@
 import 'package:get/get.dart';
-import 'package:parela/app/data/models/banner_model.dart';
 import 'package:parela/app/data/models/cart_item_model.dart';
-import 'package:parela/app/data/models/category_model.dart';
-import 'package:parela/app/data/models/product_model.dart';
+import 'package:parela/app/data/models/seller_model.dart';
 import 'package:parela/app/data/models/user_model.dart';
 import 'package:parela/app/data/repositories/cart_repository.dart';
-import 'package:parela/app/data/repositories/product_repository.dart';
+import 'package:parela/app/data/repositories/seller_repository.dart';
 import 'package:parela/app/routes/app_pages.dart';
 
 class MainController extends GetxController {
   late final CartRepository _cartRepo;
-  late final ProductRepository _productRepo;
+  late final SellerRepository _sellerRepo;
 
   final tabIndex = 0.obs;
   final cartCount = 0.obs;
   final wishlistIds = <String>[].obs;
   final cartItems = <CartItemModel>[].obs;
   final isLoggedIn = false.obs;
-  final isLoading = true.obs;
   final currentUser = Rxn<UserModel>();
 
-  final products = <ProductModel>[].obs;
-  final categories = <CategoryModel>[].obs;
-  final banners = <BannerModel>[].obs;
-  final stories = <Map<String, dynamic>>[].obs;
+  final _sellersById = <String, SellerModel>{};
+
+  SellerModel? sellerById(String id) => _sellersById[id];
 
   @override
   void onInit() {
     super.onInit();
     _cartRepo = Get.find<CartRepository>();
-    _productRepo = Get.find<ProductRepository>();
+    _sellerRepo = Get.find<SellerRepository>();
+    _loadSellers();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-    _loadPublicData();
-  }
-
-  Future<void> _loadPublicData() async {
-    try {
-      isLoading.value = true;
-      final results = await Future.wait([
-        _productRepo.getAll(),
-        _productRepo.getCategories(),
-        _productRepo.getBanners(),
-        _productRepo.getStories(),
-      ]);
-      products.assignAll(results[0] as List<ProductModel>);
-      categories.assignAll(results[1] as List<CategoryModel>);
-      banners.assignAll(results[2] as List<BannerModel>);
-      stories.assignAll(results[3] as List<Map<String, dynamic>>);
-    } catch (_) {
-      // keep existing data on error
-    } finally {
-      isLoading.value = false;
+  Future<void> _loadSellers() async {
+    final list = await _sellerRepo.getAll();
+    for (final s in list) {
+      _sellersById[s.id] = s;
     }
   }
 

@@ -9,7 +9,8 @@ class VideoTab extends GetView<VideoTabController> {
   static const _videos = [
     {
       'username': '@beautybysarah_id',
-      'description': 'Tutorial makeup natural untuk sehari-hari ✨ #makeuptutorial #naturalmakeup #fyp',
+      'description':
+          'Tutorial makeup natural untuk sehari-hari ✨ #makeuptutorial #naturalmakeup #fyp',
       'product': 'NARS Radiant Creamy Foundation',
       'likes': '124.2K',
       'comments': '1.2K',
@@ -20,7 +21,8 @@ class VideoTab extends GetView<VideoTabController> {
     },
     {
       'username': '@glowwithrina',
-      'description': 'Skincare routine pagi hari yang bikin kulit glowing 🌟 #skincare #morningroutine',
+      'description':
+          'Skincare routine pagi hari yang bikin kulit glowing 🌟 #skincare #morningroutine',
       'product': 'Laneige Water Sleeping Mask',
       'likes': '89.5K',
       'comments': '756',
@@ -31,7 +33,8 @@ class VideoTab extends GetView<VideoTabController> {
     },
     {
       'username': '@makeupbynadia',
-      'description': 'Review lipstik viral yang lagi hits! Worth it gak? 💄 #lipstickreview #viral',
+      'description':
+          'Review lipstik viral yang lagi hits! Worth it gak? 💄 #lipstickreview #viral',
       'product': 'Bourjois Rouge Edition Velvet',
       'likes': '203.7K',
       'comments': '3.4K',
@@ -42,7 +45,8 @@ class VideoTab extends GetView<VideoTabController> {
     },
     {
       'username': '@skincarejunkie.id',
-      'description': 'Kalau kulit kering wajib pakai ini!! Game changer banget 😍 #dryskin #skincaretips',
+      'description':
+          'Kalau kulit kering wajib pakai ini!! Game changer banget 😍 #dryskin #skincaretips',
       'product': 'CeraVe Moisturizing Cream',
       'likes': '67.3K',
       'comments': '912',
@@ -53,7 +57,8 @@ class VideoTab extends GetView<VideoTabController> {
     },
     {
       'username': '@beautyhaul.indonesia',
-      'description': 'Haul beauty produk lokal terbaik bulan ini! Semua harganya terjangkau 🛍️',
+      'description':
+          'Haul beauty produk lokal terbaik bulan ini! Semua harganya terjangkau 🛍️',
       'product': 'Wardah Lightening Series',
       'likes': '155.0K',
       'comments': '2.1K',
@@ -74,36 +79,44 @@ class VideoTab extends GetView<VideoTabController> {
           PageView.builder(
             scrollDirection: Axis.vertical,
             itemCount: _videos.length,
-            itemBuilder: (context, index) => Obx(() => _VideoPage(
-              data: _videos[index],
-              isLiked: controller.likedStates[index],
-              onLike: () => controller.toggleLike(index),
-            )),
+            itemBuilder: (context, index) => Obx(
+              () => _VideoPage(
+                data: _videos[index],
+                isLiked: controller.likedStates[index],
+                onLike: () => controller.toggleLike(index),
+              ),
+            ),
           ),
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Obx(() => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _FeedToggle(
-                    label: 'Following',
-                    isActive: controller.feedType.value == 1,
-                    onTap: () => controller.setFeedType(1),
-                  ),
-                  const SizedBox(width: 20),
-                  _FeedToggle(
-                    label: 'For You',
-                    isActive: controller.feedType.value == 0,
-                    onTap: () => controller.setFeedType(0),
-                  ),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.search, color: Colors.white, size: 24),
-                  ),
-                ],
-              )),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Obx(
+                () => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _FeedToggle(
+                      label: 'Following',
+                      isActive: controller.feedType.value == 1,
+                      onTap: () => controller.setFeedType(1),
+                    ),
+                    const SizedBox(width: 20),
+                    _FeedToggle(
+                      label: 'For You',
+                      isActive: controller.feedType.value == 0,
+                      onTap: () => controller.setFeedType(0),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
@@ -117,7 +130,11 @@ class _VideoPage extends StatelessWidget {
   final bool isLiked;
   final VoidCallback onLike;
 
-  const _VideoPage({required this.data, required this.isLiked, required this.onLike});
+  const _VideoPage({
+    required this.data,
+    required this.isLiked,
+    required this.onLike,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +150,11 @@ class _VideoPage extends StatelessWidget {
             ),
           ),
           child: Center(
-            child: Icon(Icons.play_circle_outline, size: 72,
-                color: Colors.white.withValues(alpha: 0.4)),
+            child: Icon(
+              Icons.play_circle_outline,
+              size: 72,
+              color: Colors.white.withValues(alpha: 0.4),
+            ),
           ),
         ),
         Container(
@@ -169,8 +189,15 @@ class _VideoPage extends StatelessWidget {
                       bottom: 0,
                       child: Container(
                         padding: const EdgeInsets.all(2),
-                        decoration: const BoxDecoration(color: kPrimary, shape: BoxShape.circle),
-                        child: const Icon(Icons.add, size: 12, color: Colors.white),
+                        decoration: const BoxDecoration(
+                          color: kPrimary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.add,
+                          size: 12,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ],
@@ -185,39 +212,69 @@ class _VideoPage extends StatelessWidget {
                 onTap: onLike,
               ),
               const SizedBox(height: 16),
-              _ActionButton(icon: Icons.chat_bubble_outline, label: data['comments'] as String),
+              _ActionButton(
+                icon: Icons.chat_bubble_outline,
+                label: data['comments'] as String,
+              ),
               const SizedBox(height: 16),
-              _ActionButton(icon: Icons.share_outlined, label: data['shares'] as String),
+              _ActionButton(
+                icon: Icons.share_outlined,
+                label: data['shares'] as String,
+              ),
               const SizedBox(height: 16),
               Container(
-                width: 44, height: 44,
+                width: 44,
+                height: 44,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 3),
-                  gradient: const LinearGradient(colors: [kPrimary, Color(0xFFFF8C42)]),
+                  gradient: const LinearGradient(
+                    colors: [kPrimary, Color(0xFFFF8C42)],
+                  ),
                 ),
-                child: const Icon(Icons.music_note, color: Colors.white, size: 18),
+                child: const Icon(
+                  Icons.music_note,
+                  color: Colors.white,
+                  size: 18,
+                ),
               ),
             ],
           ),
         ),
         Positioned(
-          left: 16, right: 80, bottom: 80,
+          left: 16,
+          right: 80,
+          bottom: 80,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(data['username'] as String,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 15)),
+              Text(
+                data['username'] as String,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
+                ),
+              ),
               const SizedBox(height: 6),
-              Text(data['description'] as String,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: Colors.white, fontSize: 13, height: 1.4)),
+              Text(
+                data['description'] as String,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  height: 1.4,
+                ),
+              ),
               const SizedBox(height: 8),
               GestureDetector(
                 onTap: () {},
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
                   decoration: BoxDecoration(
                     color: kPrimary.withValues(alpha: 0.9),
                     borderRadius: BorderRadius.circular(20),
@@ -225,11 +282,21 @@ class _VideoPage extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.shopping_bag_outlined, color: Colors.white, size: 13),
+                      const Icon(
+                        Icons.shopping_bag_outlined,
+                        color: Colors.white,
+                        size: 13,
+                      ),
                       const SizedBox(width: 5),
-                      Text(data['product'] as String,
-                          style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis),
+                      Text(
+                        data['product'] as String,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ],
                   ),
                 ),
@@ -240,10 +307,15 @@ class _VideoPage extends StatelessWidget {
                   const Icon(Icons.music_note, color: Colors.white, size: 13),
                   const SizedBox(width: 5),
                   Expanded(
-                    child: Text(data['music'] as String,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: Colors.white70, fontSize: 12)),
+                    child: Text(
+                      data['music'] as String,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -262,7 +334,13 @@ class _ActionButton extends StatelessWidget {
   final VoidCallback? onTap;
   final Widget? widget;
 
-  const _ActionButton({this.icon, this.iconColor, required this.label, this.onTap, this.widget});
+  const _ActionButton({
+    this.icon,
+    this.iconColor,
+    required this.label,
+    this.onTap,
+    this.widget,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -273,7 +351,14 @@ class _ActionButton extends StatelessWidget {
           widget ?? Icon(icon!, color: iconColor ?? Colors.white, size: 30),
           if (label.isNotEmpty) ...[
             const SizedBox(height: 4),
-            Text(label, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ],
         ],
       ),
@@ -286,7 +371,11 @@ class _FeedToggle extends StatelessWidget {
   final bool isActive;
   final VoidCallback onTap;
 
-  const _FeedToggle({required this.label, required this.isActive, required this.onTap});
+  const _FeedToggle({
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -295,17 +384,23 @@ class _FeedToggle extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(label,
-              style: TextStyle(
-                color: isActive ? Colors.white : Colors.white60,
-                fontWeight: isActive ? FontWeight.w700 : FontWeight.w400,
-                fontSize: 15,
-              )),
+          Text(
+            label,
+            style: TextStyle(
+              color: isActive ? Colors.white : Colors.white60,
+              fontWeight: isActive ? FontWeight.w700 : FontWeight.w400,
+              fontSize: 15,
+            ),
+          ),
           if (isActive) ...[
             const SizedBox(height: 3),
             Container(
-              width: 20, height: 2,
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(1)),
+              width: 20,
+              height: 2,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(1),
+              ),
             ),
           ],
         ],

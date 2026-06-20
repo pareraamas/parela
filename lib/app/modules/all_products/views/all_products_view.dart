@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/cart_item_model.dart';
-import 'package:parela/app/modules/home/widgets/product_card.dart';
+import 'package:parela/app/widgets/product_card.dart';
 import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
@@ -56,13 +56,15 @@ class AllProductsView extends GetView<AllProductsController> {
               isFavorite: main.wishlistIds.contains(p.id),
               onFavorite: () => main.toggleWishlist(p.id),
               onTap: () => Get.toNamed(Routes.PRODUCT_DETAIL, arguments: p),
-              onAddToCart: () => main.addToCart(CartItemModel(
-                productId: p.id,
-                quantity: 1,
-                color: p.colors.first,
-                size: p.sizes.first,
-                price: p.price,
-              )),
+              onAddToCart: () => main.addToCart(
+                CartItemModel(
+                  productId: p.id,
+                  quantity: 1,
+                  color: p.colors.first,
+                  size: p.sizes.first,
+                  price: p.price,
+                ),
+              ),
             ),
           );
         },
