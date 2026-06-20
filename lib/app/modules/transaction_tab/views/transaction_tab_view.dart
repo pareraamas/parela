@@ -1,29 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/order_model.dart';
-import 'package:parela/app/data/repositories/order_repository.dart';
 import 'package:parela/app/modules/main/widgets/app_header.dart';
+import 'package:parela/app/modules/transaction_tab/controllers/transaction_tab_controller.dart';
 import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
 
-class TransactionTab extends StatelessWidget {
+class TransactionTab extends GetView<TransactionTabController> {
   const TransactionTab({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final orders = Get.find<OrderRepository>().getAll();
     return Column(
       children: [
         const AppHeader(title: 'My Orders'),
         const _StatusFilterRow(),
         Expanded(
-          child: orders.isEmpty
-              ? const _EmptyOrders()
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: orders.length,
-                  itemBuilder: (_, i) => _OrderCard(order: orders[i]),
-                ),
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              return const Center(child: CircularProgressIndicator(color: kPrimary));
+            }
+            if (controller.orders.isEmpty) return const _EmptyOrders();
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: controller.orders.length,
+              itemBuilder: (_, i) => _OrderCard(order: controller.orders[i]),
+            );
+          }),
         ),
       ],
     );
@@ -86,13 +89,17 @@ class _OrderCard extends StatelessWidget {
   const _OrderCard({required this.order});
 
   Color _statusColor(String status) {
-    switch (status) {
-      case 'Delivered':
+    switch (status.toLowerCase()) {
+      case 'delivered':
+      case 'completed':
         return const Color(0xFF4CAF50);
-      case 'Shipped':
+      case 'shipped':
         return const Color(0xFF2196F3);
-      case 'Processing':
+      case 'processing':
+      case 'waiting_payment':
         return const Color(0xFFFF9800);
+      case 'cancelled':
+        return Colors.red;
       default:
         return kSubtext;
     }
@@ -124,11 +131,7 @@ class _OrderCard extends StatelessWidget {
               children: [
                 Text(
                   order.id,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
-                    color: kText,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: kText),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -148,10 +151,7 @@ class _OrderCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            Text(
-              order.date,
-              style: const TextStyle(color: kSubtext, fontSize: 12),
-            ),
+            Text(order.date, style: const TextStyle(color: kSubtext, fontSize: 12)),
             const SizedBox(height: 12),
             const Divider(height: 1, color: kBackground),
             const SizedBox(height: 12),
@@ -170,47 +170,10 @@ class _OrderCard extends StatelessWidget {
                 ),
                 Text(
                   'Rp ${_fmt(order.total)}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: kPrimary,
-                    fontSize: 14,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w700, color: kPrimary, fontSize: 14),
                 ),
               ],
             ),
-            if (order.status == 'Delivered') ...[
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: kPrimary,
-                    side: const BorderSide(color: kPrimary),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                  ),
-                  child: const Text('Write Review', style: TextStyle(fontSize: 13)),
-                ),
-              ),
-            ],
-            if (order.status == 'Shipped') ...[
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Get.toNamed(Routes.ORDER_DETAIL, arguments: order),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: kPrimary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    elevation: 0,
-                  ),
-                  child: const Text('Track Order', style: TextStyle(fontSize: 13)),
-                ),
-              ),
-            ],
           ],
         ),
       ),

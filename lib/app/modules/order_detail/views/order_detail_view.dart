@@ -47,7 +47,7 @@ class OrderDetailView extends GetView<OrderDetailController> {
             const SizedBox(height: 12),
             _Card(
               title: 'Items',
-              child: Column(
+              child: Obx(() => Column(
                 children: controller.orderProducts.map((p) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
@@ -99,51 +99,58 @@ class OrderDetailView extends GetView<OrderDetailController> {
                     ),
                   );
                 }).toList(),
-              ),
+              )),
             ),
             const SizedBox(height: 12),
             _Card(
               title: 'Delivery Address',
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    controller.address.recipient,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: kText,
+              child: Obx(() {
+                final addr = controller.address.value;
+                if (addr == null) return const SizedBox.shrink();
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      addr.recipient,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: kText,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    controller.address.fullAddress,
-                    style: const TextStyle(color: kSubtext, fontSize: 13, height: 1.5),
-                  ),
-                ],
-              ),
+                    const SizedBox(height: 4),
+                    Text(
+                      addr.fullAddress,
+                      style: const TextStyle(color: kSubtext, fontSize: 13, height: 1.5),
+                    ),
+                  ],
+                );
+              }),
             ),
             const SizedBox(height: 12),
             _Card(
               title: 'Payment & Total',
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Payment',
-                        style: TextStyle(color: kSubtext, fontSize: 13),
-                      ),
-                      Text(
-                        controller.payment.label,
-                        style: const TextStyle(
-                          color: kText,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
+                  Obx(() {
+                    final pay = controller.payment.value;
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Payment',
+                          style: TextStyle(color: kSubtext, fontSize: 13),
                         ),
-                      ),
-                    ],
-                  ),
+                        Text(
+                          pay?.label ?? '—',
+                          style: const TextStyle(
+                            color: kText,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

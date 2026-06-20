@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:parela/app/data/repositories/user_repository.dart';
+import 'package:parela/app/modules/main/controllers/main_controller.dart';
 
 class EditProfileController extends GetxController {
   late final TextEditingController nameController;
@@ -14,11 +14,11 @@ class EditProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    final user = Get.find<UserRepository>().getUser();
-    nameController = TextEditingController(text: user.name);
-    emailController = TextEditingController(text: user.email);
-    phoneController = TextEditingController(text: user.phone);
-    addressController = TextEditingController(text: user.address);
+    final user = Get.find<MainController>().currentUser.value;
+    nameController = TextEditingController(text: user?.name ?? '');
+    emailController = TextEditingController(text: user?.email ?? '');
+    phoneController = TextEditingController(text: user?.phone ?? '');
+    addressController = TextEditingController(text: user?.address ?? '');
   }
 
   bool _validate() {

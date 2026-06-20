@@ -6,11 +6,11 @@ import '../user_repository.dart';
 
 class MockUserRepository implements UserRepository {
   @override
-  UserModel getUser() => MockContent.mockUser;
+  Future<UserModel> getUser() async => MockContent.mockUser;
 
   @override
-  List<AddressModel> getAddresses() => MockContent.mockAddresses;
+  Future<List<AddressModel>> getAddresses() async => MockContent.mockAddresses;
 
   @override
-  List<PaymentMethodModel> getPaymentMethods() => MockContent.mockPaymentMethods;
+  Future<List<PaymentMethodModel>> getPaymentMethods() async => MockContent.mockPaymentMethods;
 }

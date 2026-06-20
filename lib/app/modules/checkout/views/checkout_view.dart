@@ -264,7 +264,7 @@ class _PaymentCard extends StatelessWidget {
               ),
             ),
             Text(
-              method.number,
+              method.number ?? method.last4 ?? '',
               style: const TextStyle(color: kSubtext, fontSize: 12),
             ),
           ],

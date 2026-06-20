@@ -7,38 +7,34 @@ import '../product_repository.dart';
 
 class MockProductRepository implements ProductRepository {
   @override
-  List<ProductModel> getAll() => MockContent.mockProducts;
+  Future<List<ProductModel>> getAll() async => MockContent.mockProducts;
 
   @override
-  List<ProductModel> getByCategory(String categoryId) {
-    final filtered =
-        MockContent.mockProducts.where((p) => p.categoryId == categoryId).toList();
+  Future<List<ProductModel>> getByCategory(String categoryId) async {
+    final filtered = MockContent.mockProducts.where((p) => p.categoryId == categoryId).toList();
     return filtered.isEmpty ? MockContent.mockProducts : filtered;
   }
 
   @override
-  List<ProductModel> getBySeller(String sellerId) {
-    final filtered =
-        MockContent.mockProducts.where((p) => p.sellerId == sellerId).toList();
-    return filtered.isEmpty
-        ? MockContent.mockProducts.take(4).toList()
-        : filtered;
+  Future<List<ProductModel>> getBySeller(String sellerId) async {
+    final filtered = MockContent.mockProducts.where((p) => p.sellerId == sellerId).toList();
+    return filtered.isEmpty ? MockContent.mockProducts.take(4).toList() : filtered;
   }
 
   @override
-  ProductModel? getById(String id) =>
+  Future<ProductModel?> getById(String id) async =>
       MockContent.mockProducts.where((p) => p.id == id).firstOrNull;
 
   @override
-  List<ReviewModel> getReviewsFor(String productId) =>
+  Future<List<ReviewModel>> getReviewsFor(String productId) async =>
       MockContent.mockReviews.where((r) => r.productId == productId).toList();
 
   @override
-  List<CategoryModel> getCategories() => MockContent.mockCategories;
+  Future<List<CategoryModel>> getCategories() async => MockContent.mockCategories;
 
   @override
-  List<BannerModel> getBanners() => MockContent.mockBanners;
+  Future<List<BannerModel>> getBanners() async => MockContent.mockBanners;
 
   @override
-  List<Map<String, dynamic>> getStories() => MockContent.mockStories;
+  Future<List<Map<String, dynamic>>> getStories() async => MockContent.mockStories;
 }

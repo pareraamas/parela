@@ -6,8 +6,8 @@ import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/routes/app_pages.dart';
 
 class CheckoutController extends GetxController {
-  late final List<AddressModel> addresses;
-  late final List<PaymentMethodModel> paymentMethods;
+  final addresses = <AddressModel>[].obs;
+  final paymentMethods = <PaymentMethodModel>[].obs;
   final selectedAddressIndex = 0.obs;
   final selectedPaymentIndex = 0.obs;
   final isLoading = false.obs;
@@ -15,9 +15,16 @@ class CheckoutController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    final repo = Get.find<UserRepository>();
-    addresses = repo.getAddresses();
-    paymentMethods = repo.getPaymentMethods();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final repo = Get.find<UserRepository>();
+      final results = await Future.wait([repo.getAddresses(), repo.getPaymentMethods()]);
+      addresses.assignAll(results[0] as List<AddressModel>);
+      paymentMethods.assignAll(results[1] as List<PaymentMethodModel>);
+    } catch (_) {}
   }
 
   double get subtotal => Get.find<MainController>().cartSubtotal;

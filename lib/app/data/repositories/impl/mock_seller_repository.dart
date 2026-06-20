@@ -4,9 +4,9 @@ import '../seller_repository.dart';
 
 class MockSellerRepository implements SellerRepository {
   @override
-  List<SellerModel> getAll() => MockContent.mockSellers;
+  Future<List<SellerModel>> getAll() async => MockContent.mockSellers;
 
   @override
-  SellerModel? getById(String id) =>
+  Future<SellerModel?> getById(String id) async =>
       MockContent.mockSellers.where((s) => s.id == id).firstOrNull;
 }

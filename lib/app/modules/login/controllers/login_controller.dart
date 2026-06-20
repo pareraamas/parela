@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:parela/app/data/repositories/auth_repository.dart';
+import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/routes/app_pages.dart';
+import 'package:parela/app/services/api_client.dart';
 
 class LoginController extends GetxController {
   final emailController = TextEditingController();
@@ -9,12 +12,14 @@ class LoginController extends GetxController {
   final isLoading = false.obs;
   final emailError = ''.obs;
   final passwordError = ''.obs;
+  final generalError = ''.obs;
 
   void toggleObscure() => obscurePassword.value = !obscurePassword.value;
 
   bool _validate() {
     emailError.value = '';
     passwordError.value = '';
+    generalError.value = '';
     bool ok = true;
     final email = emailController.text.trim();
     if (email.isEmpty) {
@@ -34,9 +39,20 @@ class LoginController extends GetxController {
   Future<void> login() async {
     if (!_validate()) return;
     isLoading.value = true;
-    await Future.delayed(const Duration(seconds: 1));
-    isLoading.value = false;
-    Get.offAllNamed(Routes.MAIN);
+    try {
+      final user = await Get.find<AuthRepository>().login(
+        email: emailController.text.trim(),
+        password: passwordController.text,
+      );
+      Get.find<MainController>().setUser(user);
+      Get.offAllNamed(Routes.MAIN);
+    } on ApiException catch (e) {
+      generalError.value = e.message;
+    } catch (_) {
+      generalError.value = 'Terjadi kesalahan. Coba lagi.';
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   @override

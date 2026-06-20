@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:parela/app/data/repositories/auth_repository.dart';
+import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/routes/app_pages.dart';
+import 'package:parela/app/services/api_client.dart';
 
 class RegisterController extends GetxController {
   final nameController = TextEditingController();
@@ -14,12 +17,14 @@ class RegisterController extends GetxController {
   final emailError = ''.obs;
   final passwordError = ''.obs;
   final confirmError = ''.obs;
+  final generalError = ''.obs;
 
   bool _validate() {
     nameError.value = '';
     emailError.value = '';
     passwordError.value = '';
     confirmError.value = '';
+    generalError.value = '';
     bool ok = true;
     if (nameController.text.trim().isEmpty) {
       nameError.value = 'Full name is required';
@@ -47,9 +52,21 @@ class RegisterController extends GetxController {
   Future<void> register() async {
     if (!_validate()) return;
     isLoading.value = true;
-    await Future.delayed(const Duration(seconds: 1));
-    isLoading.value = false;
-    Get.offAllNamed(Routes.MAIN);
+    try {
+      final user = await Get.find<AuthRepository>().register(
+        name: nameController.text.trim(),
+        email: emailController.text.trim(),
+        password: passwordController.text,
+      );
+      Get.find<MainController>().setUser(user);
+      Get.offAllNamed(Routes.MAIN);
+    } on ApiException catch (e) {
+      generalError.value = e.message;
+    } catch (_) {
+      generalError.value = 'Terjadi kesalahan. Coba lagi.';
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   @override

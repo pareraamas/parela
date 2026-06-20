@@ -4,9 +4,9 @@ import '../order_repository.dart';
 
 class MockOrderRepository implements OrderRepository {
   @override
-  List<OrderModel> getAll() => MockContent.mockOrders;
+  Future<List<OrderModel>> getAll() async => MockContent.mockOrders;
 
   @override
-  OrderModel? getById(String id) =>
+  Future<OrderModel?> getById(String id) async =>
       MockContent.mockOrders.where((o) => o.id == id).firstOrNull;
 }

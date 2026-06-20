@@ -1,5 +1,7 @@
 import 'package:parela/app/data/models/notification_model.dart';
 
 abstract class NotificationRepository {
-  List<NotificationModel> getAll();
+  Future<List<NotificationModel>> getAll();
+  Future<void> markAllRead();
+  Future<void> markRead(String id);
 }

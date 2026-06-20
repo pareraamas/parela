@@ -4,5 +4,11 @@ import '../notification_repository.dart';
 
 class MockNotificationRepository implements NotificationRepository {
   @override
-  List<NotificationModel> getAll() => MockContent.mockNotifications;
+  Future<List<NotificationModel>> getAll() async => MockContent.mockNotifications;
+
+  @override
+  Future<void> markAllRead() async {}
+
+  @override
+  Future<void> markRead(String id) async {}
 }

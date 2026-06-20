@@ -4,13 +4,13 @@ import 'package:parela/app/data/models/banner_model.dart';
 import 'package:parela/app/data/models/cart_item_model.dart';
 import 'package:parela/app/data/models/category_model.dart';
 import 'package:parela/app/data/models/notification_model.dart';
+import 'package:parela/app/data/models/order_item_model.dart';
 import 'package:parela/app/data/models/order_model.dart';
 import 'package:parela/app/data/models/payment_method_model.dart';
 import 'package:parela/app/data/models/product_model.dart';
 import 'package:parela/app/data/models/review_model.dart';
 import 'package:parela/app/data/models/seller_model.dart';
 import 'package:parela/app/data/models/user_model.dart';
-import 'package:parela/app/theme/app_colors.dart';
 
 class MockContent {
   MockContent._();
@@ -40,7 +40,7 @@ class MockContent {
       isBestSeller: true,
       sellerId: 's001',
       categoryId: 'c001',
-      color: kPrimaryLight,
+      colorHex: '#F8D7E5',
       description:
           'A volumizing mascara with a twist-up brush. Perfect for dramatic lashes that last all day without smudging.',
       colors: [0xFF000000, 0xFF4A1010, 0xFF1A237E],
@@ -57,7 +57,7 @@ class MockContent {
       isBestSeller: true,
       sellerId: 's002',
       categoryId: 'c004',
-      color: Color(0xFFE8F5E9),
+      colorHex: '#E8F5E9',
       description:
           'A lightweight serum that grips pigment for long-lasting color. Infused with 2% niacinamide for radiant skin.',
       colors: [0xFFE91E63, 0xFF9C27B0, 0xFFFF5722],
@@ -74,7 +74,7 @@ class MockContent {
       isBestSeller: false,
       sellerId: 's001',
       categoryId: 'c001',
-      color: Color(0xFFFFF9C4),
+      colorHex: '#FFF9C4',
       description:
           'Full-coverage foundation with up to 24-hour wear. Lightweight formula that blends seamlessly.',
       colors: [0xFFD7A87B, 0xFFC4956A, 0xFFB07B50],
@@ -91,7 +91,7 @@ class MockContent {
       isBestSeller: true,
       sellerId: 's003',
       categoryId: 'c001',
-      color: Color(0xFFFCE4EC),
+      colorHex: '#FCE4EC',
       description:
           'Define and line your lips with this long-lasting pencil. Creamy formula glides on effortlessly.',
       colors: [0xFFE91E63, 0xFFAD1457, 0xFFBF360C],
@@ -108,7 +108,7 @@ class MockContent {
       isBestSeller: true,
       sellerId: 's004',
       categoryId: 'c004',
-      color: Color(0xFFE3F2FD),
+      colorHex: '#E3F2FD',
       description:
           'Rich, non-greasy moisturizer for dry to very dry skin. Clinically proven to restore skin barrier.',
       colors: [0xFFFFFFFF],
@@ -125,7 +125,7 @@ class MockContent {
       isBestSeller: false,
       sellerId: 's005',
       categoryId: 'c004',
-      color: Color(0xFFE8F5E9),
+      colorHex: '#E8F5E9',
       description:
           'Intensive hydrating serum with fresh Jeju green tea. Provides 72-hour moisturization.',
       colors: [0xFF4CAF50],
@@ -142,7 +142,7 @@ class MockContent {
       isBestSeller: true,
       sellerId: 's002',
       categoryId: 'c001',
-      color: Color(0xFFFFF8E1),
+      colorHex: '#FFF8E1',
       description:
           'Matte finish powder with SPF 15. Provides buildable, natural-looking coverage.',
       colors: [0xFFD7A87B, 0xFFC4956A, 0xFFEDD9BD],
@@ -159,7 +159,7 @@ class MockContent {
       isBestSeller: false,
       sellerId: 's005',
       categoryId: 'c004',
-      color: Color(0xFFF3E5F5),
+      colorHex: '#F3E5F5',
       description:
           'Strengthens skin barrier with 5 types of ceramide. Reduces redness and sensitivity.',
       colors: [0xFFCE93D8],
@@ -176,7 +176,7 @@ class MockContent {
       isBestSeller: false,
       sellerId: 's003',
       categoryId: 'c002',
-      color: Color(0xFFEEEEEE),
+      colorHex: '#EEEEEE',
       description:
           'Smudge-proof eyeliner with built-in sharpener. Lasts up to 24 hours.',
       colors: [0xFF000000, 0xFF212121, 0xFF1A237E],
@@ -193,7 +193,7 @@ class MockContent {
       isBestSeller: false,
       sellerId: 's004',
       categoryId: 'c004',
-      color: Color(0xFFECEFF1),
+      colorHex: '#ECEFF1',
       description:
           'Purifying glow mask with Himalayan charcoal and bamboo. Draws out pore-clogging impurities.',
       colors: [0xFF607D8B],
@@ -216,22 +216,22 @@ class MockContent {
 
   // ── Banners ───────────────────────────────────────────────────────────────
 
-  static const List<BannerModel> mockBanners = [
-    BannerModel(
+  static final List<BannerModel> mockBanners = [
+    const BannerModel(
       tag: 'BRAND',
       title: 'Feminine Care',
       subtitle: 'Lorem ipsum dolor sit amet\nconsectetur adipiscing elit.',
       colorStart: Color(0xFFF8BDD0),
       colorEnd: Color(0xFFFCE4EC),
     ),
-    BannerModel(
+    const BannerModel(
       tag: 'PROMO',
       title: 'Summer Sale 50%',
       subtitle: 'Up to 50% off on all skincare\nproducts this weekend.',
       colorStart: Color(0xFFBBDEFB),
       colorEnd: Color(0xFFE3F2FD),
     ),
-    BannerModel(
+    const BannerModel(
       tag: 'NEW',
       title: 'Glow Collection',
       subtitle: 'Discover the new season\nbeauty collection.',
@@ -261,11 +261,62 @@ class MockContent {
   // ── Orders ────────────────────────────────────────────────────────────────
 
   static final List<OrderModel> mockOrders = [
-    OrderModel.fromMap({'id': 'ORD-20240601', 'date': '1 Jun 2024', 'status': 'Delivered', 'statusIndex': 3, 'total': 898000.0, 'items': ['p001', 'p004'], 'tracking': 'JNE-123456789'}),
-    OrderModel.fromMap({'id': 'ORD-20240525', 'date': '25 May 2024', 'status': 'Shipped', 'statusIndex': 2, 'total': 475000.0, 'items': ['p007'], 'tracking': 'SICEPAT-987654321'}),
-    OrderModel.fromMap({'id': 'ORD-20240510', 'date': '10 May 2024', 'status': 'Processing', 'statusIndex': 1, 'total': 310000.0, 'items': ['p006'], 'tracking': '-'}),
-    OrderModel.fromMap({'id': 'ORD-20240501', 'date': '1 May 2024', 'status': 'Delivered', 'statusIndex': 3, 'total': 220000.0, 'items': ['p002'], 'tracking': 'ANTERAJA-567891234'}),
-    OrderModel.fromMap({'id': 'ORD-20240420', 'date': '20 Apr 2024', 'status': 'Delivered', 'statusIndex': 3, 'total': 145000.0, 'items': ['p005'], 'tracking': 'JNE-112233445'}),
+    OrderModel(
+      id: 'ORD-20240601',
+      date: '1 Jun 2024',
+      status: 'delivered',
+      statusIndex: 3,
+      total: 898000,
+      tracking: 'JNE-123456789',
+      items: [
+        const OrderItemModel(productId: 'p001', productName: 'Bourjois Twist Up The Volume', variant: 'Black / 10ml', quantity: 2, price: 189000),
+        const OrderItemModel(productId: 'p004', productName: 'NYX Professional Lip Liner', variant: 'Pink / One Size', quantity: 1, price: 95000),
+      ],
+    ),
+    OrderModel(
+      id: 'ORD-20240525',
+      date: '25 May 2024',
+      status: 'shipped',
+      statusIndex: 2,
+      total: 475000,
+      tracking: 'SICEPAT-987654321',
+      items: [
+        const OrderItemModel(productId: 'p007', productName: 'MAC Studio Fix Powder', variant: 'NW25', quantity: 1, price: 425000),
+      ],
+    ),
+    OrderModel(
+      id: 'ORD-20240510',
+      date: '10 May 2024',
+      status: 'processing',
+      statusIndex: 1,
+      total: 310000,
+      tracking: '-',
+      items: [
+        const OrderItemModel(productId: 'p006', productName: 'Innisfree Green Tea Serum', variant: '50ml', quantity: 1, price: 310000),
+      ],
+    ),
+    OrderModel(
+      id: 'ORD-20240501',
+      date: '1 May 2024',
+      status: 'delivered',
+      statusIndex: 3,
+      total: 220000,
+      tracking: 'ANTERAJA-567891234',
+      items: [
+        const OrderItemModel(productId: 'p002', productName: 'Maybelline Grippy Serum +2%', variant: 'Pink / 30ml', quantity: 1, price: 220000),
+      ],
+    ),
+    OrderModel(
+      id: 'ORD-20240420',
+      date: '20 Apr 2024',
+      status: 'delivered',
+      statusIndex: 3,
+      total: 145000,
+      tracking: 'JNE-112233445',
+      items: [
+        const OrderItemModel(productId: 'p005', productName: 'Cetaphil Moisturizing Cream', variant: '250g', quantity: 1, price: 145000),
+      ],
+    ),
   ];
 
   // ── Notifications ─────────────────────────────────────────────────────────

@@ -136,10 +136,11 @@ class ProductDetailView extends GetView<ProductDetailController> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Obx(
-                      () => Row(
+                    Obx(() {
+                      final selectedColor = controller.selectedColorIndex.value;
+                      return Row(
                         children: List.generate(product.colors.length, (i) {
-                          final isSelected = i == controller.selectedColorIndex.value;
+                          final isSelected = i == selectedColor;
                           return GestureDetector(
                             onTap: () => controller.selectedColorIndex.value = i,
                             child: Container(
@@ -162,8 +163,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
                             ),
                           );
                         }),
-                      ),
-                    ),
+                      );
+                    }),
                     const SizedBox(height: 20),
                     const Text(
                       'Size',
@@ -174,11 +175,12 @@ class ProductDetailView extends GetView<ProductDetailController> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Obx(
-                      () => Wrap(
+                    Obx(() {
+                      final selectedSize = controller.selectedSizeIndex.value;
+                      return Wrap(
                         spacing: 10,
                         children: List.generate(product.sizes.length, (i) {
-                          final isSelected = i == controller.selectedSizeIndex.value;
+                          final isSelected = i == selectedSize;
                           return GestureDetector(
                             onTap: () => controller.selectedSizeIndex.value = i,
                             child: Container(
@@ -203,8 +205,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
                             ),
                           );
                         }),
-                      ),
-                    ),
+                      );
+                    }),
                     const SizedBox(height: 20),
                     const Divider(color: kBackground),
                     const SizedBox(height: 12),
@@ -365,7 +367,7 @@ class _ReviewCard extends StatelessWidget {
                 radius: 16,
                 backgroundColor: kPrimaryLight,
                 child: Text(
-                  review.user[0],
+                  review.userName[0],
                   style: const TextStyle(
                     color: kPrimary,
                     fontWeight: FontWeight.w700,
@@ -375,7 +377,7 @@ class _ReviewCard extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  review.user,
+                  review.userName,
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 13,

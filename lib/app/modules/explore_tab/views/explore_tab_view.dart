@@ -1,34 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/cart_item_model.dart';
+import 'package:parela/app/modules/explore_tab/controllers/explore_tab_controller.dart';
 import 'package:parela/app/modules/home/widgets/product_card.dart';
 import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/modules/main/widgets/app_header.dart';
 import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
 
-class ExploreTab extends StatefulWidget {
+class ExploreTab extends GetView<ExploreTabController> {
   const ExploreTab({super.key});
-
-  @override
-  State<ExploreTab> createState() => _ExploreTabState();
-}
-
-class _ExploreTabState extends State<ExploreTab> {
-  int _selectedCategoryIndex = 0;
-  final _searchController = TextEditingController();
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final main = Get.find<MainController>();
-    final categoryLabels = ['All', ...main.categories.map((c) => c.label)];
-
     return Column(
       children: [
         const AppHeader(title: 'Explore'),
@@ -43,7 +28,7 @@ class _ExploreTabState extends State<ExploreTab> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TextField(
-                  controller: _searchController,
+                  controller: controller.searchTextController,
                   decoration: const InputDecoration(
                     hintText: 'Search products...',
                     hintStyle: TextStyle(color: kSubtext, fontSize: 14),
@@ -55,48 +40,47 @@ class _ExploreTabState extends State<ExploreTab> {
                 ),
               ),
               const SizedBox(height: 12),
-              SizedBox(
-                height: 36,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: categoryLabels.length,
-                  itemBuilder: (context, index) {
-                    final isSelected = index == _selectedCategoryIndex;
-                    return GestureDetector(
-                      onTap: () =>
-                          setState(() => _selectedCategoryIndex = index),
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 8),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: isSelected ? kPrimary : kBackground,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          categoryLabels[index],
-                          style: TextStyle(
-                            color: isSelected ? Colors.white : kSubtext,
-                            fontSize: 13,
-                            fontWeight: isSelected
-                                ? FontWeight.w600
-                                : FontWeight.normal,
+              Obx(() {
+                final categoryLabels = ['All', ...main.categories.map((c) => c.label)];
+                return SizedBox(
+                  height: 36,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: categoryLabels.length,
+                    itemBuilder: (context, index) {
+                      final isSelected = index == controller.selectedCategoryIndex.value;
+                      return GestureDetector(
+                        onTap: () => controller.selectCategory(index),
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: isSelected ? kPrimary : kBackground,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            categoryLabels[index],
+                            style: TextStyle(
+                              color: isSelected ? Colors.white : kSubtext,
+                              fontSize: 13,
+                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+                      );
+                    },
+                  ),
+                );
+              }),
             ],
           ),
         ),
         Expanded(
-          child: GridView.builder(
+          child: Obx(() {
+            final products = main.products.toList();
+            return GridView.builder(
               padding: const EdgeInsets.all(16),
-              itemCount: main.products.length,
+              itemCount: products.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 0.72,
@@ -104,7 +88,7 @@ class _ExploreTabState extends State<ExploreTab> {
                 mainAxisSpacing: 12,
               ),
               itemBuilder: (context, index) {
-                final p = main.products[index];
+                final p = products[index];
                 return Obx(() => ProductCard(
                   product: p,
                   isFavorite: main.wishlistIds.contains(p.id),
@@ -119,7 +103,8 @@ class _ExploreTabState extends State<ExploreTab> {
                   )),
                 ));
               },
-            ),
+            );
+          }),
         ),
       ],
     );

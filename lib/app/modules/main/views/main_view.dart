@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/theme/app_colors.dart';
+import 'package:parela/app/modules/explore_tab/views/explore_tab_view.dart';
+import 'package:parela/app/modules/home/views/home_view.dart';
+import 'package:parela/app/modules/profile_tab/views/profile_tab_view.dart';
+import 'package:parela/app/modules/transaction_tab/views/transaction_tab_view.dart';
+import 'package:parela/app/modules/video_tab/views/video_tab_view.dart';
 import '../controllers/main_controller.dart';
-import 'tabs/explore_tab.dart';
-import 'tabs/home_tab.dart';
-import 'tabs/profile_tab.dart';
-import 'tabs/transaction_tab.dart';
-import 'tabs/video_tab.dart';
 
 class MainView extends GetView<MainController> {
   const MainView({super.key});

@@ -4,12 +4,12 @@ import 'package:parela/app/data/models/product_model.dart';
 import 'package:parela/app/data/models/review_model.dart';
 
 abstract class ProductRepository {
-  List<ProductModel> getAll();
-  List<ProductModel> getByCategory(String categoryId);
-  List<ProductModel> getBySeller(String sellerId);
-  ProductModel? getById(String id);
-  List<ReviewModel> getReviewsFor(String productId);
-  List<CategoryModel> getCategories();
-  List<BannerModel> getBanners();
-  List<Map<String, dynamic>> getStories();
+  Future<List<ProductModel>> getAll();
+  Future<List<ProductModel>> getByCategory(String categoryId);
+  Future<List<ProductModel>> getBySeller(String sellerId);
+  Future<ProductModel?> getById(String id);
+  Future<List<ReviewModel>> getReviewsFor(String productId);
+  Future<List<CategoryModel>> getCategories();
+  Future<List<BannerModel>> getBanners();
+  Future<List<Map<String, dynamic>>> getStories();
 }

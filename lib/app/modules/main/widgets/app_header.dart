@@ -52,14 +52,26 @@ class AppHeader extends StatelessWidget {
                 ),
           const Spacer(),
           IconButton(
-            onPressed: () => Get.toNamed(Routes.MESSAGES),
+            onPressed: () {
+              if (main.isLoggedIn.value) {
+                Get.toNamed(Routes.MESSAGES);
+              } else {
+                Get.toNamed(Routes.LOGIN);
+              }
+            },
             icon: const Icon(Icons.chat_bubble_outline_rounded, color: kText, size: 24),
           ),
           Obx(() => Stack(
                 clipBehavior: Clip.none,
                 children: [
                   IconButton(
-                    onPressed: () => Get.toNamed(Routes.CART),
+                    onPressed: () {
+                      if (main.isLoggedIn.value) {
+                        Get.toNamed(Routes.CART);
+                      } else {
+                        Get.toNamed(Routes.LOGIN);
+                      }
+                    },
                     icon: const Icon(Icons.shopping_bag_outlined, color: kText, size: 24),
                   ),
                   if (main.cartCount.value > 0)

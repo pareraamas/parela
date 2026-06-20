@@ -3,29 +3,51 @@ import 'package:parela/app/data/models/address_model.dart';
 import 'package:parela/app/data/models/order_model.dart';
 import 'package:parela/app/data/models/payment_method_model.dart';
 import 'package:parela/app/data/models/product_model.dart';
-import 'package:parela/app/data/repositories/order_repository.dart';
 import 'package:parela/app/data/repositories/product_repository.dart';
 import 'package:parela/app/data/repositories/user_repository.dart';
+import 'package:parela/app/modules/main/controllers/main_controller.dart';
 
 class OrderDetailController extends GetxController {
-  late final ProductRepository _productRepo;
-  late final UserRepository _userRepo;
+  final isLoading = true.obs;
   late final OrderModel order;
+  final orderProducts = <ProductModel>[].obs;
+  final address = Rxn<AddressModel>();
+  final payment = Rxn<PaymentMethodModel>();
 
   final statusSteps = ['Confirmed', 'Processing', 'Shipped', 'Delivered'];
 
   @override
   void onInit() {
     super.onInit();
-    _productRepo = Get.find<ProductRepository>();
-    _userRepo = Get.find<UserRepository>();
-    order = Get.arguments as OrderModel? ??
-        Get.find<OrderRepository>().getAll().first;
+    order = Get.arguments as OrderModel? ?? Get.find<MainController>().products.first as dynamic;
+    _load();
   }
 
-  List<ProductModel> get orderProducts =>
-      _productRepo.getAll().where((p) => order.items.contains(p.id)).toList();
+  Future<void> _load() async {
+    try {
+      isLoading.value = true;
+      final productRepo = Get.find<ProductRepository>();
+      final userRepo = Get.find<UserRepository>();
 
-  AddressModel get address => _userRepo.getAddresses().first;
-  PaymentMethodModel get payment => _userRepo.getPaymentMethods().first;
+      final itemIds = order.items.map((i) => i.productId).toSet();
+      final results = await Future.wait([
+        productRepo.getAll(),
+        userRepo.getAddresses(),
+        userRepo.getPaymentMethods(),
+      ]);
+
+      orderProducts.assignAll(
+        (results[0] as List<ProductModel>).where((p) => itemIds.contains(p.id)),
+      );
+
+      final addrs = results[1] as List<AddressModel>;
+      address.value = addrs.isNotEmpty ? addrs.first : null;
+
+      final pays = results[2] as List<PaymentMethodModel>;
+      payment.value = pays.isNotEmpty ? pays.first : null;
+    } catch (_) {
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

@@ -43,13 +43,30 @@ class StorageService {
   Future<void> saveWishlist(List<String> ids) async =>
       _prefs.setStringList(_wishlistKey, ids);
 
+  // ── Auth tokens ───────────────────────────────────────────────────────────
+
+  static const _accessTokenKey = 'access_token';
+  static const _refreshTokenKey = 'refresh_token';
+
+  String? get accessToken => _prefs.getString(_accessTokenKey);
+  String? get refreshToken => _prefs.getString(_refreshTokenKey);
+
+  Future<void> saveTokens({
+    required String accessToken,
+    required String refreshToken,
+  }) async {
+    await _prefs.setString(_accessTokenKey, accessToken);
+    await _prefs.setString(_refreshTokenKey, refreshToken);
+  }
+
+  Future<void> clearTokens() async {
+    await _prefs.remove(_accessTokenKey);
+    await _prefs.remove(_refreshTokenKey);
+  }
+
+  bool get isLoggedIn => accessToken != null;
+
   // ── Session ───────────────────────────────────────────────────────────────
-
-  static const _loggedInKey = 'is_logged_in';
-
-  bool get isLoggedIn => _prefs.getBool(_loggedInKey) ?? false;
-
-  Future<void> setLoggedIn(bool value) => _prefs.setBool(_loggedInKey, value);
 
   Future<void> clearAll() => _prefs.clear();
 }

@@ -11,15 +11,26 @@ class ProductDetailController extends GetxController {
   final selectedColorIndex = 0.obs;
   final selectedSizeIndex = 0.obs;
   final quantity = 1.obs;
+  final reviews = <ReviewModel>[].obs;
+  final isLoadingReviews = false.obs;
 
   @override
   void onInit() {
     super.onInit();
     _repo = Get.find<ProductRepository>();
-    product = Get.arguments as ProductModel? ?? _repo.getAll().first;
+    product = Get.arguments as ProductModel;
+    _loadReviews();
   }
 
-  List<ReviewModel> get reviews => _repo.getReviewsFor(product.id);
+  Future<void> _loadReviews() async {
+    try {
+      isLoadingReviews.value = true;
+      reviews.assignAll(await _repo.getReviewsFor(product.id));
+    } catch (_) {
+    } finally {
+      isLoadingReviews.value = false;
+    }
+  }
 
   void incrementQty() => quantity.value++;
   void decrementQty() {
@@ -28,11 +39,17 @@ class ProductDetailController extends GetxController {
 
   void addToCart() {
     final main = Get.find<MainController>();
+    final color = product.colors.isNotEmpty
+        ? product.colors[selectedColorIndex.value]
+        : 0xFF000000;
+    final size = product.sizes.isNotEmpty
+        ? product.sizes[selectedSizeIndex.value]
+        : 'One Size';
     main.addToCart(CartItemModel(
       productId: product.id,
       quantity: quantity.value,
-      color: product.colors[selectedColorIndex.value],
-      size: product.sizes[selectedSizeIndex.value],
+      color: color,
+      size: size,
       price: product.price,
     ));
     Get.snackbar(
