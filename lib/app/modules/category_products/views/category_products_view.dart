@@ -50,8 +50,8 @@ class CategoryProductsView extends GetView<CategoryProductsController> {
                 return MasonryGridView.count(
                   padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
                   crossAxisCount: 2,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 6,
+                  crossAxisSpacing: 6,
                   itemCount: controller.products.length,
                   itemBuilder: (context, index) {
                     final p = controller.products[index];

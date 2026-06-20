@@ -184,9 +184,9 @@ class SearchResultView extends GetView<SearchResultController> {
                     Expanded(
                       child: MasonryGridView.count(
                         crossAxisCount: 2,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        mainAxisSpacing: 6,
+                        crossAxisSpacing: 6,
+                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
                         itemCount: items.length,
                         itemBuilder: (context, index) {
                           final p = items[index];
