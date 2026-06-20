@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/modules/search/controllers/search_controller.dart';
 import 'package:parela/app/data/repositories/auth_repository.dart';
 import 'package:parela/app/data/repositories/cart_repository.dart';
@@ -20,7 +21,6 @@ import 'package:parela/app/data/repositories/user_repository.dart';
 class AppBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(ProductSearchController(), permanent: true);
     Get.put<AuthRepository>(MockAuthRepository(), permanent: true);
     Get.put<ProductRepository>(MockProductRepository(), permanent: true);
     Get.put<UserRepository>(MockUserRepository(), permanent: true);
@@ -29,5 +29,7 @@ class AppBinding extends Bindings {
     Get.put<SellerRepository>(MockSellerRepository(), permanent: true);
     Get.put<CartRepository>(MockCartRepository(), permanent: true);
     Get.put<PromotionRepository>(MockPromotionRepository(), permanent: true);
+    Get.put<MainController>(MainController(), permanent: true);
+    Get.put(ProductSearchController(), permanent: true);
   }
 }

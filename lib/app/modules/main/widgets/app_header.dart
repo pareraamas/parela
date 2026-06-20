@@ -31,7 +31,7 @@ class AppHeader extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () => Navigator.of(context).push(
                           PageRouteBuilder(
-                            pageBuilder: (_, _, _) => const SearchPage(),
+                            pageBuilder: (_, _, _) => SearchPage(heroTag: heroTag),
                             transitionDuration: const Duration(
                               milliseconds: 250,
                             ),
@@ -125,13 +125,13 @@ class AppHeader extends StatelessWidget {
                 ),
                 if (main.cartCount.value > 0)
                   Positioned(
-                    top: 6,
-                    right: 6,
+                    top: 0,
+                    right: 0,
                     child: Container(
-                      padding: const EdgeInsets.all(2),
+                      padding: const EdgeInsets.all(4),
                       constraints: const BoxConstraints(
-                        minWidth: 16,
-                        minHeight: 16,
+                        minWidth: 12,
+                        minHeight: 12,
                       ),
                       decoration: const BoxDecoration(
                         color: kPrimary,
@@ -141,7 +141,7 @@ class AppHeader extends StatelessWidget {
                         '${main.cartCount.value}',
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 9,
+                          fontSize: 10,
                           fontWeight: FontWeight.w700,
                         ),
                         textAlign: TextAlign.center,

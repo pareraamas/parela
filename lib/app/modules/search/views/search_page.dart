@@ -5,7 +5,9 @@ import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  const SearchPage({super.key, this.heroTag = 'search-bar'});
+
+  final String heroTag;
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -61,7 +63,7 @@ class _SearchPageState extends State<SearchPage> {
             // ── Search bar (Hero destination) ─────────────────────────
             Container(
               color: Colors.white,
-              padding: const EdgeInsets.fromLTRB(4, 8, 8, 8),
+              padding: const EdgeInsets.fromLTRB(4, 8, 16, 8),
               child: Row(
                 children: [
                   IconButton(
@@ -74,18 +76,17 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                   Expanded(
                     child: Hero(
-                      tag: 'search-bar',
+                      tag: widget.heroTag,
                       child: Material(
                         color: Colors.transparent,
                         child: Container(
-                          height: 40,
+                          height: 38,
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           decoration: BoxDecoration(
-                            color: kBackground,
+                            color: const Color(0xFFFFF9FB),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: kPrimary.withValues(alpha: 0.5),
-                              width: 1.5,
+                              color: kPrimary.withValues(alpha: 0.3),
                             ),
                           ),
                           child: Row(
@@ -130,17 +131,6 @@ class _SearchPageState extends State<SearchPage> {
                             ],
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: _submit,
-                    child: const Text(
-                      'Cari',
-                      style: TextStyle(
-                        color: kPrimary,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
                       ),
                     ),
                   ),

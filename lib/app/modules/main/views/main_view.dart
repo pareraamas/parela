@@ -27,7 +27,7 @@ class MainView extends GetView<MainController> {
         value: statusBarStyle,
         child: Scaffold(
           backgroundColor: isVideoTab ? Colors.black : Colors.white,
-          extendBody: false,
+          extendBody: isVideoTab,
           body: SafeArea(
             bottom: false,
             child: IndexedStack(

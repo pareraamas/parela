@@ -82,6 +82,27 @@ class ApiProductRepository implements ProductRepository {
         .toList();
   }
 
+  @override
+  Future<List<Map<String, dynamic>>> getVideoFeed() async {
+    final res = await _client.get('/videos/feed', auth: false);
+    return ((res['data'] as List?) ?? [])
+        .map((j) => <String, dynamic>{
+              'username': j['username'] as String? ?? '',
+              'sellerId': j['seller_id'] as String? ?? '',
+              'avatarUrl': j['avatar_url'],
+              'description': j['description'] as String? ?? '',
+              'productId': j['product_id'] as String? ?? '',
+              'product': j['product_name'] as String? ?? '',
+              'likes': j['likes'] as String? ?? '0',
+              'comments': j['comments'] as String? ?? '0',
+              'shares': j['shares'] as String? ?? '0',
+              'music': j['music'] as String? ?? '',
+              'colorTop': _colorFromHex(j['color_top_hex'] as String? ?? 'FFCDD2'),
+              'colorBottom': _colorFromHex(j['color_bottom_hex'] as String? ?? 'F06292'),
+            })
+        .toList();
+  }
+
   static Color _colorFromHex(String hex) {
     final h = hex.replaceAll('#', '');
     return Color(int.parse(h.length == 6 ? 'FF$h' : h, radix: 16));

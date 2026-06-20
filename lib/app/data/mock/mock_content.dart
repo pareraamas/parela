@@ -515,6 +515,107 @@ class MockContent {
     ),
   ];
 
+  // ── Video Feed ────────────────────────────────────────────────────────────
+
+  static const List<Map<String, dynamic>> mockVideoFeed = [
+    {
+      'username': '@esqa.cosmetics',
+      'sellerId': 's001',
+      'avatarUrl': 'assets/public/sellers/esqa-mall/avatar.webp',
+      'description':
+          'Tutorial pakai ESQA Lip Matte Cream — intens, transfer-proof, tahan 8 jam! 💄 #esqa #lipsticktutorial #makeupnatural #fyp',
+      'productId': 'p003',
+      'product': 'ESQA Lip Matte Cream',
+      'likes': '124.2K',
+      'comments': '1.2K',
+      'shares': '892',
+      'music': 'Original Sound - ESQA Cosmetics',
+      'videoUrl': 'assets/public/videos/esqa-lipstik-story/video.mp4',
+      'colorTop': Color(0xFFFFCDD2),
+      'colorBottom': Color(0xFFF06292),
+    },
+    {
+      'username': '@iok.indonesia',
+      'sellerId': 's002',
+      'avatarUrl': 'assets/public/sellers/iok-mall/avatar.webp',
+      'description':
+          'IOK Jaket Anti UV UPF50+! Ultra ringan, proteksi 98% sinar UV, bisa dilipat masuk saku 🧥 #iok #jaket #outdoor #antiuv',
+      'productId': 'p006',
+      'product': 'IOK Jaket Anti UV UPF50+',
+      'likes': '45.6K',
+      'comments': '534',
+      'shares': '678',
+      'music': 'As It Was - Harry Styles',
+      'videoUrl': 'assets/public/videos/iok-jaket-story/video.mp4',
+      'colorTop': Color(0xFFDCEDC8),
+      'colorBottom': Color(0xFF33691E),
+    },
+    {
+      'username': '@foc.official',
+      'sellerId': 's003',
+      'avatarUrl': 'assets/public/sellers/foc-offisial/avatar.webp',
+      'description':
+          'FOC Meteore EDP — aroma woody-aromatic premium, tahan 8–12 jam! 💫 #foc #parfume #meteore #woody',
+      'productId': 'p004',
+      'product': 'FOC Meteore Eau de Parfum',
+      'likes': '67.3K',
+      'comments': '912',
+      'shares': '445',
+      'music': 'Stay - Justin Bieber',
+      'videoUrl': 'assets/public/videos/foc-parfume-story/video.mp4',
+      'colorTop': Color(0xFFD1C4E9),
+      'colorBottom': Color(0xFF311B92),
+    },
+    {
+      'username': '@iok.indonesia',
+      'sellerId': 's002',
+      'avatarUrl': 'assets/public/sellers/iok-mall/avatar.webp',
+      'description':
+          'IOK Celana Olahraga Slim Fit — 4-way stretch, moisture-wicking, anti-bau! 🏃 #iok #activewear #gym #olahraga',
+      'productId': 'p005',
+      'product': 'IOK Celana Olahraga Slim Fit',
+      'likes': '78.4K',
+      'comments': '1.3K',
+      'shares': '987',
+      'music': 'Flowers - Miley Cyrus',
+      'videoUrl': 'assets/public/videos/iok-celana-story/video.mp4',
+      'colorTop': Color(0xFFBBDEFB),
+      'colorBottom': Color(0xFF1565C0),
+    },
+    {
+      'username': '@esqa.cosmetics',
+      'sellerId': 's001',
+      'avatarUrl': 'assets/public/sellers/esqa-mall/avatar.webp',
+      'description':
+          'ESQA x Tasya Farasya Eyeshadow Palette — 12 warna pigmentasi tinggi, vegan & cruelty-free 🎨 #esqa #tasya #eyeshadow',
+      'productId': 'p002',
+      'product': 'ESQA x Tasya Farasya Eyeshadow',
+      'likes': '89.5K',
+      'comments': '756',
+      'shares': '1.1K',
+      'music': 'Chill Vibes - lofi mix',
+      'videoUrl': 'assets/public/videos/esqa-eyeshadow-story/video.mp4',
+      'colorTop': Color(0xFFF8BBD0),
+      'colorBottom': Color(0xFF4A148C),
+    },
+    {
+      'username': '@iok.indonesia',
+      'sellerId': 's002',
+      'avatarUrl': 'assets/public/sellers/iok-mall/avatar.webp',
+      'description':
+          'IOK Shino Shorts — bahan ringan, desain clean minimalis, cocok buat casual everyday ✌️ #iok #shino #casualwear #fashion',
+      'productId': 'p008',
+      'product': 'IOK Shino Shorts',
+      'likes': '33.2K',
+      'comments': '421',
+      'shares': '312',
+      'music': 'Levitating - Dua Lipa',
+      'videoUrl': 'assets/public/videos/iok-shino-pendek-story/video.mp4',
+      'colorTop': Color(0xFFCFD8DC),
+      'colorBottom': Color(0xFF37474F),
+    },
+  ];
+
   // ── Stories ───────────────────────────────────────────────────────────────
 
   static const List<Map<String, dynamic>> mockStories = [

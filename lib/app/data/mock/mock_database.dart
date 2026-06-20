@@ -20,6 +20,7 @@ class MockDatabase {
   final List<ProductModel> products = [...MockContent.mockProducts];
   final List<CategoryModel> categories = [...MockContent.mockCategories];
   final List<BannerModel> banners = [...MockContent.mockBanners];
+  final List<Map<String, dynamic>> videoFeed = [...MockContent.mockVideoFeed];
   final List<Map<String, dynamic>> stories = [...MockContent.mockStories];
   final List<OrderModel> orders = [...MockContent.mockOrders];
   final List<NotificationModel> notifications = [...MockContent.mockNotifications];

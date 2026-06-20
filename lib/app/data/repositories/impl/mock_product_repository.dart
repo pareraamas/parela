@@ -52,4 +52,7 @@ class MockProductRepository implements ProductRepository {
 
   @override
   Future<List<Map<String, dynamic>>> getStories() async => _db.stories;
+
+  @override
+  Future<List<Map<String, dynamic>>> getVideoFeed() async => _db.videoFeed;
 }

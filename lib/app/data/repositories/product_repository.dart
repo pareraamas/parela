@@ -12,4 +12,5 @@ abstract class ProductRepository {
   Future<List<CategoryModel>> getCategories();
   Future<List<BannerModel>> getBanners();
   Future<List<Map<String, dynamic>>> getStories();
+  Future<List<Map<String, dynamic>>> getVideoFeed();
 }

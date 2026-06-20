@@ -18,6 +18,7 @@ class MainController extends GetxController {
   final currentUser = Rxn<UserModel>();
 
   final _sellersById = <String, SellerModel>{};
+  int? _pendingTabAfterLogin;
 
   SellerModel? sellerById(String id) => _sellersById[id];
 
@@ -36,7 +37,14 @@ class MainController extends GetxController {
     }
   }
 
-  void changeTab(int index) => tabIndex.value = index;
+  void changeTab(int index) {
+    if (index == 4 && !isLoggedIn.value) {
+      _pendingTabAfterLogin = 4;
+      Get.toNamed(Routes.LOGIN);
+      return;
+    }
+    tabIndex.value = index;
+  }
 
   void setUser(UserModel user) {
     currentUser.value = user;
@@ -45,6 +53,10 @@ class MainController extends GetxController {
     cartItems.assignAll(saved.isNotEmpty ? saved : _cartRepo.getInitialCart());
     wishlistIds.assignAll(_cartRepo.loadWishlist());
     cartCount.value = cartItems.length;
+    if (_pendingTabAfterLogin != null) {
+      tabIndex.value = _pendingTabAfterLogin!;
+      _pendingTabAfterLogin = null;
+    }
   }
 
   void logout() {
