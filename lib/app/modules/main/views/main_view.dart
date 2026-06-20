@@ -158,19 +158,26 @@ class _NavItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              isActive ? activeIcon : icon,
-              color: isActive ? activeColor : iconColor,
-              size: 24,
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              transitionBuilder: (child, animation) =>
+                  ScaleTransition(scale: animation, child: child),
+              child: Icon(
+                isActive ? activeIcon : icon,
+                key: ValueKey<bool>(isActive),
+                color: isActive ? activeColor : iconColor,
+                size: 24,
+              ),
             ),
             const SizedBox(height: 3),
-            Text(
-              label,
+            AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 250),
               style: TextStyle(
                 fontSize: 10,
                 color: isActive ? activeColor : iconColor,
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
               ),
+              child: Text(label),
             ),
           ],
         ),
@@ -179,17 +186,53 @@ class _NavItem extends StatelessWidget {
   }
 }
 
-class _VideoNavItem extends StatelessWidget {
+class _VideoNavItem extends StatefulWidget {
   final bool isActive;
   final VoidCallback onTap;
 
   const _VideoNavItem({required this.isActive, required this.onTap});
 
   @override
+  State<_VideoNavItem> createState() => _VideoNavItemState();
+}
+
+class _VideoNavItemState extends State<_VideoNavItem>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 250),
+      value: widget.isActive ? 1.0 : 0.0,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant _VideoNavItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isActive != widget.isActive) {
+      if (widget.isActive) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Expanded(
       child: GestureDetector(
-        onTap: onTap,
+        onTap: widget.onTap,
         behavior: HitTestBehavior.opaque,
         child: Center(
           child: Stack(
@@ -221,13 +264,16 @@ class _VideoNavItem extends StatelessWidget {
                 width: 36,
                 height: 34,
                 decoration: BoxDecoration(
-                  color: isActive ? Colors.black : Colors.white,
+                  color: widget.isActive ? Colors.black : Colors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
-                  Icons.play_arrow_rounded,
-                  color: isActive ? Colors.white : Colors.black,
-                  size: 22,
+                child: Center(
+                  child: AnimatedIcon(
+                    icon: AnimatedIcons.play_pause,
+                    progress: _controller,
+                    color: widget.isActive ? Colors.white : Colors.black,
+                    size: 22,
+                  ),
                 ),
               ),
             ],

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/modules/main/controllers/main_controller.dart';
+import 'package:parela/app/modules/search/views/search_page.dart';
 import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
 
@@ -28,7 +29,22 @@ class AppHeader extends StatelessWidget {
                     child: Material(
                       color: Colors.transparent,
                       child: GestureDetector(
-                        onTap: () => Get.toNamed(Routes.SEARCH),
+                        onTap: () => Navigator.of(context).push(
+                          PageRouteBuilder(
+                            pageBuilder: (_, _, _) => const SearchPage(),
+                            transitionDuration: const Duration(
+                              milliseconds: 250,
+                            ),
+                            transitionsBuilder: (_, anim, _, child) =>
+                                FadeTransition(
+                                  opacity: CurvedAnimation(
+                                    parent: anim,
+                                    curve: Curves.easeOut,
+                                  ),
+                                  child: child,
+                                ),
+                          ),
+                        ),
                         child: Container(
                           height: 38,
                           padding: const EdgeInsets.symmetric(horizontal: 12),
