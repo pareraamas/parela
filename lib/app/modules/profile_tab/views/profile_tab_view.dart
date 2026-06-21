@@ -56,7 +56,7 @@ class _LoggedInProfile extends StatelessWidget {
               _MenuRow(
                 icon: Icons.location_on_outlined,
                 label: 'Alamat Pengiriman',
-                onTap: () {},
+                onTap: () => Get.toNamed(Routes.SELECT_ADDRESS),
               ),
               _MenuRow(
                 icon: Icons.credit_card_outlined,

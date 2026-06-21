@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/banner_model.dart';
 import 'package:parela/app/data/models/category_model.dart';
@@ -9,8 +8,6 @@ class HomeTabController extends GetxController {
   late final ProductRepository _productRepo;
 
   static const _limit = 12;
-
-  late final ScrollController scrollController;
 
   final isLoading = true.obs;
   final isLoadingMore = false.obs;
@@ -26,20 +23,12 @@ class HomeTabController extends GetxController {
   void onInit() {
     super.onInit();
     _productRepo = Get.find<ProductRepository>();
-    scrollController = ScrollController();
-    scrollController.addListener(_onScroll);
   }
 
   @override
   void onReady() {
     super.onReady();
     _loadInitial();
-  }
-
-  @override
-  void onClose() {
-    scrollController.dispose();
-    super.onClose();
   }
 
   Future<void> _loadInitial() async {
@@ -71,7 +60,7 @@ class HomeTabController extends GetxController {
     }
   }
 
-  Future<void> _loadMore() async {
+  Future<void> loadMore() async {
     if (!hasMore.value || isLoadingMore.value) return;
     try {
       isLoadingMore.value = true;
@@ -83,14 +72,6 @@ class HomeTabController extends GetxController {
       // keep existing products on error
     } finally {
       isLoadingMore.value = false;
-    }
-  }
-
-  void _onScroll() {
-    if (!scrollController.hasClients) return;
-    if (scrollController.position.pixels >=
-        scrollController.position.maxScrollExtent - 300) {
-      _loadMore();
     }
   }
 }

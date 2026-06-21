@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/product_model.dart';
 import 'package:parela/app/data/repositories/product_repository.dart';
+import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/modules/video_tab/controllers/video_tab_controller.dart';
+import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
 import 'package:video_player/video_player.dart';
 
@@ -12,6 +14,7 @@ class VideoTab extends GetView<VideoTabController> {
 
   @override
   Widget build(BuildContext context) {
+    final main = Get.find<MainController>();
     return Scaffold(
       backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
@@ -42,7 +45,7 @@ class VideoTab extends GetView<VideoTabController> {
             );
           }),
           Positioned(
-            top: 0,
+            top: 8,
             left: 0,
             right: 0,
             child: SafeArea(
@@ -68,6 +71,72 @@ class VideoTab extends GetView<VideoTabController> {
                       ),
                     ],
                   ),
+                ),
+              ),
+            ),
+          ),
+          // icon keranjang — top-right, sejajar dengan feed toggle
+          Positioned(
+            top: 0,
+            right: 12,
+            child: SafeArea(
+              bottom: false,
+              child: Obx(
+                () => Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Get.toNamed(
+                          main.isLoggedIn.value ? Routes.CART : Routes.LOGIN,
+                        );
+                      },
+                      style: IconButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(36, 36),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      icon: const Icon(
+                        CupertinoIcons.cart,
+                        color: Colors.white,
+                        size: 22,
+                      ),
+                    ),
+                    if (main.cartCount.value > 0)
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.toNamed(
+                              main.isLoggedIn.value
+                                  ? Routes.CART
+                                  : Routes.LOGIN,
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(3),
+                            decoration: const BoxDecoration(
+                              color: kPrimary,
+                              shape: BoxShape.circle,
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 14,
+                              minHeight: 14,
+                            ),
+                            child: Text(
+                              '${main.cartCount.value}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),
@@ -518,7 +587,7 @@ class _VideoPageState extends State<_VideoPage> {
         Positioned(
           left: 16,
           right: 80,
-          bottom: navBarBottom + 4,
+          bottom: navBarBottom + 8,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -3,6 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/cart_item_model.dart';
 import 'package:parela/app/data/models/flash_sale_model.dart';
+import 'package:parela/app/data/models/product_model.dart';
 import 'package:parela/app/modules/explore_tab/controllers/explore_tab_controller.dart';
 import 'package:parela/app/modules/home/controllers/home_controller.dart';
 import 'package:parela/app/widgets/product_card.dart';
@@ -37,6 +38,7 @@ class ExploreTab extends GetView<ExploreTabController> {
                   return _FlashSaleSection(
                     session: session,
                     countdown: controller.countdown,
+                    products: controller.flashSaleProducts,
                   );
                 }),
               ),
@@ -89,8 +91,13 @@ class ExploreTab extends GetView<ExploreTabController> {
 class _FlashSaleSection extends StatelessWidget {
   final FlashSaleSessionModel session;
   final RxString countdown;
+  final Map<String, ProductModel> products;
 
-  const _FlashSaleSection({required this.session, required this.countdown});
+  const _FlashSaleSection({
+    required this.session,
+    required this.countdown,
+    required this.products,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -158,8 +165,10 @@ class _FlashSaleSection extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.only(left: 16, right: 8),
               itemCount: session.items.length,
-              itemBuilder: (context, index) =>
-                  _FlashSaleCard(item: session.items[index]),
+              itemBuilder: (context, index) => _FlashSaleCard(
+                item: session.items[index],
+                fullProduct: products[session.items[index].productId],
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -228,7 +237,8 @@ class _CountdownBadge extends StatelessWidget {
 
 class _FlashSaleCard extends StatelessWidget {
   final FlashSaleItemModel item;
-  const _FlashSaleCard({required this.item});
+  final ProductModel? fullProduct;
+  const _FlashSaleCard({required this.item, this.fullProduct});
 
   String _formatPrice(double price) {
     final s = price.toInt().toString();
@@ -243,7 +253,27 @@ class _FlashSaleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        final product = fullProduct ?? ProductModel(
+          id: item.productId,
+          brand: item.brand,
+          name: item.productName,
+          price: item.flashSalePrice,
+          originalPrice: item.originalPrice,
+          rating: 0,
+          reviewCount: 0,
+          isBestSeller: false,
+          sellerId: item.sellerId,
+          categoryId: '',
+          description: '',
+          colors: [item.color.toARGB32()],
+          sizes: const ['One Size'],
+          imageUrls: item.imageUrl != null ? [item.imageUrl!] : const [],
+          discountPercent: item.discountPercent,
+          soldCount: item.soldCount,
+        );
+        Get.toNamed(Routes.PRODUCT_DETAIL, arguments: product);
+      },
       child: Container(
         width: 140,
         height: 230,

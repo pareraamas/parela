@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/flash_sale_model.dart';
+import 'package:parela/app/data/models/product_model.dart';
+import 'package:parela/app/data/repositories/product_repository.dart';
 import 'package:parela/app/data/repositories/promotion_repository.dart';
 
 class ExploreTabController extends GetxController {
@@ -12,6 +14,8 @@ class ExploreTabController extends GetxController {
   final flashSale = Rxn<FlashSaleModel>();
   final isLoadingFlashSale = true.obs;
   final countdown = '00:00:00'.obs;
+
+  final flashSaleProducts = <String, ProductModel>{};
 
   Timer? _countdownTimer;
 
@@ -30,10 +34,20 @@ class ExploreTabController extends GetxController {
     try {
       isLoadingFlashSale.value = true;
       final data = await Get.find<PromotionRepository>().getFlashSale();
-      flashSale.value = data;
       if (data.currentSession != null) {
         _startCountdown(data.currentSession!.endsAt);
+        final repo = Get.find<ProductRepository>();
+        final results = await Future.wait(
+          data.currentSession!.items.map((item) => repo.getById(item.productId)),
+        );
+        for (var i = 0; i < data.currentSession!.items.length; i++) {
+          final product = results[i];
+          if (product != null) {
+            flashSaleProducts[data.currentSession!.items[i].productId] = product;
+          }
+        }
       }
+      flashSale.value = data;
     } catch (_) {
       flashSale.value = null;
     } finally {

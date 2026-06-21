@@ -22,30 +22,64 @@ const _sellerLocations = {
   's005': 'Yogyakarta',
 };
 
-class HomeTab extends GetView<HomeTabController> {
+// StatefulWidget agar ScrollController lifecycle-nya ikut widget tree,
+// bukan GetX controller lifecycle — mencegah "used after disposed" error.
+class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
 
   @override
+  State<HomeTab> createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<HomeTab> {
+  late final ScrollController _scrollController;
+  late final HomeTabController _ctrl;
+  late final MainController _main;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = Get.find<HomeTabController>();
+    _main = Get.find<MainController>();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 300) {
+      _ctrl.loadMore();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final main = Get.find<MainController>();
     return Column(
       children: [
         const AppHeader(),
         Expanded(
           child: Obx(() {
-            final isLoading = controller.isLoading.value;
-            final items = controller.products.toList();
-            final banners = controller.banners.toList();
-            final stories = controller.stories.toList();
-            final categories = controller.categories.toList();
-            final isLoadingMore = controller.isLoadingMore.value;
+            final isLoading = _ctrl.isLoading.value;
+            final items = _ctrl.products.toList();
+            final banners = _ctrl.banners.toList();
+            final stories = _ctrl.stories.toList();
+            final categories = _ctrl.categories.toList();
+            final isLoadingMore = _ctrl.isLoadingMore.value;
 
             if (isLoading && items.isEmpty) {
               return const ShimmerProductGrid(count: 6);
             }
 
             return SingleChildScrollView(
-              controller: controller.scrollController,
+              controller: _scrollController,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -68,11 +102,6 @@ class HomeTab extends GetView<HomeTabController> {
                     onTap: (cat) =>
                         Get.toNamed(Routes.CATEGORY_PRODUCTS, arguments: cat),
                   ),
-                  // const SizedBox(height: 16),
-                  // _SectionHeader(
-                  //   title: 'Makeup Products',
-                  //   onSeeAll: () => Get.toNamed(Routes.ALL_PRODUCTS),
-                  // ),
                   const SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -89,16 +118,16 @@ class HomeTab extends GetView<HomeTabController> {
                         return Obx(
                           () => ProductCard(
                             product: p,
-                            isFavorite: main.wishlistIds.contains(p.id),
+                            isFavorite: _main.wishlistIds.contains(p.id),
                             location:
                                 _sellerLocations[p.sellerId] ?? 'Indonesia',
-                            seller: main.sellerById(p.sellerId),
-                            onFavorite: () => main.toggleWishlist(p.id),
+                            seller: _main.sellerById(p.sellerId),
+                            onFavorite: () => _main.toggleWishlist(p.id),
                             onTap: () => Get.toNamed(
                               Routes.PRODUCT_DETAIL,
                               arguments: p,
                             ),
-                            onAddToCart: () => main.addToCart(
+                            onAddToCart: () => _main.addToCart(
                               CartItemModel(
                                 productId: p.id,
                                 quantity: 1,

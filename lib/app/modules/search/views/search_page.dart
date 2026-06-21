@@ -28,11 +28,6 @@ class _SearchPageState extends State<SearchPage> {
     _query = initial;
     _focusNode = FocusNode();
     _textCtrl.addListener(() => setState(() => _query = _textCtrl.text));
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(milliseconds: 200), () {
-        if (mounted) _focusNode.requestFocus();
-      });
-    });
   }
 
   @override
@@ -66,62 +61,80 @@ class _SearchPageState extends State<SearchPage> {
             // ── Search bar ────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(12, 0, 16, 10),
-              child: Hero(
-                tag: widget.heroTag,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    height: 38,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF9FB),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: kPrimary.withValues(alpha: 0.3),
+              child: SizedBox(
+                height: 38,
+                child: Stack(
+                  children: [
+                    // Hero hanya untuk visual transition — tidak membungkus TextField
+                    Positioned.fill(
+                      child: Hero(
+                        tag: widget.heroTag,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFF9FB),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: kPrimary.withValues(alpha: 0.3),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () => Navigator.of(context).pop(),
-                          child: const Icon(
-                            Icons.keyboard_arrow_left_rounded,
-                            color: kSubtext,
-                            size: 24,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: TextField(
-                            controller: _textCtrl,
-                            focusNode: _focusNode,
-                            textInputAction: TextInputAction.search,
-                            onSubmitted: (_) => _submit(),
-                            style: const TextStyle(fontSize: 13, color: kText),
-                            decoration: const InputDecoration(
-                              hintText: 'Cari produk beauty...',
-                              hintStyle: TextStyle(
-                                fontSize: 13,
+                    // Konten interaktif di luar Hero agar bisa dapat focus
+                    Positioned.fill(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () => Navigator.of(context).pop(),
+                              child: const Icon(
+                                Icons.keyboard_arrow_left_rounded,
                                 color: kSubtext,
+                                size: 24,
                               ),
-                              border: InputBorder.none,
-                              isDense: true,
-                              contentPadding: EdgeInsets.zero,
                             ),
-                          ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: TextField(
+                                autofocus: true,
+                                controller: _textCtrl,
+                                focusNode: _focusNode,
+                                textInputAction: TextInputAction.search,
+                                onSubmitted: (_) => _submit(),
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  color: kText,
+                                ),
+                                decoration: const InputDecoration(
+                                  hintText: 'Cari produk beauty...',
+                                  hintStyle: TextStyle(
+                                    fontSize: 13,
+                                    color: kSubtext,
+                                  ),
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.zero,
+                                ),
+                              ),
+                            ),
+                            if (_query.isNotEmpty)
+                              GestureDetector(
+                                onTap: () => _textCtrl.clear(),
+                                child: const Icon(
+                                  Icons.close_rounded,
+                                  color: kSubtext,
+                                  size: 16,
+                                ),
+                              ),
+                          ],
                         ),
-                        if (_query.isNotEmpty)
-                          GestureDetector(
-                            onTap: () => _textCtrl.clear(),
-                            child: const Icon(
-                              Icons.close_rounded,
-                              color: kSubtext,
-                              size: 16,
-                            ),
-                          ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),

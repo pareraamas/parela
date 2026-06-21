@@ -107,6 +107,35 @@ class MockContent {
       'responseTime': '< 6 jam',
       'badges': [],
     }),
+    SellerModel.fromMap({
+      'id': 's006',
+      'name': 'Morris Official',
+      'rating': 4.8,
+      'productCount': 45,
+      'verified': true,
+      'isOfficial': true,
+      'location': 'Jakarta Utara',
+      'description': 'Morris adalah brand parfum dan fragrance lokal Indonesia dengan kualitas premium. Menghadirkan aroma tahan lama dengan harga yang terjangkau.',
+      'followerCount': 31200,
+      'soldCount': 54700,
+      'responseRate': '98%',
+      'responseTime': '< 2 jam',
+      'badges': ['official', 'fast_shipping'],
+    }),
+    SellerModel.fromMap({
+      'id': 's007',
+      'name': 'WSKEN Store',
+      'rating': 4.6,
+      'productCount': 127,
+      'verified': true,
+      'location': 'Semarang',
+      'description': 'WSKEN Store menyediakan berbagai aksesoris smartphone premium. Spesialis tempered glass, case, dan aksesoris berkualitas dengan harga kompetitif.',
+      'followerCount': 12400,
+      'soldCount': 38900,
+      'responseRate': '95%',
+      'responseTime': '< 4 jam',
+      'badges': ['fast_shipping'],
+    }),
   ];
 
   // ── Categories ────────────────────────────────────────────────────────────
@@ -484,6 +513,96 @@ class MockContent {
         'assets/public/products/random/cermin-lipat.webp',
       ],
     ),
+
+    // ── Flash Sale Products ───────────────────────────────────────────────
+    const ProductModel(
+      id: 'fs001',
+      brand: 'G-MAX',
+      name: 'G-MAX Kopi Ginseng 1 Box 10 Sachet',
+      price: 99000,
+      originalPrice: 185000,
+      rating: 4.7,
+      reviewCount: 2341,
+      isBestSeller: true,
+      sellerId: 's004',
+      categoryId: 'c008',
+      colorHex: '#FFF8E1',
+      description:
+          'Kopi ginseng premium G-MAX dengan formula khusus yang menggabungkan kenikmatan kopi pilihan dan manfaat ginseng alami. Memberikan energi ekstra, meningkatkan stamina, dan menjaga vitalitas pria. Tanpa efek samping, cocok dikonsumsi setiap pagi. 1 box isi 10 sachet.',
+      colors: [0xFF795548, 0xFF4E342E],
+      sizes: ['1 Box (10 Sachet)', '2 Box (20 Sachet)'],
+      soldCount: 23410,
+      discountPercent: 46,
+      imageUrls: [
+        'assets/public/flashsale/G-MAX Kopi Kekuatan Alami dari Ginseng Asli ( 1 BOX Isi 10 Sachet ).webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'fs002',
+      brand: 'METOO',
+      name: 'METOO MW-3 Whitening Toothpaste 3x100g',
+      price: 65000,
+      originalPrice: 120000,
+      rating: 4.6,
+      reviewCount: 1876,
+      isBestSeller: true,
+      sellerId: 's005',
+      categoryId: 'c002',
+      colorHex: '#E3F2FD',
+      description:
+          'Pasta gigi whitening MW-3 dari METOO dengan formula advanced yang memutihkan gigi secara bertahap dan aman. Mengandung charcoal aktif dan mint extract untuk napas segar sepanjang hari. Paket hemat 3 tube @100g.',
+      colors: [0xFFE3F2FD, 0xFF90CAF9],
+      sizes: ['3x100g'],
+      soldCount: 18760,
+      discountPercent: 46,
+      imageUrls: [
+        'assets/public/flashsale/METOO MW-3 Advanced whitening Toothpaste 3*100g - Gigi Putih.webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'fs003',
+      brand: 'MORRIS',
+      name: 'Morris White Edition Eau de Parfum 100ml',
+      price: 219000,
+      originalPrice: 349000,
+      rating: 4.8,
+      reviewCount: 1432,
+      isBestSeller: true,
+      sellerId: 's006',
+      categoryId: 'c003',
+      colorHex: '#EDE7F6',
+      description:
+          'Morris White Edition EDP hadir dengan aroma fresh-woody yang elegan dan maskulin. Top note: bergamot & white tea. Heart: iris & cedarwood. Base: vanilla & white musk. Tahan 6–8 jam, cocok untuk pria aktif modern.',
+      colors: [0xFFEDE7F6, 0xFFD1C4E9],
+      sizes: ['100ml'],
+      soldCount: 14320,
+      discountPercent: 37,
+      imageUrls: [
+        'assets/public/flashsale/Morris Eau De Parfum White Edition 100ml - Parfum Pria.webp',
+      ],
+    ),
+    const ProductModel(
+      id: 'fs004',
+      brand: 'WSKEN',
+      name: 'WSKEN Tempered Glass Auto Align iPhone',
+      price: 35000,
+      originalPrice: 79000,
+      rating: 4.5,
+      reviewCount: 3102,
+      isBestSeller: false,
+      sellerId: 's007',
+      categoryId: 'c008',
+      colorHex: '#E8F5E9',
+      description:
+          'Tempered glass premium WSKEN dengan teknologi Auto Align untuk pemasangan yang mudah dan presisi tanpa gelembung. Kejernihan HD 99.9%, perlindungan gores 9H, anti sidik jari. Tersedia untuk berbagai model iPhone.',
+      colors: [0xFFE8F5E9],
+      sizes: ['iPhone 14/15', 'iPhone 14/15 Pro', 'iPhone 14/15 Plus', 'iPhone 14/15 Pro Max'],
+      soldCount: 31020,
+      discountPercent: 56,
+      imageUrls: [
+        'assets/public/flashsale/WSKEN Tempered Glass Clear Privacy Glossy Auto Align Tech Anti Gores Screen Protector Full for iPhone.webp',
+      ],
+    ),
   ];
 
   // ── Banners ───────────────────────────────────────────────────────────────
@@ -818,6 +937,22 @@ class MockContent {
 
     // Facial Wash (p011)
     ReviewModel.fromMap({'id': 'r016', 'user': 'Citra N.', 'rating': 5.0, 'comment': 'Kulit bersih tanpa rasa ketarik setelah cuci muka. Sudah pakai berulang kali dan jadi staple skincare harianku.', 'date': '18 Jun 2024', 'productId': 'p011'}),
+
+    // G-MAX Kopi Ginseng (fs001)
+    ReviewModel.fromMap({'id': 'r017', 'user': 'Surya K.', 'rating': 5.0, 'comment': 'Kopi ini beneran bikin badan segar dan semangat! Udah pesan ke-3 kali dan nggak bisa stop. Rasa kopinya enak nggak terlalu pahit.', 'date': '17 Jun 2024', 'productId': 'fs001'}),
+    ReviewModel.fromMap({'id': 'r018', 'user': 'Bambang W.', 'rating': 4.5, 'comment': 'Mantap, stamina lebih terjaga setelah rutin minum tiap pagi. Harga flash sale ini sangat worth it untuk kualitasnya.', 'date': '14 Jun 2024', 'productId': 'fs001'}),
+
+    // METOO Toothpaste (fs002)
+    ReviewModel.fromMap({'id': 'r019', 'user': 'Fitriani S.', 'rating': 5.0, 'comment': 'Gigi saya jadi lebih putih setelah 2 minggu pakai! Busa-nya banyak dan rasa mint-nya segar. Recommended banget!', 'date': '16 Jun 2024', 'productId': 'fs002'}),
+    ReviewModel.fromMap({'id': 'r020', 'user': 'Nanda P.', 'rating': 4.0, 'comment': 'Hasilnya lumayan, gigi memang lebih cerah. Harga promo sangat murah untuk dapat 3 tube sekaligus.', 'date': '11 Jun 2024', 'productId': 'fs002'}),
+
+    // Morris White Edition (fs003)
+    ReviewModel.fromMap({'id': 'r021', 'user': 'Rizal A.', 'rating': 5.0, 'comment': 'Wanginya clean dan elegan, dapat banyak pujian dari teman-teman. Ketahanannya bagus, sampai 7 jam di kulitku. Harga flash sale sangat worth it!', 'date': '15 Jun 2024', 'productId': 'fs003'}),
+    ReviewModel.fromMap({'id': 'r022', 'user': 'Dimas F.', 'rating': 4.5, 'comment': 'Cocok untuk daily wear, tidak terlalu strong dan tidak terlalu light. Botolnya elegan dan desainnya premium.', 'date': '10 Jun 2024', 'productId': 'fs003'}),
+
+    // WSKEN Tempered Glass (fs004)
+    ReviewModel.fromMap({'id': 'r023', 'user': 'Kevin L.', 'rating': 5.0, 'comment': 'Pemasangan auto-align-nya gampang banget, nggak ada gelembung sama sekali! Layar tetap responsif dan jernih. Sangat worth it untuk harganya.', 'date': '18 Jun 2024', 'productId': 'fs004'}),
+    ReviewModel.fromMap({'id': 'r024', 'user': 'Andi S.', 'rating': 4.0, 'comment': 'Kualitas bagus, anti gores oke dan touchscreen tetap lancar. Pengiriman cepat. Sedikit kurang: edge-nya agak tajam saat pertama pasang.', 'date': '12 Jun 2024', 'productId': 'fs004'}),
   ];
 
   // ── Flash Sale ────────────────────────────────────────────────────────────
