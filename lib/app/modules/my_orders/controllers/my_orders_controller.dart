@@ -2,11 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/order_model.dart';
 import 'package:parela/app/data/repositories/order_repository.dart';
+import 'package:parela/app/routes/app_pages.dart';
 
 class MyOrdersController extends GetxController {
   late final OrderRepository _repo;
   final orders = <OrderModel>[].obs;
   final isLoading = true.obs;
+  final selectedTab = 'Semua'.obs;
+
+  static const tabs = [
+    'Semua', 'Menunggu', 'Diproses', 'Dikirim', 'Selesai', 'Dibatalkan',
+  ];
+
+  static const _rawStatus = {
+    'Menunggu':   'waiting_payment',
+    'Diproses':   'processing',
+    'Dikirim':    'shipped',
+    'Selesai':    'delivered',
+    'Dibatalkan': 'cancelled',
+  };
 
   @override
   void onInit() {
@@ -18,28 +32,53 @@ class MyOrdersController extends GetxController {
   Future<void> _load() async {
     try {
       isLoading.value = true;
-      final list = await _repo.getAll();
-      orders.assignAll(list);
+      orders.assignAll(await _repo.getAll());
     } catch (_) {
     } finally {
       isLoading.value = false;
     }
   }
 
+  List<OrderModel> get filteredOrders {
+    if (selectedTab.value == 'Semua') return orders;
+    final raw = _rawStatus[selectedTab.value];
+    if (raw == null) return orders;
+    return orders.where((o) {
+      if (selectedTab.value == 'Selesai') {
+        return o.status == 'delivered' || o.status == 'completed';
+      }
+      return o.status == raw;
+    }).toList();
+  }
+
+  int    get totalOrders => orders.length;
+  double get totalSpent  => orders.fold(0.0, (s, o) => s + o.total);
+  double get totalSaved  => totalSpent * 0.082;
+
+  void goToDetail(OrderModel order) =>
+      Get.toNamed(Routes.ORDER_DETAIL, arguments: order);
+
   Color statusColor(String status) {
-    switch (status.toLowerCase()) {
+    switch (status) {
       case 'delivered':
-      case 'completed':
-        return const Color(0xFF4CAF50);
-      case 'shipped':
-        return const Color(0xFF2196F3);
-      case 'processing':
-      case 'waiting_payment':
-        return const Color(0xFFFF9800);
-      case 'cancelled':
-        return Colors.red;
-      default:
-        return const Color(0xFF9E9E9E);
+      case 'completed':  return const Color(0xFF2E7D32);
+      case 'shipped':    return const Color(0xFF1565C0);
+      case 'processing': return const Color(0xFFF57C00);
+      case 'waiting_payment': return const Color(0xFFE65100);
+      case 'cancelled':  return const Color(0xFFC62828);
+      default:           return const Color(0xFF757575);
+    }
+  }
+
+  String statusLabel(String status) {
+    switch (status) {
+      case 'delivered':
+      case 'completed':  return 'Selesai';
+      case 'shipped':    return 'Dikirim';
+      case 'processing': return 'Diproses';
+      case 'waiting_payment': return 'Menunggu';
+      case 'cancelled':  return 'Dibatalkan';
+      default:           return status;
     }
   }
 }

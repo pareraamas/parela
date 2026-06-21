@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/order_model.dart';
 import 'package:parela/app/modules/main/widgets/app_header.dart';
-import 'package:parela/app/modules/transaction_tab/controllers/transaction_tab_controller.dart';
 import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
+import '../controllers/transaction_tab_controller.dart';
 
 class TransactionTab extends GetView<TransactionTabController> {
   const TransactionTab({super.key});
@@ -13,166 +13,525 @@ class TransactionTab extends GetView<TransactionTabController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const AppHeader(title: 'My Orders'),
-        const _StatusFilterRow(),
+        const AppHeader(title: 'Transaksi'),
         Expanded(
-          child: Obx(() {
-            if (controller.isLoading.value) {
-              return const Center(child: CircularProgressIndicator(color: kPrimary));
-            }
-            if (controller.orders.isEmpty) return const _EmptyOrders();
-            return ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: controller.orders.length,
-              itemBuilder: (_, i) => _OrderCard(order: controller.orders[i]),
-            );
-          }),
+          child: CustomScrollView(
+            slivers: [
+              // Summary card — scrolls away
+              SliverToBoxAdapter(child: _SummaryCard(controller: controller)),
+
+              // Chip bar — sticky
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _ChipBarDelegate(controller),
+              ),
+              SliverToBoxAdapter(child: Divider(color: kBackground, height: 4)),
+              // Order list
+              SliverToBoxAdapter(
+                child: Obx(() {
+                  if (controller.isLoading.value) {
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 60),
+                      child: Center(
+                        child: CircularProgressIndicator(color: kPrimary),
+                      ),
+                    );
+                  }
+                  final list = controller.filteredOrders;
+                  if (list.isEmpty) return const _EmptyState();
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+                    child: Column(
+                      children: list
+                          .map(
+                            (o) => _OrderCard(order: o, controller: controller),
+                          )
+                          .toList(),
+                    ),
+                  );
+                }),
+              ),
+            ],
+          ),
         ),
       ],
     );
   }
 }
 
-class _StatusFilterRow extends StatefulWidget {
-  const _StatusFilterRow();
+// ── Summary Card ──────────────────────────────────────────────────────────────
 
-  @override
-  State<_StatusFilterRow> createState() => _StatusFilterRowState();
-}
-
-class _StatusFilterRowState extends State<_StatusFilterRow> {
-  int _selected = 0;
-  final _filters = const ['All', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+class _SummaryCard extends StatelessWidget {
+  final TransactionTabController controller;
+  const _SummaryCard({required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
-      child: SizedBox(
-        height: 36,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          itemCount: _filters.length,
-          itemBuilder: (_, i) {
-            final isSelected = i == _selected;
-            return GestureDetector(
-              onTap: () => setState(() => _selected = i),
-              child: Container(
-                margin: const EdgeInsets.only(right: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: isSelected ? kPrimary : kBackground,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  _filters[i],
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : kSubtext,
-                    fontSize: 13,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: kPrimary.withOpacity(0.25),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+        image: const DecorationImage(
+          image: AssetImage('assets/public/banners/summary_card_bg.png'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: const [
+                  Icon(
+                    Icons.auto_awesome,
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    size: 16,
+                  ),
+                  SizedBox(width: 6),
+                  Text(
+                    'Ringkasan Belanja',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
+              ),
+              GestureDetector(
+                onTap: () => Get.toNamed(Routes.NOTIFICATIONS),
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.notifications_outlined,
+                    color: Color(0xFF5C1233),
+                    size: 20,
                   ),
                 ),
               ),
-            );
-          },
-        ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Container(
+            padding: EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(.8),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Obx(() {
+              final orders = controller.orders;
+              final spent = orders.fold(0.0, (s, o) => s + o.total);
+              return IntrinsicHeight(
+                child: Row(
+                  children: [
+                    _StatItem(
+                      imagePath:
+                          'assets/public/banners/summary_icon_orders.png',
+                      value: '${orders.length}',
+                      label: 'Total Pesanan',
+                      valueSuffix: ' pcs',
+                    ),
+                    VerticalDivider(
+                      width: 24,
+                      thickness: 1,
+                      color: const Color(0xFF5C1233).withOpacity(0.15),
+                    ),
+                    _StatItem(
+                      imagePath: 'assets/public/banners/summary_icon_spent.png',
+                      value: _fmtShort(spent),
+                      label: 'Total Belanja',
+                    ),
+                    VerticalDivider(
+                      width: 24,
+                      thickness: 1,
+                      color: const Color(0xFF5C1233).withOpacity(0.15),
+                    ),
+                    _StatItem(
+                      imagePath: 'assets/public/banners/summary_icon_saved.png',
+                      value: _fmtShort(spent * 0.082),
+                      label: 'Total Hemat',
+                      valueColor: const Color(0xFF2E7D32),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static String _fmtShort(double v) {
+    if (v >= 1000000) return 'Rp${(v / 1000000).toStringAsFixed(1)}jt';
+    if (v >= 1000) return 'Rp${(v / 1000).toStringAsFixed(0)}rb';
+    return 'Rp${v.toStringAsFixed(0)}';
+  }
+}
+
+class _StatItem extends StatelessWidget {
+  final String imagePath;
+  final String value;
+  final String label;
+  final String? valueSuffix;
+  final Color? valueColor;
+
+  const _StatItem({
+    required this.imagePath,
+    required this.value,
+    required this.label,
+    this.valueSuffix,
+    this.valueColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          Image.asset(imagePath, width: 28, height: 28, fit: BoxFit.contain),
+          const SizedBox(height: 8),
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: value,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: valueColor ?? const Color(0xFF5C1233),
+                  ),
+                ),
+                if (valueSuffix != null)
+                  TextSpan(
+                    text: valueSuffix,
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      color:
+                          valueColor?.withOpacity(0.8) ??
+                          const Color(0xFF5C1233).withOpacity(0.8),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF5C1233),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _OrderCard extends StatelessWidget {
-  final OrderModel order;
+// ── Chip Bar Delegate ─────────────────────────────────────────────────────────
 
-  const _OrderCard({required this.order});
+class _ChipBarDelegate extends SliverPersistentHeaderDelegate {
+  final TransactionTabController controller;
+  const _ChipBarDelegate(this.controller);
 
-  Color _statusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'delivered':
-      case 'completed':
-        return const Color(0xFF4CAF50);
-      case 'shipped':
-        return const Color(0xFF2196F3);
-      case 'processing':
-      case 'waiting_payment':
-        return const Color(0xFFFF9800);
-      case 'cancelled':
-        return Colors.red;
+  static const _h = 52.0;
+
+  @override
+  double get minExtent => _h;
+  @override
+  double get maxExtent => _h;
+
+  IconData _tabIcon(String tab) {
+    switch (tab) {
+      case 'Semua':
+        return Icons.all_inbox_outlined;
+      case 'Menunggu':
+        return Icons.hourglass_empty_outlined;
+      case 'Diproses':
+        return Icons.sync_outlined;
+      case 'Dikirim':
+        return Icons.local_shipping_outlined;
+      case 'Selesai':
+        return Icons.check_circle_outline_rounded;
+      case 'Dibatalkan':
+        return Icons.cancel_outlined;
       default:
-        return kSubtext;
+        return Icons.receipt_long_outlined;
     }
   }
 
   @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Material(
+      color: Colors.white,
+      elevation: shrinkOffset > 0 ? 2 : 0,
+      shadowColor: Colors.black12,
+      child: Obx(() {
+        final currentTab = controller.selectedTab.value;
+        return SizedBox(
+          height: _h,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            itemCount: TransactionTabController.tabs.length,
+            separatorBuilder: (_, i) => const SizedBox(width: 8),
+            itemBuilder: (_, i) {
+              final tab = TransactionTabController.tabs[i];
+              final selected = currentTab == tab;
+              return GestureDetector(
+                onTap: () => controller.selectedTab.value = tab,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 180),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: selected ? kPrimary : Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: selected ? kPrimary : const Color(0xFFDDDDDD),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        _tabIcon(tab),
+                        size: 15,
+                        color: selected ? Colors.white : kSubtext,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        tab,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: selected
+                              ? FontWeight.w600
+                              : FontWeight.w400,
+                          color: selected ? Colors.white : kSubtext,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      }),
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant _ChipBarDelegate old) => false;
+}
+
+// ── Order Card ────────────────────────────────────────────────────────────────
+
+class _OrderCard extends StatelessWidget {
+  final OrderModel order;
+  final TransactionTabController controller;
+
+  const _OrderCard({required this.order, required this.controller});
+
+  @override
   Widget build(BuildContext context) {
+    final color = controller.statusColor(order.status);
+    final label = controller.statusLabel(order.status);
+
     return GestureDetector(
-      onTap: () => Get.toNamed(Routes.ORDER_DETAIL, arguments: order),
+      onTap: () => controller.goToDetail(order),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
+        clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFEEEEEE)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
+              color: Colors.black.withOpacity(0.02),
               blurRadius: 8,
-              offset: const Offset(0, 2),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  order.id,
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: kText),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: _statusColor(order.status).withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    order.status,
-                    style: TextStyle(
-                      color: _statusColor(order.status),
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
+            // Header
+            Container(
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              decoration: BoxDecoration(color: color.withOpacity(.07)),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          order.id,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: color,
+                            letterSpacing: 0.2,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          order.date,
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                            color: color.withOpacity(0.8),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: color.withOpacity(0.3)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          controller.statusIcon(order.status),
+                          size: 12,
+                          color: color,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          label,
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: color,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 8),
-            Text(order.date, style: const TextStyle(color: kSubtext, fontSize: 12)),
-            const SizedBox(height: 12),
-            const Divider(height: 1, color: kBackground),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    const Icon(Icons.shopping_bag_outlined, size: 16, color: kSubtext),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${order.items.length} item${order.items.length > 1 ? 's' : ''}',
-                      style: const TextStyle(color: kSubtext, fontSize: 13),
+            const Divider(height: 1, color: Color(0xFFF5F5F5)),
+
+            // Items
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              child: Column(
+                children: order.items.take(2).map((item) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F5F5),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: const Icon(
+                            Icons.inventory_2_outlined,
+                            size: 14,
+                            color: kSubtext,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            '${item.productName} — ${item.variant}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF333333),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'x${item.quantity}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: kSubtext,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                Text(
-                  'Rp ${_fmt(order.total)}',
-                  style: const TextStyle(fontWeight: FontWeight.w700, color: kPrimary, fontSize: 14),
-                ),
-              ],
+                  );
+                }).toList(),
+              ),
+            ),
+            const Divider(height: 1, color: Color(0xFFF5F5F5)),
+
+            // Footer
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.widgets_outlined,
+                    size: 14,
+                    color: kSubtext.withOpacity(0.8),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${order.items.length} produk',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: kSubtext,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    _fmt(order.total),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                      color: kPrimary,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Icon(Icons.arrow_forward_ios, size: 12, color: color),
+                ],
+              ),
             ),
           ],
         ),
@@ -180,29 +539,52 @@ class _OrderCard extends StatelessWidget {
     );
   }
 
-  String _fmt(double price) => price.toStringAsFixed(0).replaceAllMapped(
-        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-        (m) => '${m[1]}.',
-      );
+  String _fmt(double p) =>
+      'Rp${p.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.')}';
 }
 
-class _EmptyOrders extends StatelessWidget {
-  const _EmptyOrders();
+// ── Empty State ───────────────────────────────────────────────────────────────
+
+class _EmptyState extends StatelessWidget {
+  const _EmptyState();
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Padding(
+      padding: const EdgeInsets.only(top: 80),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.receipt_long_outlined, size: 72, color: kPrimaryLight),
-          SizedBox(height: 16),
-          Text(
-            'No orders yet',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: kText),
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: kBackground.withOpacity(0.4),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.receipt_long_rounded,
+              size: 64,
+              color: kPrimary,
+            ),
           ),
-          SizedBox(height: 8),
-          Text('Your order history will appear here', style: TextStyle(color: kSubtext)),
+          const SizedBox(height: 20),
+          const Text(
+            'Belum ada pesanan',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: kText,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Pesanan kamu akan muncul di sini',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+              color: kSubtext,
+            ),
+          ),
         ],
       ),
     );

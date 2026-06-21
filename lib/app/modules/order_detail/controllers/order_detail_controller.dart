@@ -29,15 +29,15 @@ class OrderDetailController extends GetxController {
       final productRepo = Get.find<ProductRepository>();
       final userRepo = Get.find<UserRepository>();
 
-      final itemIds = order.items.map((i) => i.productId).toSet();
+      final itemIds = order.items.map((i) => i.productId).toList();
       final results = await Future.wait([
-        productRepo.getAll(),
+        Future.wait(itemIds.map((id) => productRepo.getById(id))),
         userRepo.getAddresses(),
         userRepo.getPaymentMethods(),
       ]);
 
       orderProducts.assignAll(
-        (results[0] as List<ProductModel>).where((p) => itemIds.contains(p.id)),
+        (results[0] as List<ProductModel?>).whereType<ProductModel>(),
       );
 
       final addrs = results[1] as List<AddressModel>;

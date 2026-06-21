@@ -13,7 +13,12 @@ class AppHeader extends StatelessWidget {
   final String heroTag;
   final Widget? leading;
 
-  const AppHeader({super.key, this.title, this.heroTag = 'search-bar', this.leading});
+  const AppHeader({
+    super.key,
+    this.title,
+    this.heroTag = 'search-bar',
+    this.leading,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +38,8 @@ class AppHeader extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () => Navigator.of(context).push(
                           PageRouteBuilder(
-                            pageBuilder: (_, _, _) => SearchPage(heroTag: heroTag),
+                            pageBuilder: (_, _, _) =>
+                                SearchPage(heroTag: heroTag),
                             transitionDuration: const Duration(
                               milliseconds: 250,
                             ),
@@ -130,24 +136,24 @@ class AppHeader extends StatelessWidget {
                     top: 0,
                     right: 0,
                     child: Container(
-                      padding: const EdgeInsets.all(4),
-                      constraints: const BoxConstraints(
-                        minWidth: 12,
-                        minHeight: 12,
-                      ),
-                      decoration: const BoxDecoration(
-                        color: kPrimary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        '${main.cartCount.value}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
+                        padding: const EdgeInsets.all(4),
+                        constraints: const BoxConstraints(
+                          minWidth: 12,
+                          minHeight: 12,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
+                        decoration: const BoxDecoration(
+                          color: kPrimary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '${main.cartCount.value}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                     ),
                   ),
               ],
