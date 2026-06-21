@@ -10,6 +10,7 @@ class EditProfileController extends GetxController {
   final isLoading = false.obs;
   final nameError = ''.obs;
   final emailError = ''.obs;
+  final avatarUrl = Rxn<String>();
 
   @override
   void onInit() {
@@ -19,6 +20,7 @@ class EditProfileController extends GetxController {
     emailController = TextEditingController(text: user?.email ?? '');
     phoneController = TextEditingController(text: user?.phone ?? '');
     addressController = TextEditingController(text: user?.address ?? '');
+    avatarUrl.value = user?.avatarUrl;
   }
 
   bool _validate() {
@@ -26,11 +28,11 @@ class EditProfileController extends GetxController {
     emailError.value = '';
     bool ok = true;
     if (nameController.text.trim().isEmpty) {
-      nameError.value = 'Name is required';
+      nameError.value = 'Nama lengkap wajib diisi';
       ok = false;
     }
     if (!GetUtils.isEmail(emailController.text.trim())) {
-      emailError.value = 'Enter a valid email address';
+      emailError.value = 'Format email tidak valid';
       ok = false;
     }
     return ok;
@@ -39,13 +41,33 @@ class EditProfileController extends GetxController {
   Future<void> save() async {
     if (!_validate()) return;
     isLoading.value = true;
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 800));
     isLoading.value = false;
+
+    // Actually update current user details in MainController
+    final mainController = Get.find<MainController>();
+    final currentUser = mainController.currentUser.value;
+    if (currentUser != null) {
+      final updatedUser = currentUser.copyWith(
+        name: nameController.text.trim(),
+        email: emailController.text.trim(),
+        phone: phoneController.text.trim(),
+        address: addressController.text.trim(),
+        avatarUrl: avatarUrl.value,
+      );
+      mainController.setUser(updatedUser);
+    }
+
     Get.back();
     Get.snackbar(
-      'Saved',
-      'Profile updated successfully',
+      'Berhasil',
+      'Profil Anda berhasil diperbarui',
       snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: const Color(0xFF2E7D32),
+      colorText: Colors.white,
+      margin: const EdgeInsets.all(16),
+      borderRadius: 12,
+      duration: const Duration(seconds: 2),
     );
   }
 

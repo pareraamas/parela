@@ -7,6 +7,7 @@ import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
 import 'package:parela/app/widgets/cached_image.dart';
+import 'package:parela/app/widgets/shimmer.dart';
 import 'package:parela/app/widgets/product_card.dart';
 import '../controllers/seller_store_controller.dart';
 
@@ -27,9 +28,7 @@ class SellerStoreView extends GetView<SellerStoreController> {
       body: Obx(() {
         final seller = controller.seller.value;
         if (seller == null) {
-          return const Center(
-            child: CircularProgressIndicator(color: kPrimary),
-          );
+          return const ShimmerProductGrid();
         }
         return CustomScrollView(
           slivers: [
@@ -212,10 +211,8 @@ class SellerStoreView extends GetView<SellerStoreController> {
             // ── Masonry grid ──────────────────────────────────────────────
             Obx(() {
               if (controller.isLoading.value) {
-                return const SliverFillRemaining(
-                  child: Center(
-                    child: CircularProgressIndicator(color: kPrimary),
-                  ),
+                return const SliverToBoxAdapter(
+                  child: ShimmerProductGrid(),
                 );
               }
               if (controller.products.isEmpty) {

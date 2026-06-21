@@ -7,6 +7,7 @@ import 'package:parela/app/data/models/product_model.dart';
 import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
+import 'package:parela/app/widgets/shimmer.dart';
 import '../controllers/checkout_controller.dart';
 
 class CheckoutView extends GetView<CheckoutController> {
@@ -150,9 +151,10 @@ class _ProductsSection extends StatelessWidget {
     final main = Get.find<MainController>();
     return Obx(() {
       if (!controller.isReady.value) {
-        return const Padding(
-          padding: EdgeInsets.all(32),
-          child: Center(child: CircularProgressIndicator(color: kPrimary)),
+        return AppShimmer(
+          child: Column(
+            children: List.generate(3, (_) => const ShimmerListRow()),
+          ),
         );
       }
       final cartItems = main.cartItems;

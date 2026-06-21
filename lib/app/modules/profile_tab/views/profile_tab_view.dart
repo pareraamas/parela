@@ -4,6 +4,7 @@ import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/modules/profile_tab/controllers/profile_tab_controller.dart';
 import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
+import 'package:parela/app/widgets/shimmer.dart';
 
 class ProfileTab extends GetView<ProfileTabController> {
   const ProfileTab({super.key});
@@ -28,7 +29,7 @@ class _LoggedInProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = main.currentUser.value;
     if (user == null) {
-      return const Center(child: CircularProgressIndicator(color: kPrimary));
+      return const ShimmerProfile();
     }
     return SingleChildScrollView(
       child: Column(
@@ -211,77 +212,6 @@ class _ProfileHeader extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _OrderShortcuts extends StatelessWidget {
-  final _items = const [
-    (Icons.access_time_rounded, 'Menunggu'),
-    (Icons.inventory_2_outlined, 'Dikemas'),
-    (Icons.local_shipping_outlined, 'Dikirim'),
-    (Icons.check_circle_outline, 'Selesai'),
-    (Icons.rate_review_outlined, 'Ulasan'),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(0, 14, 0, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Pesanan Saya',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: kText,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => Get.toNamed(Routes.MY_ORDERS),
-                  child: const Row(
-                    children: [
-                      Text(
-                        'Lihat Semua',
-                        style: TextStyle(fontSize: 12, color: kSubtext),
-                      ),
-                      Icon(Icons.chevron_right, size: 16, color: kSubtext),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Row(
-            children: _items.map((e) {
-              return Expanded(
-                child: GestureDetector(
-                  onTap: () => Get.toNamed(Routes.MY_ORDERS),
-                  child: Column(
-                    children: [
-                      Icon(e.$1, size: 26, color: kPrimary),
-                      const SizedBox(height: 6),
-                      Text(
-                        e.$2,
-                        style: const TextStyle(fontSize: 11, color: kText),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }).toList(),
           ),
         ],
       ),

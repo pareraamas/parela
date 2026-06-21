@@ -10,54 +10,95 @@ class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackground,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 48),
-              Center(
-                child: Container(
-                  width: 64,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    color: kPrimary,
-                    borderRadius: BorderRadius.circular(16),
+              // Back button if navigable
+              if (Navigator.of(context).canPop())
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: IconButton(
+                    onPressed: Get.back,
+                    icon: const Icon(Icons.arrow_back_ios,
+                        color: kText, size: 20),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
                   ),
-                  child: const Icon(Icons.local_mall, size: 32, color: Colors.white),
+                )
+              else
+                const SizedBox(height: 16),
+
+              const SizedBox(height: 24),
+
+              // Brand
+              Center(
+                child: Column(
+                  children: [
+                    RichText(
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'par',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w400,
+                              color: kSubtext,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'ela',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w800,
+                              color: kPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Beauty Marketplace',
+                      style: TextStyle(fontSize: 11, color: kSubtext),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 32),
+
+              const SizedBox(height: 40),
+
               const Text(
-                'Welcome Back 👋',
+                'Masuk',
                 style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w800,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
                   color: kText,
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 4),
               const Text(
-                'Sign in to your account',
-                style: TextStyle(color: kSubtext, fontSize: 14),
+                'Selamat datang kembali',
+                style: TextStyle(fontSize: 13, color: kSubtext),
               ),
-              const SizedBox(height: 32),
-              _InputLabel('Email'),
-              const SizedBox(height: 6),
-              _TextField(
-                controller: controller.emailController,
-                hint: 'your@email.com',
+
+              const SizedBox(height: 24),
+
+              _Field(
+                ctrl: controller.emailController,
+                label: 'Email',
+                hint: 'email@kamu.com',
                 keyboardType: TextInputType.emailAddress,
                 error: controller.emailError,
               ),
-              const SizedBox(height: 16),
-              _InputLabel('Password'),
-              const SizedBox(height: 6),
+              const SizedBox(height: 14),
               Obx(
-                () => _TextField(
-                  controller: controller.passwordController,
+                () => _Field(
+                  ctrl: controller.passwordController,
+                  label: 'Password',
                   hint: '••••••••',
                   obscure: controller.obscurePassword.value,
                   error: controller.passwordError,
@@ -73,30 +114,39 @@ class LoginView extends GetView<LoginController> {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
+
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () => Get.toNamed(Routes.FORGOT_PASSWORD),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8, horizontal: 0),
+                  ),
                   child: const Text(
-                    'Forgot Password?',
-                    style: TextStyle(color: kPrimary, fontSize: 13),
+                    'Lupa password?',
+                    style: TextStyle(color: kPrimary, fontSize: 12),
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
+
+              const SizedBox(height: 4),
+
               Obx(
                 () => SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed:
-                        controller.isLoading.value ? null : controller.login,
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : controller.login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: kPrimary,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      disabledBackgroundColor: kPrimary.withAlpha(120),
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(vertical: 15),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     child: controller.isLoading.value
@@ -109,59 +159,67 @@ class LoginView extends GetView<LoginController> {
                             ),
                           )
                         : const Text(
-                            'Login',
+                            'Masuk',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 15,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+
+              const SizedBox(height: 28),
+
               Row(
                 children: [
-                  const Expanded(child: Divider(color: kPrimaryLight)),
+                  const Expanded(
+                      child: Divider(color: Color(0xFFEEEEEE))),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
-                      'or continue with',
+                      'atau masuk dengan',
                       style: TextStyle(color: kSubtext, fontSize: 12),
                     ),
                   ),
-                  const Expanded(child: Divider(color: kPrimaryLight)),
+                  const Expanded(
+                      child: Divider(color: Color(0xFFEEEEEE))),
                 ],
               ),
-              const SizedBox(height: 20),
+
+              const SizedBox(height: 16),
+
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: () {},
-                  icon: const Icon(Icons.g_mobiledata, size: 24),
-                  label: const Text('Continue with Google'),
+                  icon: const Icon(Icons.g_mobiledata, size: 22),
+                  label: const Text('Lanjut dengan Google'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: kText,
-                    side: const BorderSide(color: kPrimaryLight),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    side: const BorderSide(color: Color(0xFFE0E0E0)),
+                    padding: const EdgeInsets.symmetric(vertical: 13),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
+
+              const SizedBox(height: 28),
+
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      "Don't have an account? ",
+                      'Belum punya akun? ',
                       style: TextStyle(color: kSubtext, fontSize: 13),
                     ),
                     GestureDetector(
                       onTap: () => Get.toNamed(Routes.REGISTER),
                       child: const Text(
-                        'Register',
+                        'Daftar',
                         style: TextStyle(
                           color: kPrimary,
                           fontWeight: FontWeight.w700,
@@ -172,6 +230,7 @@ class LoginView extends GetView<LoginController> {
                   ],
                 ),
               ),
+
               const SizedBox(height: 24),
             ],
           ),
@@ -181,33 +240,18 @@ class LoginView extends GetView<LoginController> {
   }
 }
 
-class _InputLabel extends StatelessWidget {
-  final String text;
-  const _InputLabel(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontWeight: FontWeight.w600,
-        fontSize: 13,
-        color: kText,
-      ),
-    );
-  }
-}
-
-class _TextField extends StatelessWidget {
-  final TextEditingController controller;
+class _Field extends StatelessWidget {
+  final TextEditingController ctrl;
+  final String label;
   final String hint;
   final bool obscure;
   final TextInputType? keyboardType;
   final Widget? suffix;
   final RxString? error;
 
-  const _TextField({
-    required this.controller,
+  const _Field({
+    required this.ctrl,
+    required this.label,
     required this.hint,
     this.obscure = false,
     this.keyboardType,
@@ -220,33 +264,44 @@ class _TextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: kText,
           ),
-          child: TextField(
-            controller: controller,
-            obscureText: obscure,
-            keyboardType: keyboardType,
-            style: const TextStyle(fontSize: 14, color: kText),
-            decoration: InputDecoration(
-              hintText: hint,
-              hintStyle: const TextStyle(color: kSubtext),
-              suffixIcon: suffix,
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 14,
-              ),
+        ),
+        const SizedBox(height: 6),
+        TextField(
+          controller: ctrl,
+          obscureText: obscure,
+          keyboardType: keyboardType,
+          style: const TextStyle(fontSize: 14, color: kText),
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle:
+                const TextStyle(color: kSubtext, fontSize: 13),
+            suffixIcon: suffix,
+            filled: true,
+            fillColor: const Color(0xFFF8F8F8),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide:
+                  const BorderSide(color: Color(0xFFE8E8E8)),
             ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide:
+                  const BorderSide(color: Color(0xFFE8E8E8)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide:
+                  const BorderSide(color: kPrimary, width: 1.5),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16, vertical: 14),
           ),
         ),
         if (error != null)
@@ -254,10 +309,11 @@ class _TextField extends StatelessWidget {
             final msg = error!.value;
             if (msg.isEmpty) return const SizedBox.shrink();
             return Padding(
-              padding: const EdgeInsets.only(top: 4, left: 4),
+              padding: const EdgeInsets.only(top: 4, left: 2),
               child: Text(
                 msg,
-                style: const TextStyle(color: Colors.red, fontSize: 11),
+                style:
+                    const TextStyle(color: Colors.red, fontSize: 11),
               ),
             );
           }),

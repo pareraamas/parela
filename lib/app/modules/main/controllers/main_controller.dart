@@ -4,7 +4,9 @@ import 'package:parela/app/data/models/seller_model.dart';
 import 'package:parela/app/data/models/user_model.dart';
 import 'package:parela/app/data/repositories/cart_repository.dart';
 import 'package:parela/app/data/repositories/seller_repository.dart';
+import 'package:parela/app/data/repositories/user_repository.dart';
 import 'package:parela/app/routes/app_pages.dart';
+import 'package:parela/app/services/storage_service.dart';
 
 class MainController extends GetxController {
   late final CartRepository _cartRepo;
@@ -28,6 +30,18 @@ class MainController extends GetxController {
     _cartRepo = Get.find<CartRepository>();
     _sellerRepo = Get.find<SellerRepository>();
     _loadSellers();
+    if (StorageService.instance.isLoggedIn) {
+      _initUser();
+    }
+  }
+
+  Future<void> _initUser() async {
+    try {
+      final user = await Get.find<UserRepository>().getUser();
+      setUser(user);
+    } catch (_) {
+      await StorageService.instance.clearTokens();
+    }
   }
 
   Future<void> _loadSellers() async {
@@ -38,11 +52,6 @@ class MainController extends GetxController {
   }
 
   void changeTab(int index) {
-    if (index == 4 && !isLoggedIn.value) {
-      _pendingTabAfterLogin = 4;
-      Get.toNamed(Routes.LOGIN);
-      return;
-    }
     tabIndex.value = index;
   }
 
@@ -65,6 +74,10 @@ class MainController extends GetxController {
     cartItems.clear();
     wishlistIds.clear();
     cartCount.value = 0;
+    
+    // Clear persistent session tokens
+    StorageService.instance.clearTokens();
+    
     Get.offAllNamed(Routes.MAIN);
   }
 
@@ -77,10 +90,15 @@ class MainController extends GetxController {
   void addToCart(CartItemModel item) {
     if (!_requireAuth()) return;
     final idx = cartItems.indexWhere(
-      (i) => i.productId == item.productId && i.color == item.color && i.size == item.size,
+      (i) =>
+          i.productId == item.productId &&
+          i.color == item.color &&
+          i.size == item.size,
     );
     if (idx >= 0) {
-      cartItems[idx] = cartItems[idx].copyWith(quantity: cartItems[idx].quantity + item.quantity);
+      cartItems[idx] = cartItems[idx].copyWith(
+        quantity: cartItems[idx].quantity + item.quantity,
+      );
     } else {
       cartItems.add(item);
     }
@@ -119,7 +137,8 @@ class MainController extends GetxController {
     _cartRepo.saveWishlist(wishlistIds.toList());
   }
 
-  double get cartSubtotal => cartItems.fold(0, (sum, item) => sum + item.subtotal);
+  double get cartSubtotal =>
+      cartItems.fold(0, (sum, item) => sum + item.subtotal);
 
   void _persist() => _cartRepo.saveCart(cartItems.toList());
 }

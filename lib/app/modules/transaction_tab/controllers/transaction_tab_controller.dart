@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/order_model.dart';
 import 'package:parela/app/data/repositories/order_repository.dart';
+import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/routes/app_pages.dart';
 
 class TransactionTabController extends GetxController {
@@ -24,13 +25,20 @@ class TransactionTabController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // Reactively reload/clear orders when user login status changes
+    ever(Get.find<MainController>().isLoggedIn, (_) => _load());
     _load();
   }
 
   Future<void> _load() async {
     try {
       isLoading.value = true;
-      orders.assignAll(await Get.find<OrderRepository>().getAll());
+      final mainController = Get.find<MainController>();
+      if (mainController.isLoggedIn.value) {
+        orders.assignAll(await Get.find<OrderRepository>().getAll());
+      } else {
+        orders.clear();
+      }
     } catch (_) {
     } finally {
       isLoading.value = false;

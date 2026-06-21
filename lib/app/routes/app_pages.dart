@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 
 import '../modules/main/bindings/main_binding.dart';
 import '../modules/main/views/main_view.dart';
-import '../modules/splash/bindings/splash_binding.dart';
-import '../modules/splash/views/splash_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/login/bindings/login_binding.dart';
@@ -74,14 +72,9 @@ class _SearchFadeTransition extends CustomTransition {
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.SPLASH;
+  static const INITIAL = Routes.MAIN;
 
   static final routes = [
-    GetPage(
-      name: _Paths.SPLASH,
-      page: () => const SplashView(),
-      binding: SplashBinding(),
-    ),
     GetPage(
       name: _Paths.ONBOARDING,
       page: () => const OnboardingView(),

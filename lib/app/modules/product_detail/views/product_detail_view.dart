@@ -9,6 +9,7 @@ import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
 import '../controllers/product_detail_controller.dart';
 import 'package:parela/app/modules/main/controllers/main_controller.dart';
+import 'package:parela/app/widgets/shimmer.dart';
 
 class ProductDetailView extends GetView<ProductDetailController> {
   const ProductDetailView({super.key});
@@ -424,12 +425,11 @@ class ProductDetailView extends GetView<ProductDetailController> {
                       const SizedBox(height: 14),
                       Obx(() {
                         if (controller.isLoadingReviews.value) {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 20),
-                              child: CircularProgressIndicator(
-                                color: kPrimary,
-                                strokeWidth: 2,
+                          return AppShimmer(
+                            child: Column(
+                              children: List.generate(
+                                3,
+                                (_) => const ShimmerListRow(),
                               ),
                             ),
                           );

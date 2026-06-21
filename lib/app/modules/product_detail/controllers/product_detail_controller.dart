@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/cart_item_model.dart';
 import 'package:parela/app/data/models/product_model.dart';
@@ -7,7 +6,6 @@ import 'package:parela/app/data/models/seller_model.dart';
 import 'package:parela/app/data/repositories/product_repository.dart';
 import 'package:parela/app/data/repositories/seller_repository.dart';
 import 'package:parela/app/modules/main/controllers/main_controller.dart';
-import 'package:parela/app/theme/app_colors.dart';
 
 class ProductDetailController extends GetxController {
   late final ProductRepository _repo;
@@ -59,24 +57,19 @@ class ProductDetailController extends GetxController {
     final size = product.sizes.isNotEmpty
         ? product.sizes[selectedSizeIndex.value]
         : 'One Size';
-    main.addToCart(CartItemModel(
-      productId: product.id,
-      quantity: quantity.value,
-      color: color,
-      size: size,
-      price: product.price,
-    ));
-    Get.snackbar(
-      'Ditambahkan ke Keranjang',
-      '${product.name} berhasil ditambahkan',
-      snackPosition: SnackPosition.BOTTOM,
-      duration: const Duration(seconds: 2),
-      backgroundColor: kPrimary,
-      colorText: Colors.white,
+    main.addToCart(
+      CartItemModel(
+        productId: product.id,
+        quantity: quantity.value,
+        color: color,
+        size: size,
+        price: product.price,
+      ),
     );
   }
 
-  void toggleWishlist() => Get.find<MainController>().toggleWishlist(product.id);
+  void toggleWishlist() =>
+      Get.find<MainController>().toggleWishlist(product.id);
 
   bool get isWishlisted =>
       Get.find<MainController>().wishlistIds.contains(product.id);

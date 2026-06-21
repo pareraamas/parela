@@ -11,6 +11,7 @@ import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/modules/main/widgets/app_header.dart';
 import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
+import 'package:parela/app/widgets/shimmer.dart';
 
 // sellerId → location (matches MockContent.mockSellers)
 const _sellerLocations = {
@@ -40,9 +41,7 @@ class HomeTab extends GetView<HomeTabController> {
             final isLoadingMore = controller.isLoadingMore.value;
 
             if (isLoading && items.isEmpty) {
-              return const Center(
-                child: CircularProgressIndicator(color: kPrimary),
-              );
+              return const ShimmerProductGrid(count: 6);
             }
 
             return SingleChildScrollView(
@@ -119,9 +118,9 @@ class HomeTab extends GetView<HomeTabController> {
                   ),
                   const SizedBox(height: 16),
                   if (isLoadingMore)
-                    const Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 8),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8),
+                      child: Center(
                         child: SizedBox(
                           width: 20,
                           height: 20,

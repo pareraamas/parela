@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:parela/app/data/models/order_item_model.dart';
 import 'package:parela/app/data/models/order_model.dart';
 import 'package:parela/app/theme/app_colors.dart';
+import 'package:parela/app/widgets/shimmer.dart';
 import '../controllers/order_detail_controller.dart';
 
 class OrderDetailView extends GetView<OrderDetailController> {
@@ -113,12 +114,7 @@ class OrderDetailView extends GetView<OrderDetailController> {
                         final loading = controller.isLoading.value;
                         final products = controller.orderProducts;
                         if (loading) {
-                          return const Padding(
-                            padding: EdgeInsets.all(24),
-                            child: Center(
-                              child: CircularProgressIndicator(color: kPrimary),
-                            ),
-                          );
+                          return const ShimmerProductList(count: 2);
                         }
                         return Column(
                           children: order.items.map((item) {

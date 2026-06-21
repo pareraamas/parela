@@ -6,6 +6,7 @@ import 'package:parela/app/modules/main/controllers/main_controller.dart';
 import 'package:parela/app/modules/main/widgets/app_header.dart';
 import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
+import 'package:parela/app/widgets/shimmer.dart';
 import 'package:parela/app/widgets/product_card.dart';
 import '../controllers/category_products_controller.dart';
 
@@ -35,9 +36,7 @@ class CategoryProductsView extends GetView<CategoryProductsController> {
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: kPrimary),
-                  );
+                  return const ShimmerProductGrid();
                 }
                 if (controller.products.isEmpty) {
                   return const Center(

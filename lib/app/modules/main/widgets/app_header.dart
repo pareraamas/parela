@@ -135,7 +135,15 @@ class AppHeader extends StatelessWidget {
                   Positioned(
                     top: 0,
                     right: 0,
-                    child: Container(
+                    child: GestureDetector(
+                      onTap: () {
+                        if (main.isLoggedIn.value) {
+                          Get.toNamed(Routes.CART);
+                        } else {
+                          Get.toNamed(Routes.LOGIN);
+                        }
+                      },
+                      child: Container(
                         padding: const EdgeInsets.all(4),
                         constraints: const BoxConstraints(
                           minWidth: 12,
@@ -154,6 +162,7 @@ class AppHeader extends StatelessWidget {
                           ),
                           textAlign: TextAlign.center,
                         ),
+                      ),
                     ),
                   ),
               ],

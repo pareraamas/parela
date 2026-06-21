@@ -9,13 +9,18 @@ class RegisterView extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackground,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: kBackground,
+        backgroundColor: Colors.white,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: kText, size: 20),
           onPressed: Get.back,
+        ),
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(1),
+          child: Divider(height: 1, color: Color(0xFFEEEEEE)),
         ),
       ),
       body: SingleChildScrollView(
@@ -23,40 +28,44 @@ class RegisterView extends GetView<RegisterController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 24),
+
             const Text(
-              'Create Account',
+              'Buat Akun',
               style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.w800,
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
                 color: kText,
               ),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             const Text(
-              'Join Parela and discover beauty',
-              style: TextStyle(color: kSubtext, fontSize: 14),
+              'Bergabung dengan komunitas Parela',
+              style: TextStyle(fontSize: 13, color: kSubtext),
             ),
-            const SizedBox(height: 28),
-            _buildField(
-              'Full Name',
-              controller.nameController,
-              'Muhammad Farhan',
+
+            const SizedBox(height: 24),
+
+            _Field(
+              ctrl: controller.nameController,
+              label: 'Nama Lengkap',
+              hint: 'Nama kamu',
               error: controller.nameError,
             ),
             const SizedBox(height: 14),
-            _buildField(
-              'Email',
-              controller.emailController,
-              'your@email.com',
+            _Field(
+              ctrl: controller.emailController,
+              label: 'Email',
+              hint: 'email@kamu.com',
               keyboardType: TextInputType.emailAddress,
               error: controller.emailError,
             ),
             const SizedBox(height: 14),
             Obx(
-              () => _buildField(
-                'Password',
-                controller.passwordController,
-                '••••••••',
+              () => _Field(
+                ctrl: controller.passwordController,
+                label: 'Password',
+                hint: '••••••••',
                 obscure: controller.obscurePassword.value,
                 error: controller.passwordError,
                 suffix: IconButton(
@@ -73,10 +82,10 @@ class RegisterView extends GetView<RegisterController> {
             ),
             const SizedBox(height: 14),
             Obx(
-              () => _buildField(
-                'Confirm Password',
-                controller.confirmController,
-                '••••••••',
+              () => _Field(
+                ctrl: controller.confirmController,
+                label: 'Konfirmasi Password',
+                hint: '••••••••',
                 obscure: controller.obscureConfirm.value,
                 error: controller.confirmError,
                 suffix: IconButton(
@@ -91,7 +100,9 @@ class RegisterView extends GetView<RegisterController> {
                 ),
               ),
             ),
+
             const SizedBox(height: 28),
+
             Obx(
               () => SizedBox(
                 width: double.infinity,
@@ -102,9 +113,11 @@ class RegisterView extends GetView<RegisterController> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: kPrimary,
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    disabledBackgroundColor: kPrimary.withAlpha(120),
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(vertical: 15),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: controller.isLoading.value
@@ -117,28 +130,30 @@ class RegisterView extends GetView<RegisterController> {
                           ),
                         )
                       : const Text(
-                          'Create Account',
+                          'Daftar',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 15,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                 ),
               ),
             ),
+
             const SizedBox(height: 20),
+
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    'Already have an account? ',
+                    'Sudah punya akun? ',
                     style: TextStyle(color: kSubtext, fontSize: 13),
                   ),
                   GestureDetector(
                     onTap: Get.back,
                     child: const Text(
-                      'Login',
+                      'Masuk',
                       style: TextStyle(
                         color: kPrimary,
                         fontWeight: FontWeight.w700,
@@ -149,69 +164,81 @@ class RegisterView extends GetView<RegisterController> {
                 ],
               ),
             ),
+
             const SizedBox(height: 32),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildField(
-    String label,
-    TextEditingController ctrl,
-    String hint, {
-    bool obscure = false,
-    TextInputType? keyboardType,
-    Widget? suffix,
-    RxString? error,
-  }) {
+class _Field extends StatelessWidget {
+  final TextEditingController ctrl;
+  final String label;
+  final String hint;
+  final bool obscure;
+  final TextInputType? keyboardType;
+  final Widget? suffix;
+  final RxString? error;
+
+  const _Field({
+    required this.ctrl,
+    required this.label,
+    required this.hint,
+    this.obscure = false,
+    this.keyboardType,
+    this.suffix,
+    this.error,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
           style: const TextStyle(
-            fontWeight: FontWeight.w600,
             fontSize: 13,
+            fontWeight: FontWeight.w600,
             color: kText,
           ),
         ),
         const SizedBox(height: 6),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: TextField(
-            controller: ctrl,
-            obscureText: obscure,
-            keyboardType: keyboardType,
-            style: const TextStyle(fontSize: 14, color: kText),
-            decoration: InputDecoration(
-              hintText: hint,
-              hintStyle: const TextStyle(color: kSubtext),
-              suffixIcon: suffix,
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 14,
-              ),
+        TextField(
+          controller: ctrl,
+          obscureText: obscure,
+          keyboardType: keyboardType,
+          style: const TextStyle(fontSize: 14, color: kText),
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: const TextStyle(color: kSubtext, fontSize: 13),
+            suffixIcon: suffix,
+            filled: true,
+            fillColor: const Color(0xFFF8F8F8),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFFE8E8E8)),
             ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFFE8E8E8)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: kPrimary, width: 1.5),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16, vertical: 14),
           ),
         ),
         if (error != null)
           Obx(() {
-            final msg = error.value;
+            final msg = error!.value;
             if (msg.isEmpty) return const SizedBox.shrink();
             return Padding(
-              padding: const EdgeInsets.only(top: 4, left: 4),
+              padding: const EdgeInsets.only(top: 4, left: 2),
               child: Text(
                 msg,
                 style: const TextStyle(color: Colors.red, fontSize: 11),

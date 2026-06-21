@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:parela/app/data/models/order_model.dart';
 import 'package:parela/app/routes/app_pages.dart';
 import 'package:parela/app/theme/app_colors.dart';
+import 'package:parela/app/widgets/shimmer.dart';
 import '../controllers/my_orders_controller.dart';
 
 class MyOrdersView extends GetView<MyOrdersController> {
@@ -55,12 +56,7 @@ class MyOrdersView extends GetView<MyOrdersController> {
             child: Obx(() {
               final list = controller.filteredOrders;
               if (controller.isLoading.value) {
-                return const Padding(
-                  padding: EdgeInsets.only(top: 60),
-                  child: Center(
-                    child: CircularProgressIndicator(color: kPrimary),
-                  ),
-                );
+                return const ShimmerOrderList(count: 4);
               }
               if (list.isEmpty) return const _EmptyState();
               return Padding(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/address_model.dart';
 import 'package:parela/app/theme/app_colors.dart';
+import 'package:parela/app/widgets/shimmer.dart';
 import '../controllers/select_address_controller.dart';
 
 class SelectAddressView extends GetView<SelectAddressController> {
@@ -37,8 +38,13 @@ class SelectAddressView extends GetView<SelectAddressController> {
           Expanded(
             child: Obx(() {
               if (controller.addresses.isEmpty) {
-                return const Center(
-                  child: CircularProgressIndicator(color: kPrimary),
+                return AppShimmer(
+                  child: Column(
+                    children: List.generate(
+                      4,
+                      (_) => const ShimmerListRow(),
+                    ),
+                  ),
                 );
               }
               return _AddressList(
