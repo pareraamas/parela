@@ -272,7 +272,10 @@ class _FlashSaleCard extends StatelessWidget {
           discountPercent: item.discountPercent,
           soldCount: item.soldCount,
         );
-        Get.toNamed(Routes.PRODUCT_DETAIL, arguments: product);
+        Get.toNamed(Routes.PRODUCT_DETAIL, arguments: {
+          'product': product,
+          'flashSaleItem': item,
+        });
       },
       child: Container(
         width: 140,

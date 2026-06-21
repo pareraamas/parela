@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:parela/app/data/models/cart_item_model.dart';
+import 'package:parela/app/data/models/flash_sale_model.dart';
 import 'package:parela/app/data/models/product_model.dart';
 import 'package:parela/app/data/models/review_model.dart';
 import 'package:parela/app/data/models/seller_model.dart';
@@ -11,6 +12,7 @@ class ProductDetailController extends GetxController {
   late final ProductRepository _repo;
   late final SellerRepository _sellerRepo;
   late final ProductModel product;
+  FlashSaleItemModel? flashSaleItem;
   final selectedColorIndex = 0.obs;
   final selectedSizeIndex = 0.obs;
   final quantity = 1.obs;
@@ -18,12 +20,20 @@ class ProductDetailController extends GetxController {
   final isLoadingReviews = false.obs;
   final seller = Rx<SellerModel?>(null);
 
+  bool get isFlashSale => flashSaleItem != null;
+
   @override
   void onInit() {
     super.onInit();
     _repo = Get.find<ProductRepository>();
     _sellerRepo = Get.find<SellerRepository>();
-    product = Get.arguments as ProductModel;
+    final args = Get.arguments;
+    if (args is Map) {
+      product = args['product'] as ProductModel;
+      flashSaleItem = args['flashSaleItem'] as FlashSaleItemModel?;
+    } else {
+      product = args as ProductModel;
+    }
     _loadReviews();
     _loadSeller();
   }

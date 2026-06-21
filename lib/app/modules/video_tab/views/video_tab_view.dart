@@ -87,9 +87,10 @@ class VideoTab extends GetView<VideoTabController> {
                   children: [
                     IconButton(
                       onPressed: () {
+                        controller.isTabActive.value = false;
                         Get.toNamed(
                           main.isLoggedIn.value ? Routes.CART : Routes.LOGIN,
-                        );
+                        )?.then((_) => controller.isTabActive.value = true);
                       },
                       style: IconButton.styleFrom(
                         padding: EdgeInsets.zero,
@@ -108,11 +109,12 @@ class VideoTab extends GetView<VideoTabController> {
                         right: 0,
                         child: GestureDetector(
                           onTap: () {
+                            controller.isTabActive.value = false;
                             Get.toNamed(
                               main.isLoggedIn.value
                                   ? Routes.CART
                                   : Routes.LOGIN,
-                            );
+                            )?.then((_) => controller.isTabActive.value = true);
                           },
                           child: Container(
                             padding: const EdgeInsets.all(3),
@@ -323,20 +325,31 @@ class _VideoPageState extends State<_VideoPage> {
           ],
         ),
         const SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 7),
-          decoration: BoxDecoration(
-            color: const Color(0xFFF37021),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: const Center(
-            child: Text(
-              'Beli Sekarang',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            _closeProductCard();
+            _vc.pause();
+            Get.toNamed(Routes.PRODUCT_DETAIL, arguments: _product)
+                ?.then((_) {
+              if (mounted && widget.isActive) _vc.play();
+            });
+          },
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 7),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF37021),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: const Center(
+              child: Text(
+                'Beli Sekarang',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),
@@ -1484,7 +1497,13 @@ class _MiniProductCard extends StatelessWidget {
               MediaQuery.of(context).padding.bottom + 16,
             ),
             child: GestureDetector(
-              onTap: () => Navigator.of(context).pop(),
+              onTap: () {
+                final vc = Get.find<VideoTabController>();
+                vc.isTabActive.value = false;
+                Navigator.of(context).pop();
+                Get.toNamed(Routes.PRODUCT_DETAIL, arguments: product)
+                    ?.then((_) => vc.isTabActive.value = true);
+              },
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 13),

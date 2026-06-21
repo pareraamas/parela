@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:parela/app/data/models/flash_sale_model.dart';
 import 'package:parela/app/data/models/product_model.dart';
 import 'package:parela/app/data/models/review_model.dart';
 import 'package:parela/app/data/models/seller_model.dart';
@@ -42,136 +43,160 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 // ── Price card ────────────────────────────────────────────
                 Container(
                   color: Colors.white,
-                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Rp ${product.formattedPrice}',
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w800,
-                              color: kPrimary,
-                            ),
-                          ),
-                          if (discount > 0) ...[
-                            const SizedBox(width: 10),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 7,
-                                vertical: 3,
-                              ),
-                              decoration: BoxDecoration(
-                                color: kPrimary,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                '$discount%',
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
+                      // Flash sale banner strip
+                      if (controller.isFlashSale)
+                        _FlashSaleBanner(item: controller.flashSaleItem!),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Rp ${product.formattedPrice}',
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w800,
+                                    color: controller.isFlashSale
+                                        ? const Color(0xFFFF5722)
+                                        : kPrimary,
+                                  ),
                                 ),
-                              ),
+                                if (discount > 0) ...[
+                                  const SizedBox(width: 10),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 7,
+                                      vertical: 3,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      gradient: controller.isFlashSale
+                                          ? const LinearGradient(
+                                              colors: [
+                                                Color(0xFFFF5722),
+                                                Color(0xFFFF9800),
+                                              ],
+                                            )
+                                          : null,
+                                      color: controller.isFlashSale
+                                          ? null
+                                          : kPrimary,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Text(
+                                      '$discount%',
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    'Rp ${product.formattedOriginalPrice}',
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      color: kSubtext,
+                                      decoration: TextDecoration.lineThrough,
+                                    ),
+                                  ),
+                                ],
+                              ],
                             ),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Rp ${product.formattedOriginalPrice}',
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: kSubtext,
-                                decoration: TextDecoration.lineThrough,
-                              ),
+                            const SizedBox(height: 8),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    product.name,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: kText,
+                                      height: 1.3,
+                                    ),
+                                  ),
+                                ),
+                                if (product.isBestSeller) ...[
+                                  const SizedBox(width: 8),
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 2),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 3,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: kPrimaryLight,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: const Text(
+                                      'Best Seller',
+                                      style: TextStyle(
+                                        color: kPrimary,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.star_rounded,
+                                  color: Colors.amber,
+                                  size: 15,
+                                ),
+                                const SizedBox(width: 3),
+                                Text(
+                                  '${product.rating}',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: kText,
+                                  ),
+                                ),
+                                Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  width: 1,
+                                  height: 12,
+                                  color: kSubtext.withValues(alpha: 0.4),
+                                ),
+                                Text(
+                                  '${_fmtCount(product.reviewCount)} ulasan',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: kSubtext,
+                                  ),
+                                ),
+                                Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  width: 1,
+                                  height: 12,
+                                  color: kSubtext.withValues(alpha: 0.4),
+                                ),
+                                Text(
+                                  '${_fmtCount(product.soldCount)} terjual',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: kSubtext,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              product.name,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: kText,
-                                height: 1.3,
-                              ),
-                            ),
-                          ),
-                          if (product.isBestSeller) ...[
-                            const SizedBox(width: 8),
-                            Container(
-                              margin: const EdgeInsets.only(top: 2),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 3,
-                              ),
-                              decoration: BoxDecoration(
-                                color: kPrimaryLight,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: const Text(
-                                'Best Seller',
-                                style: TextStyle(
-                                  color: kPrimary,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.star_rounded,
-                            color: Colors.amber,
-                            size: 15,
-                          ),
-                          const SizedBox(width: 3),
-                          Text(
-                            '${product.rating}',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: kText,
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                            width: 1,
-                            height: 12,
-                            color: kSubtext.withValues(alpha: 0.4),
-                          ),
-                          Text(
-                            '${_fmtCount(product.reviewCount)} ulasan',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: kSubtext,
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                            width: 1,
-                            height: 12,
-                            color: kSubtext.withValues(alpha: 0.4),
-                          ),
-                          Text(
-                            '${_fmtCount(product.soldCount)} terjual',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: kSubtext,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
@@ -781,6 +806,94 @@ class _FallbackHero extends StatelessWidget {
                   ),
                 ),
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Flash Sale Banner ─────────────────────────────────────────────────────────
+
+class _FlashSaleBanner extends StatelessWidget {
+  final FlashSaleItemModel item;
+  const _FlashSaleBanner({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    final soldPercent = item.soldPercent.clamp(0, 100);
+    final almostOut = soldPercent >= 70;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFFFFF3E0), Color(0xFFFFF8F5)],
+        ),
+        border: Border(
+          bottom: BorderSide(color: Color(0xFFFFE0B2), width: 1),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFFFF5722), Color(0xFFFF9800)],
+              ),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.bolt, color: Colors.white, size: 12),
+                SizedBox(width: 2),
+                Text(
+                  'FLASH SALE',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(3),
+                  child: LinearProgressIndicator(
+                    value: soldPercent / 100,
+                    minHeight: 6,
+                    backgroundColor: const Color(0xFFFFE0B2),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      almostOut
+                          ? const Color(0xFFFF5722)
+                          : const Color(0xFFFF9800),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  almostOut
+                      ? 'Hampir habis! Sisa ${100 - soldPercent}%'
+                      : 'Terjual $soldPercent%',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: almostOut
+                        ? const Color(0xFFFF5722)
+                        : const Color(0xFFE65100),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
