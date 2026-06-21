@@ -34,6 +34,7 @@ import '../modules/edit_profile/bindings/edit_profile_binding.dart';
 import '../modules/edit_profile/views/edit_profile_view.dart';
 import '../modules/seller_store/bindings/seller_store_binding.dart';
 import '../modules/seller_store/views/seller_store_view.dart';
+import '../modules/cart/bindings/cart_binding.dart';
 import '../modules/cart/views/cart_view.dart';
 import '../modules/messages/bindings/messages_binding.dart';
 import '../modules/messages/views/messages_view.dart';
@@ -43,6 +44,10 @@ import '../modules/search/views/search_page.dart';
 import '../modules/search/views/search_result_view.dart';
 import '../modules/story/bindings/story_binding.dart';
 import '../modules/story/views/story_view.dart';
+import '../modules/select_address/bindings/select_address_binding.dart';
+import '../modules/select_address/views/select_address_view.dart';
+import '../modules/payment/bindings/payment_binding.dart';
+import '../modules/payment/views/payment_view.dart';
 
 part 'app_routes.dart';
 
@@ -152,7 +157,11 @@ class AppPages {
       page: () => const SellerStoreView(),
       binding: SellerStoreBinding(),
     ),
-    GetPage(name: _Paths.CART, page: () => const CartView()),
+    GetPage(
+      name: _Paths.CART,
+      page: () => const CartView(),
+      binding: CartBinding(),
+    ),
     GetPage(
       name: _Paths.MESSAGES,
       page: () => const MessagesView(),
@@ -174,6 +183,16 @@ class AppPages {
       name: _Paths.STORY,
       page: () => const StoryView(),
       binding: StoryBinding(),
+    ),
+    GetPage(
+      name: _Paths.SELECT_ADDRESS,
+      page: () => const SelectAddressView(),
+      binding: SelectAddressBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYMENT,
+      page: () => const PaymentView(),
+      binding: PaymentBinding(),
     ),
   ];
 }

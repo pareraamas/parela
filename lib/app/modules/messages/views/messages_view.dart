@@ -12,68 +12,109 @@ class MessagesView extends GetView<MessagesController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackground,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: Get.back,
-          icon: const Icon(Icons.arrow_back_ios_new, color: kText, size: 20),
-        ),
-        title: const Text(
-          'Messages',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            color: kText,
-          ),
-        ),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.edit_outlined, color: kText, size: 22),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            child: Container(
-              decoration: BoxDecoration(
-                color: kBackground,
-                borderRadius: BorderRadius.circular(12),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            // ── App bar (pinned) ───────────────────────────────────────
+            SliverAppBar(
+              pinned: true,
+              backgroundColor: Colors.white,
+              elevation: 0,
+              scrolledUnderElevation: 1,
+              surfaceTintColor: Colors.transparent,
+              shadowColor: Colors.black.withValues(alpha: 0.08),
+              leading: IconButton(
+                onPressed: Get.back,
+                icon: const Icon(
+                  Icons.arrow_back_ios_new,
+                  color: kText,
+                  size: 20,
+                ),
               ),
-              child: const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search messages...',
-                  hintStyle: TextStyle(color: kSubtext, fontSize: 14),
-                  prefixIcon: Icon(Icons.search, color: kSubtext, size: 20),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 12),
+              title: const Text(
+                'Messages',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: kText,
+                ),
+              ),
+              centerTitle: false,
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.edit_outlined,
+                    color: kText,
+                    size: 22,
+                  ),
+                ),
+              ],
+            ),
+
+            // ── Search bar (bagian konten, naik ke app bar saat scroll)
+            SliverToBoxAdapter(
+              child: Container(
+                color: Colors.white,
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                child: Container(
+                  height: 38,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF9FB),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: kPrimary.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.search_rounded, color: kSubtext, size: 18),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          style: TextStyle(fontSize: 13, color: kText),
+                          decoration: InputDecoration(
+                            hintText: 'Search messages...',
+                            hintStyle: TextStyle(
+                              fontSize: 13,
+                              color: kSubtext,
+                            ),
+                            border: InputBorder.none,
+                            isDense: true,
+                            contentPadding: EdgeInsets.zero,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Expanded(
-            child: Obx(() => ListView.separated(
-                  itemCount: controller.conversations.length,
-                  separatorBuilder: (context, index) =>
-                      const Divider(height: 1, indent: 76, color: kBackground),
-                  itemBuilder: (_, i) {
-                    final conv = controller.conversations[i];
-                    return _ConversationTile(
-                      conversation: conv,
-                      onTap: () {
-                        controller.openChat(conv);
-                        Get.toNamed(Routes.CHAT);
-                      },
-                    );
-                  },
-                )),
-          ),
-        ],
+
+            // ── Daftar percakapan ─────────────────────────────────────
+            Obx(
+              () => SliverList.separated(
+                itemCount: controller.conversations.length,
+                separatorBuilder: (_, _) => const Divider(
+                  height: 1,
+                  indent: 76,
+                  color: kBackground,
+                ),
+                itemBuilder: (_, i) {
+                  final conv = controller.conversations[i];
+                  return _ConversationTile(
+                    conversation: conv,
+                    onTap: () {
+                      controller.openChat(conv);
+                      Get.toNamed(Routes.CHAT);
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -172,7 +213,10 @@ class _ConversationTile extends StatelessWidget {
                 const SizedBox(height: 5),
                 if (conversation.unreadCount > 0)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: kPrimary,
                       borderRadius: BorderRadius.circular(10),

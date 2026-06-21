@@ -26,6 +26,8 @@ abstract class Routes {
   static const SEARCH_RESULT = _Paths.SEARCH_RESULT;
   static const SEARCH = _Paths.SEARCH;
   static const STORY = _Paths.STORY;
+  static const SELECT_ADDRESS = _Paths.SELECT_ADDRESS;
+  static const PAYMENT = _Paths.PAYMENT;
 }
 
 abstract class _Paths {
@@ -53,4 +55,6 @@ abstract class _Paths {
   static const SEARCH_RESULT = '/search-result';
   static const SEARCH = '/search';
   static const STORY = '/story';
+  static const SELECT_ADDRESS = '/select-address';
+  static const PAYMENT = '/payment';
 }

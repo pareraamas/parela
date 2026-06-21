@@ -40,7 +40,17 @@ class CategoryRow extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Icon(cat.icon, color: kPrimary, size: 28),
+                      child: cat.imageUrl != null && cat.imageUrl!.isNotEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Image.asset(
+                                cat.imageUrl!,
+                                width: 18,
+                                height: 18,
+                                fit: BoxFit.contain,
+                              ),
+                            )
+                          : Icon(cat.icon, color: kPrimary, size: 28),
                     ),
                     const SizedBox(height: 6),
                     Text(

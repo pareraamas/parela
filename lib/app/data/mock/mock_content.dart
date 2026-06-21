@@ -112,14 +112,14 @@ class MockContent {
   // ── Categories ────────────────────────────────────────────────────────────
 
   static final List<CategoryModel> mockCategories = [
-    const CategoryModel(id: 'c001', label: 'Makeup',    icon: Icons.brush,         color: Color(0xFFFCE4EC)),
-    const CategoryModel(id: 'c002', label: 'Skincare',  icon: Icons.spa,            color: Color(0xFFE3F2FD)),
-    const CategoryModel(id: 'c003', label: 'Parfume',   icon: Icons.local_florist,  color: Color(0xFFEDE7F6)),
-    const CategoryModel(id: 'c004', label: 'Lipstick',  icon: Icons.color_lens,     color: Color(0xFFFFEBEE)),
-    const CategoryModel(id: 'c005', label: 'Hair Care', icon: Icons.content_cut,    color: Color(0xFFFFF8E1)),
-    const CategoryModel(id: 'c006', label: 'Fashion',   icon: Icons.checkroom,      color: Color(0xFFE8EAF6)),
-    const CategoryModel(id: 'c007', label: 'Sport',     icon: Icons.sports,         color: Color(0xFFE8F5E9)),
-    const CategoryModel(id: 'c008', label: 'Aksesoris', icon: Icons.handyman,       color: Color(0xFFFFF3E0)),
+    const CategoryModel(id: 'c001', label: 'Makeup',    icon: Icons.brush,         color: Color(0xFFFCE4EC), imageUrl: 'assets/public/category/makeup.png'),
+    const CategoryModel(id: 'c002', label: 'Skincare',  icon: Icons.spa,            color: Color(0xFFE3F2FD), imageUrl: 'assets/public/category/skincare.png'),
+    const CategoryModel(id: 'c003', label: 'Parfume',   icon: Icons.local_florist,  color: Color(0xFFEDE7F6), imageUrl: 'assets/public/category/parfume.png'),
+    const CategoryModel(id: 'c004', label: 'Lipstick',  icon: Icons.color_lens,     color: Color(0xFFFFEBEE), imageUrl: 'assets/public/category/lipstick.png'),
+    const CategoryModel(id: 'c005', label: 'Hair Care', icon: Icons.content_cut,    color: Color(0xFFFFF8E1), imageUrl: 'assets/public/category/hair_care.png'),
+    const CategoryModel(id: 'c006', label: 'Fashion',   icon: Icons.checkroom,      color: Color(0xFFE8EAF6), imageUrl: 'assets/public/category/fashion.png'),
+    const CategoryModel(id: 'c007', label: 'Sport',     icon: Icons.sports,         color: Color(0xFFE8F5E9), imageUrl: 'assets/public/category/sport.png'),
+    const CategoryModel(id: 'c008', label: 'Aksesoris', icon: Icons.handyman,       color: Color(0xFFFFF3E0), imageUrl: 'assets/public/category/aksesoris.png'),
   ];
 
   // ── Products ──────────────────────────────────────────────────────────────
@@ -772,9 +772,14 @@ class MockContent {
   // ── Payment Methods ───────────────────────────────────────────────────────
 
   static final List<PaymentMethodModel> mockPaymentMethods = [
-    PaymentMethodModel.fromMap({'id': 'pm001', 'label': 'BCA Virtual Account', 'type': 'bank', 'number': '8277-XXXX-XXXX', 'isDefault': true}),
-    PaymentMethodModel.fromMap({'id': 'pm002', 'label': 'GoPay', 'type': 'ewallet', 'number': '+62 812-3456-XXXX', 'isDefault': false}),
-    PaymentMethodModel.fromMap({'id': 'pm003', 'label': 'OVO', 'type': 'ewallet', 'number': '+62 812-3456-XXXX', 'isDefault': false}),
+    PaymentMethodModel.fromMap({'id': 'pm001', 'label': 'BCA Virtual Account',      'type': 'bank', 'number': '126 0859 1065 2911 2', 'isDefault': true}),
+    PaymentMethodModel.fromMap({'id': 'pm002', 'label': 'Mandiri Virtual Account',  'type': 'bank', 'number': '889 0859 1065 2911 0', 'isDefault': false}),
+    PaymentMethodModel.fromMap({'id': 'pm003', 'label': 'BNI Virtual Account',      'type': 'bank', 'number': '988 5510 6529 112',    'isDefault': false}),
+    PaymentMethodModel.fromMap({'id': 'pm004', 'label': 'BRI Virtual Account',      'type': 'bank', 'number': '260 8590 1065 2912',   'isDefault': false}),
+    PaymentMethodModel.fromMap({'id': 'pm005', 'label': 'CIMB Virtual Account',     'type': 'bank', 'number': '702 0859 1065 2911',   'isDefault': false}),
+    PaymentMethodModel.fromMap({'id': 'pm006', 'label': 'Permata Virtual Account',  'type': 'bank', 'number': '820 8591 0652 9112',   'isDefault': false}),
+    PaymentMethodModel.fromMap({'id': 'pm007', 'label': 'Danamon Virtual Account',  'type': 'bank', 'number': '158 0859 1065 2911',   'isDefault': false}),
+    PaymentMethodModel.fromMap({'id': 'pm008', 'label': 'QRIS',                     'type': 'qris', 'number': '',                     'isDefault': false}),
   ];
 
   // ── Reviews ───────────────────────────────────────────────────────────────
