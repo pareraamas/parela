@@ -153,7 +153,7 @@ flutter build ios        # build iOS release
 
 ## Kontribusi & Aturan Pengembangan
 
-Proyek ini mengikuti sejumlah aturan arsitektur yang didokumentasikan lebih detail di [`CLAUDE.md`](CLAUDE.md), di antaranya:
+Proyek ini mengikuti sejumlah aturan arsitektur yang didokumentasikan lebih detail , di antaranya:
 
 1. Jalankan `flutter analyze` setelah setiap perubahan — harus **No issues found**.
 2. Controller/View **tidak boleh** mengakses `MockContent` atau `StorageService` secara langsung — selalu lewat repository.
