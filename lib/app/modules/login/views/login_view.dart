@@ -158,7 +158,7 @@ class LoginView extends GetView<LoginController> {
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: controller.loginWithGoogle,
                         style: OutlinedButton.styleFrom(
                           foregroundColor: kText,
                           side: const BorderSide(color: Color(0xFFE0E0E0)),

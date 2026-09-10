@@ -14,35 +14,45 @@ class LoginController extends GetxController {
   final passwordError = ''.obs;
   final generalError = ''.obs;
 
+  static const _dummyEmail = 'demo@parela.com';
+  static const _dummyPassword = 'demo123456';
+
   void toggleObscure() => obscurePassword.value = !obscurePassword.value;
 
-  bool _validate() {
+  Future<void> login() async {
     emailError.value = '';
     passwordError.value = '';
     generalError.value = '';
-    bool ok = true;
-    final email = emailController.text.trim();
-    if (email.isEmpty) {
-      emailError.value = 'Email is required';
-      ok = false;
-    } else if (!GetUtils.isEmail(email)) {
-      emailError.value = 'Enter a valid email address';
-      ok = false;
+    isLoading.value = true;
+    try {
+      final email = emailController.text.trim().isEmpty
+          ? _dummyEmail
+          : emailController.text.trim();
+      final password = passwordController.text.isEmpty
+          ? _dummyPassword
+          : passwordController.text;
+      final user = await Get.find<AuthRepository>().login(
+        email: email,
+        password: password,
+      );
+      Get.find<MainController>().setUser(user);
+      Get.offAllNamed(Routes.MAIN);
+    } on ApiException catch (e) {
+      generalError.value = e.message;
+    } catch (_) {
+      generalError.value = 'Terjadi kesalahan. Coba lagi.';
+    } finally {
+      isLoading.value = false;
     }
-    if (passwordController.text.length < 6) {
-      passwordError.value = 'Password must be at least 6 characters';
-      ok = false;
-    }
-    return ok;
   }
 
-  Future<void> login() async {
-    if (!_validate()) return;
+  Future<void> loginWithGoogle() async {
+    generalError.value = '';
     isLoading.value = true;
     try {
       final user = await Get.find<AuthRepository>().login(
-        email: emailController.text.trim(),
-        password: passwordController.text,
+        email: 'demo.google@parela.com',
+        password: 'google_dummy_token',
       );
       Get.find<MainController>().setUser(user);
       Get.offAllNamed(Routes.MAIN);
