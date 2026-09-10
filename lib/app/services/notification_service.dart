@@ -10,7 +10,7 @@ class NotificationService {
   static const _channelName = 'Pembayaran';
 
   static Future<void> init() async {
-    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const android = AndroidInitializationSettings('@mipmap/launcher_icon');
     const ios = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -51,7 +51,7 @@ class NotificationService {
         channelDescription: 'Notifikasi status pembayaran Parela',
         importance: Importance.high,
         priority: Priority.high,
-        icon: '@mipmap/ic_launcher',
+        icon: '@mipmap/launcher_icon',
         color: Color(0xFFD4548A),
       ),
       iOS: const DarwinNotificationDetails(

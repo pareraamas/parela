@@ -18,6 +18,7 @@ void main() async {
       initialBinding: AppBinding(),
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
+      debugShowCheckedModeBanner: false,
     ),
   );
 }

@@ -38,6 +38,9 @@ class VideoTab extends GetView<VideoTabController> {
                   isActive:
                       controller.isTabActive.value &&
                       controller.currentPage.value == index,
+                  isPreloading:
+                      controller.isTabActive.value &&
+                      controller.currentPage.value + 1 == index,
                   onLike: () => controller.toggleLike(index),
                   onFollow: () => controller.toggleFollow(index),
                 ),
@@ -154,6 +157,7 @@ class _VideoPage extends StatefulWidget {
   final bool isLiked;
   final bool isFollowed;
   final bool isActive;
+  final bool isPreloading;
   final VoidCallback onLike;
   final VoidCallback onFollow;
 
@@ -162,6 +166,7 @@ class _VideoPage extends StatefulWidget {
     required this.isLiked,
     required this.isFollowed,
     required this.isActive,
+    required this.isPreloading,
     required this.onLike,
     required this.onFollow,
   });
@@ -171,28 +176,37 @@ class _VideoPage extends StatefulWidget {
 }
 
 class _VideoPageState extends State<_VideoPage> {
-  late VideoPlayerController _vc;
+  VideoPlayerController? _vc;
   bool _ready = false;
   bool _isPlaying = false;
   bool _productExpanded = false;
   ProductModel? _product;
+  bool _vcInitialized = false;
 
   @override
   void initState() {
     super.initState();
+    // Init when active OR when preloading (next page) so swipe is instant.
+    // Pages beyond N+1 stay uninitialized — avoids simultaneous codec instances.
+    if (widget.isActive || widget.isPreloading) _initController();
+  }
+
+  void _initController() {
+    if (_vcInitialized) return;
+    _vcInitialized = true;
     _vc = VideoPlayerController.asset(widget.data['videoUrl'] as String)
       ..setLooping(true)
       ..initialize().then((_) {
         if (mounted) {
           setState(() => _ready = true);
-          if (widget.isActive) _vc.play();
+          if (widget.isActive) _vc!.play();
         }
       });
-    _vc.addListener(_onPlaybackChanged);
+    _vc!.addListener(_onPlaybackChanged);
   }
 
   void _onPlaybackChanged() {
-    final playing = _vc.value.isPlaying;
+    final playing = _vc?.value.isPlaying ?? false;
     if (playing != _isPlaying && mounted) {
       setState(() => _isPlaying = playing);
     }
@@ -201,15 +215,29 @@ class _VideoPageState extends State<_VideoPage> {
   @override
   void didUpdateWidget(_VideoPage old) {
     super.didUpdateWidget(old);
+
+    // Start preloading when this page becomes N+1
+    if (!old.isPreloading && widget.isPreloading && !_vcInitialized) {
+      _initController();
+    }
+
     if (old.isActive != widget.isActive) {
-      widget.isActive ? _vc.play() : _vc.pause();
+      if (widget.isActive) {
+        if (!_vcInitialized) {
+          _initController();
+        } else {
+          _vc?.play();
+        }
+      } else {
+        _vc?.pause();
+      }
     }
   }
 
   @override
   void dispose() {
-    _vc.removeListener(_onPlaybackChanged);
-    _vc.dispose();
+    _vc?.removeListener(_onPlaybackChanged);
+    _vc?.dispose();
     super.dispose();
   }
 
@@ -329,10 +357,10 @@ class _VideoPageState extends State<_VideoPage> {
           behavior: HitTestBehavior.opaque,
           onTap: () {
             _closeProductCard();
-            _vc.pause();
+            _vc?.pause();
             Get.toNamed(Routes.PRODUCT_DETAIL, arguments: _product)
                 ?.then((_) {
-              if (mounted && widget.isActive) _vc.play();
+              if (mounted && widget.isActive) _vc?.play();
             });
           },
           child: Container(
@@ -393,7 +421,7 @@ class _VideoPageState extends State<_VideoPage> {
   }
 
   void _showCommentSheet(BuildContext context) {
-    _vc.pause();
+    _vc?.pause();
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -401,18 +429,18 @@ class _VideoPageState extends State<_VideoPage> {
       builder: (_) =>
           _CommentSheet(commentCount: widget.data['comments'] as String),
     ).then((_) {
-      if (mounted && widget.isActive) _vc.play();
+      if (mounted && widget.isActive) _vc?.play();
     });
   }
 
   void _showShareSheet(BuildContext context) {
-    _vc.pause();
+    _vc?.pause();
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (_) => const _ShareSheet(),
     ).then((_) {
-      if (mounted && widget.isActive) _vc.play();
+      if (mounted && widget.isActive) _vc?.play();
     });
   }
 
@@ -422,44 +450,42 @@ class _VideoPageState extends State<_VideoPage> {
     return Stack(
       fit: StackFit.expand,
       children: [
-        _ready
-            ? GestureDetector(
-                onTap: () {
-                  if (_vc.value.isPlaying) {
-                    _vc.pause();
-                  } else {
-                    _vc.play();
-                  }
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: navBarBottom),
-                  child: SizedBox.expand(
-                    child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: SizedBox(
-                        width: _vc.value.size.width,
-                        height: _vc.value.size.height,
-                        child: VideoPlayer(_vc),
-                      ),
-                    ),
+        if (_ready)
+          GestureDetector(
+            onTap: () {
+              if (_vc!.value.isPlaying) {
+                _vc!.pause();
+              } else {
+                _vc!.play();
+              }
+            },
+            child: Padding(
+              padding: EdgeInsets.only(bottom: navBarBottom),
+              child: SizedBox.expand(
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: SizedBox(
+                    width: _vc!.value.size.width,
+                    height: _vc!.value.size.height,
+                    child: VideoPlayer(_vc!),
                   ),
-                ),
-              )
-            : Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      widget.data['colorTop'] as Color,
-                      widget.data['colorBottom'] as Color,
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                ),
-                child: const Center(
-                  child: CircularProgressIndicator(color: Colors.white),
                 ),
               ),
+            ),
+          )
+        else
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  widget.data['colorTop'] as Color,
+                  widget.data['colorBottom'] as Color,
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+          ),
         IgnorePointer(
           child: AnimatedOpacity(
             opacity: _isPlaying ? 0.0 : 1.0,
