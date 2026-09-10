@@ -4,6 +4,18 @@
 
 > ⚠️ **Status: Demo/Prototype.** Seluruh data yang tampil (produk, seller, order, notifikasi, dll) masih berupa **mock/placeholder**. Belum ada koneksi ke backend/API sungguhan.
 
+## 📲 Download APK
+
+Coba langsung aplikasinya di HP Android kamu — pilih sesuai arsitektur perangkat (kalau tidak yakin, pakai **arm64-v8a**, cocok untuk hampir semua HP Android modern):
+
+| Arsitektur | Link Download |
+|---|---|
+| arm64-v8a (rekomendasi, HP modern) | [app-arm64-v8a-release.apk](https://github.com/pareraamas/parela/raw/main/releases/app-arm64-v8a-release.apk) |
+| armeabi-v7a (HP lama/32-bit) | [app-armeabi-v7a-release.apk](https://github.com/pareraamas/parela/raw/main/releases/app-armeabi-v7a-release.apk) |
+| x86_64 (emulator/tablet Intel) | [app-x86_64-release.apk](https://github.com/pareraamas/parela/raw/main/releases/app-x86_64-release.apk) |
+
+> Karena APK ini belum ditandatangani oleh Play Store, Android akan menampilkan peringatan "unknown sources" — aktifkan **Install from unknown sources** untuk browser/file manager yang digunakan saat instalasi.
+
 <p align="center">
   <img src="android.png" width="45%" alt="Tampilan Parela di Android" />
   <img src="ios.png" width="45%" alt="Tampilan Parela di iOS" />
