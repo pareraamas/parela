@@ -17,7 +17,7 @@ class NotificationService {
       requestSoundPermission: true,
     );
     await _plugin.initialize(
-      const InitializationSettings(android: android, iOS: ios),
+      settings: const InitializationSettings(android: android, iOS: ios),
     );
 
     // Create Android notification channel (no-op on older Android / iOS)
@@ -62,10 +62,10 @@ class NotificationService {
     );
 
     await _plugin.show(
-      1,
-      'Pembayaran Berhasil! 🎉',
-      'Pesananmu via $paymentLabel senilai ${_fmt(total)} berhasil diproses.',
-      details,
+      id: 1,
+      title: 'Pembayaran Berhasil! 🎉',
+      body: 'Pesananmu via $paymentLabel senilai ${_fmt(total)} berhasil diproses.',
+      notificationDetails: details,
     );
   }
 
